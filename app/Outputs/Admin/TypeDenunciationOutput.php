@@ -19,7 +19,7 @@ class TypeDenunciationOutput extends ApiOutput
             'id' => $object->id,
             'name' => $object->name,
             'state' => $object->state,
-            'encrypt_id' => encrypt($object->id),
+            'slug' => encrypt($object->id),
             'deleted_at' => $object->deleted_at,
         ];
 

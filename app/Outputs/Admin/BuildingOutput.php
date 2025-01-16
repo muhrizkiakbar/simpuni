@@ -36,7 +36,7 @@ class BuildingOutput extends ApiOutput
             'user_admin'=> $user_output->renderJson($object->user_admin ?? [], "format", [ "mode" => "raw_data"]) ?? [],
             'user_superadmin'=> $user_output->renderJson($object->user_superadmin ?? [], "format", [ "mode" => "raw_data"]) ?? [],
             'state' => $object->state,
-            'encrypt_id' => encrypt($object->id),
+            'slug' => encrypt($object->id),
             'deleted_at' => $object->deleted_at,
         ];
 

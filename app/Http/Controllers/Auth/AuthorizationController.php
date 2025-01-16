@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
 use App\Http\Controllers\Controller;
+use App\Outputs\Admin\UserOutput;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
@@ -51,12 +52,16 @@ class AuthorizationController extends Controller
         $tokenResult = $user->createToken('auth_token', ['access-api'], now()->addMinutes(10080));
         $accessToken = $tokenResult->plainTextToken;
 
+        $user_output = new UserOutput();
         // Return response in desired format
-        return response()->json([
-            'token_type' => 'Bearer',
-            'expires_in' => $tokenResult->accessToken->expires_at, // Default expiration or a custom value
-            'access_token' => $accessToken,
-        ]);
+        return response()->json(
+            [
+                'token_type' => 'Bearer',
+                'expires_in' => $tokenResult->accessToken->expires_at, // Default expiration or a custom value
+                'access_token' => $accessToken,
+                'user' => $user_output->renderJson($user, "format", [ "mode" => "raw_data" ])
+            ]
+        );
     }
 
 

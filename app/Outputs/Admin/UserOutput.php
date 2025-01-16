@@ -17,13 +17,14 @@ class UserOutput extends ApiOutput
     {
         $data = [
             'id' => $object->id,
+            'avatar' => null,
             'name' => $object->name,
             'instansi' => $object->instansi,
             'type_user' => $object->type_user,
             'email' => $object->email,
             'username' => $object->username,
             'state' => $object->state,
-            'encrypt_id' => encrypt($object->id),
+            'slug' => encrypt($object->id),
             'deleted_at' => $object->deleted_at,
         ];
 
