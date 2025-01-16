@@ -19,6 +19,7 @@ class UserOutput extends ApiOutput
             'id' => $object->id,
             'avatar' => null,
             'name' => $object->name,
+            'posisi' => $object->posisi,
             'instansi' => $object->instansi,
             'type_user' => $object->type_user,
             'email' => $object->email,
