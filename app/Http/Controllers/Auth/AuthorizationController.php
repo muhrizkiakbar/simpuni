@@ -65,7 +65,6 @@ class AuthorizationController extends Controller
     public function change_profile(Request $request)
     {
         $request->validate([
-            'type_user' => 'required|string|max:15',
             'instansi' => 'required|string|max:255',
             'posisi' => 'required|string|max:255',
             'name' => 'required|string|max:255',
