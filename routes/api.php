@@ -17,7 +17,7 @@ Route::middleware([
     Route::post('login', [AuthorizationController::class, 'login']);
     Route::post('logout', [AuthorizationController::class, 'logout'])->middleware('auth:sanctum');
     Route::get('me', [AuthorizationController::class, 'me'])->middleware('auth:sanctum');
-    Route::patch('change_profile', [AuthorizationController::class, 'change_profile'])->middleware('auth:sanctum');
+    Route::post('change_profile', [AuthorizationController::class, 'change_profile'])->middleware('auth:sanctum');
 
     Route::middleware('auth:sanctum')->group(function() {
         Route::prefix('/admin')->group(function () {
