@@ -43,7 +43,8 @@ class AuthorizationController extends Controller
         ]);
 
         $user = User::
-            where('username', $request->username)
+            where('state', 'active')
+            ->where('username', $request->username)
             ->orWhere('email', $request->username)
             ->first();
 
@@ -78,14 +79,5 @@ class AuthorizationController extends Controller
         return response()->json(['message' => 'Logged out successfully']);
     }
 
-    // Forgot password
-    public function forgotPassword(Request $request)
-    {
-        $request->validate(['email' => 'required|email']);
-
-        Password::sendResetLink($request->only('email'));
-
-        return response()->json(['message' => 'Password reset link sent']);
-    }
 }
 
