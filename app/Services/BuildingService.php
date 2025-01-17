@@ -41,15 +41,9 @@ class BuildingService extends ApplicationService
     {
 
         $building = new Building();
-        if ($this->currentUser->type_user == "superadmin") {
-            $building->nomor_bangunan = $request["nomor_bangunan"];
-            $building->user_superadmin_id = Auth::user()->id;
-            $building->user_admin_id = Auth::user()->id;
-        }
+        $building->nomor_bangunan = $request["nomor_bangunan"];
+        $building->created_by_user = $this->currentUser->id;
 
-        if ($this->currentUser->type_user == "admin") {
-            $building->user_admin_id = Auth::user()->id;
-        }
         $building->function_building_id = $request["function_building_id"];
         $building->name = $request["name"];
         $building->alamat = $request["alamat"];
@@ -69,11 +63,9 @@ class BuildingService extends ApplicationService
 
     public function update(Building $building, $request)
     {
-        if ($this->currentUser->type_user == "superadmin") {
-            $building->nomor_bangunan = $request["nomor_bangunan"];
-            $building->user_superadmin_id = $this->currentUser->id;
-        }
 
+        $building->nomor_bangunan = $request["nomor_bangunan"];
+        $building->updated_by_user = Auth::user()->id;
         $building->function_building_id = $request["function_building_id"];
 
         $building->name = $request["name"];

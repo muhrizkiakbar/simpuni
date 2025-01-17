@@ -15,8 +15,8 @@ return new class extends Migration
         Schema::create('buildings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('function_building_id')->constrained('function_buildings');
-            $table->foreignId('user_admin_id')->nullable()->constrained('users');
-            $table->foreignId('user_superadmin_id')->nullable()->constrained('users');
+            $table->foreignId('created_by_user_id')->nullable()->constrained('users');
+            $table->foreignId('updated_by_user_id')->nullable()->constrained('users');
 
             $table->string('nomor_bangunan')->unique()->nullable();
             $table->string('name');

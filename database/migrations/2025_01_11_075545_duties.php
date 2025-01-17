@@ -15,15 +15,16 @@ return new class extends Migration
         //
         Schema::create('duties', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_pelapor_id')->constrained('users');
+            $table->foreignId('denunciation_id')->constrained('denunciations');
+            $table->foreignId('user_petugas_id')->constrained('users');
             $table->foreignId('user_admin_id')->constrained('users');
 
             $table->string('state_type');
 
-            $table->dateTime('tanggal_pengantaran');
+            $table->dateTime('tanggal_pengantaran')->nullable();
 
-            $table->text('nomor_bangunan');
-            $table->text('catatan');
+            $table->string('nomor_bangunan')->nullable();
+            $table->text('catatan')->nullable();
 
             $table->string('state')->default('on_going');
             $table->dateTime('deleted_at')->nullable();

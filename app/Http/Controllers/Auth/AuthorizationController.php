@@ -22,12 +22,17 @@ class AuthorizationController extends Controller
         ]);
 
         $user = User::create([
+            'type_user' => $request->type_user,
+            'instansi' => $request->instansi,
+            'jabatan' => $request->jabatan,
             'name' => $request->name,
+            'username' => $request->username,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
-        return response()->json(['message' => 'User registered successfully'], 201);
+
+        return $this->render_json(UserOutput::class, "format", $user);
     }
 
     public function login(Request $request)

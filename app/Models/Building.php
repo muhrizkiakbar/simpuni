@@ -15,14 +15,14 @@ class Building extends Model
         'state' => 'active',
     ];
 
-    public function user_admin() : BelongsTo
+    public function updated_by_user() : BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_admin_id');
+        return $this->belongsTo(User::class, 'updated_by_user_id');
     }
 
-    public function user_superadmin() : BelongsTo
+    public function created_by_user() : BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_superadmin_id');
+        return $this->belongsTo(User::class, 'created_by_user_id');
     }
 
     public function function_building() : BelongsTo
