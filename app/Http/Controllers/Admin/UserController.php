@@ -43,7 +43,7 @@ class UserController extends Controller
     {
         $request->validate([ 'type_user' => 'required|string|max:15',
             'instansi' => 'required|string|max:255',
-            'jabatan' => 'required|string|max:255',
+            'posisi' => 'required|string|max:255',
             'username' => 'required|string|unique:users,username',
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
@@ -80,7 +80,7 @@ class UserController extends Controller
         $request->validate([
             'type_user' => 'required|string|max:15',
             'instansi' => 'required|string|max:255',
-            'jabatan' => 'required|string|max:255',
+            'posisi' => 'required|string|max:255',
             'username' => 'required|string|unique:users,username',
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',

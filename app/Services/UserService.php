@@ -34,7 +34,7 @@ class UserService extends ApplicationService
         $user = User::create([
             'type_user' => $request->type_user,
             'instansi' => $request->instansi,
-            'jabatan' => $request->jabatan,
+            'posisi' => $request->posisi,
             'name' => $request->name,
             'username' => $request->username,
             'email' => $request->email,
@@ -50,7 +50,7 @@ class UserService extends ApplicationService
         $user->update([
             'type_user' => $request->type_user,
             'instansi' => $request->instansi,
-            'jabatan' => $request->jabatan,
+            'posisi' => $request->posisi,
             'name' => $request->name,
             'username' => $request->username,
             'email' => $request->email,

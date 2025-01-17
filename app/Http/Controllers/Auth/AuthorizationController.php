@@ -6,35 +6,15 @@ use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Outputs\Admin\UserOutput;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
 class AuthorizationController extends Controller
 {
     // Register a new user
-    public function register(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:8|confirmed',
-        ]);
-
-        $user = User::create([
-            'type_user' => $request->type_user,
-            'instansi' => $request->instansi,
-            'jabatan' => $request->jabatan,
-            'name' => $request->name,
-            'username' => $request->username,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
-
-
-        return $this->render_json(UserOutput::class, "format", $user);
-    }
-
     public function login(Request $request)
     {
         $request->validate([
@@ -70,8 +50,6 @@ class AuthorizationController extends Controller
         );
     }
 
-
-    // Logout user
     public function logout(Request $request)
     {
         $request->user()->tokens()->delete();
@@ -79,5 +57,49 @@ class AuthorizationController extends Controller
         return response()->json(['message' => 'Logged out successfully']);
     }
 
+    public function me()
+    {
+        return $this->render_json(UserOutput::class, "format", Auth::user());
+    }
+
+    public function change_profile(Request $request)
+    {
+        $request->validate([
+            'type_user' => 'required|string|max:15',
+            'instansi' => 'required|string|max:255',
+            'posisi' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
+            'password' => 'nullable|min:8|confirmed',
+            'avatar' => 'nullable|mimetypes:image/jpeg,image/png|max:512',
+        ]);
+
+        $user =  User::find(Auth::user()->id);
+
+        if (!empty($request->password)) {
+            $user->password = Hash::make($request->password);
+        }
+
+        if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
+            Storage::disk('public')->delete($user->avatar);
+        }
+
+        if ($request->hasFile('avatar')) {
+            $file = $request->file('avatar');
+            $filePath = $file->store('avatars', 'public'); // Save to 'storage/app/public/avatars'
+
+            $user->avatar = $filePath;
+            $user->save();
+        }
+
+        $user->update([
+            'type_user' => $request->type_user,
+            'instansi' => $request->instansi,
+            'posisi' => $request->posisi,
+            'name' => $request->name,
+
+        ]);
+
+        return $this->render_json(UserOutput::class, "format", Auth::user());
+    }
 }
 
