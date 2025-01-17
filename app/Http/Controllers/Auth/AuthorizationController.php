@@ -99,7 +99,7 @@ class AuthorizationController extends Controller
 
         ]);
 
-        return $this->render_json(UserOutput::class, "format", Auth::user());
+        return $this->render_json(UserOutput::class, "format", $user);
     }
 }
 
