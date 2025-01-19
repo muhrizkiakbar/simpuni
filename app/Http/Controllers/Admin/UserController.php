@@ -80,10 +80,10 @@ class UserController extends Controller
             'type_user' => 'required|string|max:15',
             'instansi' => 'required|string|max:255',
             'posisi' => 'required|string|max:255',
-            'username' => 'required|string|unique:users,username',
+            'username' => 'nullable|string|unique:users,username',
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:8',
+            'email' => 'nullable|email|unique:users,email',
+            'password' => 'nullable|min:8',
         ]);
 
         $user = $this->userService->update($id, $request);

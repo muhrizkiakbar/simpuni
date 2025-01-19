@@ -52,17 +52,20 @@ class UserService extends ApplicationService
         $user->instansi = $request->instansi;
         $user->posisi = $request->posisi;
         $user->name = $request->name;
-        $user->username = $request->username;
-        $user->email = $request->email;
+
+        if (!empty($request->email)) {
+            $user->email = $request->email;
+        }
+
+        if (!empty($request->username)) {
+            $user->username = $request->username;
+        }
 
         if (!empty($request->password)) {
             $user->password = Hash::make($request->password);
         }
-
         $user->save();
-
-        $user->tokens()->where('id', '!=', $user->currentAccessToken()->id)->delete();
-
+        $user->tokens()->where('tokenable_id', $user->id)->delete();
 
         return $user;
     }
