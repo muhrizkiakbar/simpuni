@@ -48,15 +48,18 @@ class UserService extends ApplicationService
     public function update($id, $request)
     {
         $user = User::find(decrypt($id));
-        $user->update([
-            'type_user' => $request->type_user,
-            'instansi' => $request->instansi,
-            'posisi' => $request->posisi,
-            'name' => $request->name,
-            'username' => $request->username,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        $user->type_user = $request->type_user;
+        $user->instansi = $request->instansi;
+        $user->posisi = $request->posisi;
+        $user->name = $request->name;
+        $user->username = $request->username;
+        $user->email = $request->email;
+
+        if (!empty($request->password)) {
+            $user->password = Hash::make($request->password);
+        }
+
+        $user->save();
 
         $user->tokens()->where('id', '!=', $user->currentAccessToken()->id)->delete();
 
