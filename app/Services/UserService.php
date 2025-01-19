@@ -73,9 +73,11 @@ class UserService extends ApplicationService
     public function delete($id)
     {
         $user = User::find(decrypt($id));
+        $user->state = 'archived';
+        $user->deleted_at = now();
+
         $user->update([
             'state' => 'archived',
-            'deleted_at'=> now()
         ]);
 
         $user->tokens()->where('tokenable_id', $user->id)->delete();
