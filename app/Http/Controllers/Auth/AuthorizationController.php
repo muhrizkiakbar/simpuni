@@ -91,7 +91,6 @@ class AuthorizationController extends Controller
         }
 
         $user->update([
-            'type_user' => $request->type_user,
             'instansi' => $request->instansi,
             'posisi' => $request->posisi,
             'name' => $request->name,
