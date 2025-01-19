@@ -2,14 +2,14 @@
 
 namespace App\Repositories;
 
-use App\Models\Denunciation;
+use App\Models\User;
 use App\Repositories\Repository;
 
 class Users extends Repository
 {
     public function __construct()
     {
-        $this->model = Denunciation::query();
+        $this->model = User::query();
     }
 
     protected function filterByUsername($query, $value)

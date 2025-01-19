@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('denunciations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_pelapor_id')->constrained('users');
+            $table->foreignId('type_denunciation_id')->constrained('denunciations');
 
             $table->text('alamat');
             $table->string('kecamatan_id');

@@ -42,7 +42,7 @@ class BuildingService extends ApplicationService
 
         $building = new Building();
         $building->nomor_bangunan = $request["nomor_bangunan"];
-        $building->created_by_user = $this->currentUser->id;
+        $building->created_by_user_id = $this->currentUser->id;
 
         $building->function_building_id = $request["function_building_id"];
         $building->name = $request["name"];

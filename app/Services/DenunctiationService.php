@@ -2,11 +2,12 @@
 
 namespace App\Services;
 
-use App\Exceptions\BalanceMismatchException;
+use App\Exceptions\DenunciationException;
 use Illuminate\Http\Request;
 use App\Repositories\Denunciations;
 use App\Services\ApplicationService;
-use App\Models\Balances\Division as BalanceDivision;
+use App\Models\Denunciation;
+use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Throwable;
@@ -14,147 +15,84 @@ use Throwable;
 class DenunciationService extends ApplicationService
 {
     protected $denunciationRepository;
+    protected $currentUser;
 
-    public function __construct()
+    public function __construct(User $user)
     {
-        $this->denunciationRepository = new DenunciationRepository;
+        $this->currentUser = $user;
+        $this->denunciationRepository = new Denunciations;
     }
 
-    public function balances(Request $request)
+    public function denunciations(Request $request)
     {
-        $balances = $this->balanceRepository->filterByParams($request->all());
-        return $balances;
+        $denunciations = $this->denunciationRepository->filter($request->all());
+        return $denunciations;
     }
 
     public function create($request)
     {
+        $denunciation = new Denunciation();
+        $denunciation->user_pelapor_id = $this->currentUser->id;
+        $denunciation->alamat = $request['alamat'];
+        $denunciation->kecamatan_id = $request['kecamatan_id'];
+        $denunciation->kecamatan = $request['kecamatan'];
+        $denunciation->kelurahan_id = $request['kelurahan_id'];
+        $denunciation->kelurahan = $request['kelurahan'];
+        $denunciation->longitude = $request['longitude'];
+        $denunciation->latitude = $request['latitude'];
+        $denunciation->catatan = $request['catatan'];
+        $denunciation->save();
 
-        $balance = new Balance();
-        $balance->year = $request["year"];
-        $balance->initial_balance = $this->convertToFloat($request['initial_balance']);
-        $balance->current_balance = $this->convertToFloat($request['initial_balance']);
-        $balance->save();
-
-        return $balance;
+        return $denunciation;
     }
 
-    public function update(Balance $balance, $request)
+    public function update(Denunciation $denunciation, $request)
     {
-        // Example logic for updating a photo record
         try {
-            if ($balance->initial_balance != $balance-> current_balance) {
-                throw new BalanceMismatchException();
+            if ($denunciation->state != 'sent' && $request['state'] == 'cancel') {
+                throw new DenunciationException("Tidak bisa membatalkan laporan.");
             }
-            $balance->initial_balance = $this->convertToFloat($request['initial_balance']);
-            $balance->current_balance = $this->convertToFloat($request['initial_balance']);
-            $balance->state = $request['state'];
-            $balance->save();
+            $denunciation->alamat = $request['alamat'];
+            $denunciation->kecamatan_id = $request['kecamatan_id'];
+            $denunciation->kecamatan = $request['kecamatan'];
+            $denunciation->kelurahan_id = $request['kelurahan_id'];
+            $denunciation->kelurahan = $request['kelurahan'];
+            $denunciation->longitude = $request['longitude'];
+            $denunciation->latitude = $request['latitude'];
+            $denunciation->catatan = $request['catatan'];
 
-            return $balance;
-        } catch (BalanceMismatchException $e) {
-            return back()->withErrors($e->getMessage());
+            $denunciation->state = $request['state'];
+            $denunciation->save();
+
+            return $denunciation;
+        } catch (DenunciationException $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
         } catch (Exception $e) {
             throw new Exception('Something went wrong.');
         }
     }
 
-    public function delete(Balance $balance)
+    public function warning_letter(Denunciation $denunciation, Request $request)
     {
-        // Example logic for deleting a photo record
-        if ($balance->state == "active"){
-            $balance->state = "archived";
-        }else{
-            $balance->state = "active";
-        }
-        $balance->save();
+        $denunciation->state = $this->evolve_state($denunciation->state);
+        $denunciation->save();
 
-        return $balance;
+        return $denunciation;
     }
 
-    public function divisions(Balance $balance){
-        $balance_divisions = $balance->balance_divisions();
-        return $balance_divisions;
-    }
-
-    public function create_division(Balance $balance, $request){
-        try {
-            DB::statement('LOCK TABLES balances WRITE, balance_divisions WRITE');
-
-            $remain_balance = $balance->current_balance - $this->convertToFloat($request["initial_balance"]);
-
-            if ($remain_balance < 0)
-            {
-                throw new BalanceMismatchException("Unable to add new division because remain balance is not enough.");
-            }
-
-            $division = new BalanceDivision();
-            $division->division_id = $request["division_id"];
-            $division->balance_id = $balance->id;
-            $division->current_balance = $this->convertToFloat($request["initial_balance"]);
-            $division->initial_balance = $this->convertToFloat($request["initial_balance"]);
-            $division->in_progress_balance = 0;
-            $division->save();
-
-            $balance->current_balance = $remain_balance;
-            $balance->save();
-
-            DB::statement('UNLOCK TABLES');
-
-            return $division;
-        } catch (BalanceMismatchException $e) {
-            DB::statement('UNLOCK TABLES');
-            return response()->json(['error' => $e->getMessage()], 400);
-        } catch (Throwable $e) {
-            DB::statement('UNLOCK TABLES');
-            throw new Exception($e->getMessage());
-        }
-
-    }
-
-    public function update_division(Balance $balance, $request)
-    {
-        try {
-            // Lock the necessary tables
-            DB::statement('LOCK TABLES balances WRITE, balance_divisions WRITE, sessions WRITE');
-
-            // Fetch the balance division record
-            $balance_division = BalanceDivision::where('id', '=', $request["id"])
-                ->where('balance_id', '=', $balance->id)
-                ->where('division_id', '=', $request["division_id"])
-                ->firstOrFail();
-
-            if ($balance_division->initial_balance != $balance_division->current_balance) {
-                throw new BalanceMismatchException();
-            }
-
-            // Perform balance calculations
-            $balance_current_balance = $balance->current_balance;
-            $rollback_balance = $balance_current_balance + $balance_division->current_balance;
-            $remain_balance = $rollback_balance - $this->convertToFloat($request["initial_balance"]);
-
-            if ($remain_balance < 0) {
-                throw new BalanceMismatchException("Unable to update balance division because remain balance is not enough.");
-            }
-
-            // Update the balance
-            $balance->current_balance = $remain_balance;
-            $balance->save();
-
-            // Update the balance division
-            $balance_division->current_balance = $this->convertToFloat($request["initial_balance"]);
-            $balance_division->initial_balance = $this->convertToFloat($request["initial_balance"]);
-            $balance_division->save();
-
-            // Commit the transaction before unlocking the tables
-            DB::statement('UNLOCK TABLES');
-
-            return $balance_division;
-        } catch (BalanceMismatchException $e) {
-            DB::statement('UNLOCK TABLES'); // Ensure tables are unlocked
-            throw $e; // Rethrow the exception
-        } catch (\Exception $e) {
-            DB::statement('UNLOCK TABLES'); // Ensure tables are unlocked
-            throw new \Exception("An error occurred while updating the division: " . $e->getMessage());
+    protected function evolve_state($state){
+        if ($state == 'sent') {
+            return 'teguran_lisan';
+        } elseif ($state == 'teguran_lisan') {
+            return 'sp1';
+        } elseif ($state == 'sp1') {
+            return 'sp2';
+        } elseif ($state == 'sp2') {
+            return 'sp3';
+        } elseif ($state == 'sp3') {
+            return 'sk_bongkar';
+        } elseif ($state == 'sk_bongkar') {
+            return 'done';
         }
     }
 }

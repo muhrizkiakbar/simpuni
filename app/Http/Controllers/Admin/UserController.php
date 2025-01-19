@@ -24,7 +24,6 @@ class UserController extends Controller
     //
     public function index(Request $request) {
         $users = $this->userService->users($request)->cursorPaginate(10);
-
         return $this->render_json_array(UserOutput::class, "format", $users);
     }
 
