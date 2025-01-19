@@ -90,12 +90,10 @@ class AuthorizationController extends Controller
             $user->save();
         }
 
-        $user->update([
-            'instansi' => $request->instansi,
-            'posisi' => $request->posisi,
-            'name' => $request->name,
-
-        ]);
+        $user->instansi = $request->instansi;
+        $user->posisi = $request->posisi;
+        $user->name = $request->name;
+        $user->save();
 
         return $this->render_json(UserOutput::class, "format", $user);
     }
