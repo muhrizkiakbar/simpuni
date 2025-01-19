@@ -78,7 +78,7 @@ class UserService extends ApplicationService
             'deleted_at'=> now()
         ]);
 
-        $user->tokens()->where('id', '!=', $user->currentAccessToken()->id)->delete();
+        $user->tokens()->where('tokenable_id', $user->id)->delete();
 
         return $user;
     }
