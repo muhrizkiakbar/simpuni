@@ -48,10 +48,26 @@ class UserService extends ApplicationService
     public function update($id, $request)
     {
         $user = User::find(decrypt($id));
-        $user->type_user = $request->type_user;
-        $user->instansi = $request->instansi;
-        $user->posisi = $request->posisi;
-        $user->name = $request->name;
+
+        if (!empty($request->type_user)) {
+            $user->type_user = $request->type_user;
+        }
+
+        if (!empty($request->state)) {
+            $user->state = $request->state;
+        }
+
+        if (!empty($request->instansi)) {
+            $user->instansi = $request->instansi;
+        }
+
+        if (!empty($request->posisi)) {
+            $user->posisi = $request->posisi;
+        }
+
+        if (!empty($request->name)) {
+            $user->name = $request->name;
+        }
 
         if (!empty($request->email)) {
             $user->email = $request->email;
@@ -75,10 +91,6 @@ class UserService extends ApplicationService
         $user = User::find(decrypt($id));
         $user->state = 'archived';
         $user->deleted_at = now();
-
-        $user->update([
-            'state' => 'archived',
-        ]);
 
         $user->tokens()->where('tokenable_id', $user->id)->delete();
 

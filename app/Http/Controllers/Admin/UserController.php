@@ -40,7 +40,8 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([ 'type_user' => 'required|string|max:15',
+        $request->validate([
+            'type_user' => 'required|string|max:15',
             'instansi' => 'required|string|max:255',
             'posisi' => 'required|string|max:255',
             'username' => 'required|string|unique:users,username',
@@ -77,11 +78,12 @@ class UserController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'type_user' => 'required|string|max:15',
-            'instansi' => 'required|string|max:255',
-            'posisi' => 'required|string|max:255',
+            'state' => 'nullable|string|max:15',
+            'type_user' => 'nullable|string|max:15',
+            'instansi' => 'nullable|string|max:255',
+            'posisi' => 'nullable|string|max:255',
             'username' => 'nullable|string|unique:users,username',
-            'name' => 'required|string|max:255',
+            'name' => 'nullable|string|max:255',
             'email' => 'nullable|email|unique:users,email',
             'password' => 'nullable|min:8',
         ]);
