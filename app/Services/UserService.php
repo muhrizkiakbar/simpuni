@@ -81,7 +81,7 @@ class UserService extends ApplicationService
             $user->password = Hash::make($request->password);
         }
         $user->save();
-        $user->tokens()->where('tokenable_id', $user->id)->delete();
+        $user->tokens()->where('tokenable_id', $user->id)->where('tokenable_type', 'App\Models\User')->delete();
 
         return $user;
     }
@@ -92,7 +92,7 @@ class UserService extends ApplicationService
         $user->state = 'archived';
         $user->deleted_at = now();
 
-        $user->tokens()->where('tokenable_id', $user->id)->delete();
+        $user->tokens()->where('tokenable_id', $user->id)->where('tokenable_type', 'App\Models\User')->delete();
 
         return $user;
     }

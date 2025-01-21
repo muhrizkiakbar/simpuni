@@ -27,7 +27,7 @@ class BuildingService extends ApplicationService
     {
         $buildings = $this->buildingRepository->filter(
             $request->all(),
-            ['function_building', 'user_admin', 'user_superadmin']
+            ['function_building', 'updated_by_user', 'created_by_user']
         );
         return $buildings;
     }
@@ -39,7 +39,6 @@ class BuildingService extends ApplicationService
 
     public function create($request)
     {
-
         $building = new Building();
         $building->nomor_bangunan = $request["nomor_bangunan"];
         $building->created_by_user_id = $this->currentUser->id;
@@ -56,7 +55,21 @@ class BuildingService extends ApplicationService
         $building->ketinggian = $request["ketinggian"];
         $building->longitude = $request["longitude"];
         $building->latitude = $request["latitude"];
+
         $building->save();
+
+        if (!empty($request->attachments) && $request->hasFile('attachments')) {
+            foreach ($request['attachments'] as $file) {
+                $filePath = $file->store('buildings','public');
+
+                $building->attachments()->create([
+                    'file_name' => $file->getClientOriginalName(),
+                    'file_path' => $filePath,
+                    'mime_type' => $file->getMimeType(),
+                    'size' => $file->getSize(),
+                ]);
+            }
+        }
 
         return $building;
     }
@@ -80,6 +93,23 @@ class BuildingService extends ApplicationService
         $building->longitude = $request["longitude"];
         $building->latitude = $request["latitude"];
         $building->save();
+
+        $building->attachments()->where('attachable_type', 'App\Models\Building')->whereIn('attachments.id', $request["delete_attachment_ids"])->delete();
+
+        if (!empty($request->attachments) && $request->hasFile('attachments')) {
+
+            foreach ($request['attachments'] as $file) {
+                $filePath = $file->store('buildings','public');
+
+                $building->attachments()->create([
+                    'file_name' => $file->getClientOriginalName(),
+                    'file_path' => $filePath,
+                    'mime_type' => $file->getMimeType(),
+                    'size' => $file->getSize(),
+                ]);
+            }
+        }
+
 
         return $building;
     }

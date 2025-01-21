@@ -26,7 +26,10 @@ class BuildingRequest extends FormRequest
             'ketinggian' => [ 'required', 'integer'  ],
             'longitude' => [ 'required', 'string', 'max:255'  ],
             'latitude' => [ 'required', 'string', 'max:255'  ],
-            'function_building_id' => ['required', 'integer']
+            'function_building_id' => ['required', 'integer'],
+            'attachments' => 'nullable|array|max:3',
+            'attachments.*' => 'nullable|file|mimetypes:image/jpeg,image/png,image/jpg|max:512',
+            'attachments_id_deleted' => 'nullable|array|'
         ];
     }
 }

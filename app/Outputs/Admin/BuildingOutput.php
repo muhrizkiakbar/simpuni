@@ -5,6 +5,7 @@ namespace App\Outputs\Admin;
 use App\Outputs\ApiOutput;
 use App\Outputs\Admin\FunctionBuildingOutput;
 use App\Outputs\Admin\UserOutput;
+use App\Outputs\Admin\AttachmentOutput;
 
 class BuildingOutput extends ApiOutput
 {
@@ -19,6 +20,10 @@ class BuildingOutput extends ApiOutput
     {
         $function_building_output = new FunctionBuildingOutput();
         $user_output = new UserOutput();
+        $attachment_output = new AttachmentOutput();
+        if ($object->attachments->count() > 0) {
+            //dd($object->attachments->keyBy('items'));
+        }
         $data = [
             'id' => $object->id,
             'name' => $object->name,
@@ -38,9 +43,11 @@ class BuildingOutput extends ApiOutput
             'state' => $object->state,
             'slug' => encrypt($object->id),
             'deleted_at' => $object->deleted_at,
+            'attachments' => $object->attachments->count() > 0 ? $attachment_output->renderJson($object->attachments, "format", ["mode"=>"raw_many_data"]) : [],
         ];
 
         return $data;
     }
+
 }
 

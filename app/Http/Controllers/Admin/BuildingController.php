@@ -21,14 +21,14 @@ class BuildingController extends Controller
 
     //
     public function index(Request $request) {
-        $buildings = $this->buildingService->buildings($request)->cursorPaginate(10);
+        $buildings = $this->buildingService->buildings($request, ['attachments'])->cursorPaginate(10);
 
         return $this->render_json_array(BuildingOutput::class, "format", $buildings);
     }
 
     public function store(BuildingRequest $request) {
-        $building = $this->buildingService->create($request->all());
-        return $this->render_json(BuildingOutput::class, "format", $building);
+        $building = $this->buildingService->create($request);
+        return $this->render_json(BuildingOutput::class, "format", $building->load('attachments'));
     }
 
     public function show(string $id) {
@@ -38,9 +38,9 @@ class BuildingController extends Controller
 
     public function update(BuildingRequest $request, string $id) {
         $building = Building::find(decrypt($id));
-        $building = $this->buildingService->update($building, $request->all());
+        $building = $this->buildingService->update($building, $request);
 
-        return $this->render_json(BuildingOutput::class, "format", $building);
+        return $this->render_json(BuildingOutput::class, "format", $building->load('attachments'));
     }
 
     public function destroy(string $id) {

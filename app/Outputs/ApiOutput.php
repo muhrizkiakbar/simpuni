@@ -19,9 +19,7 @@ abstract class ApiOutput
     {
         // Check if the paginator is of type LengthAwarePaginator
         if ($data instanceof LengthAwarePaginator) {
-            $formattedData = $data->getCollection()->map(function ($item) use ($layout, $options) {
-                return $this->$layout($item, $options);
-            });
+            $formattedData = $this->mapData($data, $layout, $options);
 
             return [
                 'data' => $formattedData,
@@ -36,9 +34,8 @@ abstract class ApiOutput
 
         // Check if the paginator is of type CursorPaginator
         if ($data instanceof CursorPaginator) {
-            $formattedData = $data->getCollection()->map(function ($item) use ($layout, $options) {
-                return $this->$layout($item, $options);
-            });
+            $formattedData = $this->mapData($data, $layout, $options);
+
             return [
                 'data' => $formattedData,
                 'pagination' => [
@@ -50,7 +47,6 @@ abstract class ApiOutput
             ];
         }
 
-        // If it's neither LengthAwarePaginator nor CursorPaginator, just return the raw data
         return $data;
     }
 
@@ -67,15 +63,27 @@ abstract class ApiOutput
                 return [];
             }
 
-            if ($options["mode"] ?? "not_raw_data" == "raw_data")
-            {
-                return $this->$layout($data, $options);
+            if (array_key_exists('mode',$options)) {
+                if ($options["mode"] == "raw_many_data")
+                {
+                    return $this->mapData($data, $layout, $options);
+                }
+                elseif ($options["mode"] == "raw_data")
+                {
+                    return $this->$layout($data, $options);
+                }
             }
 
             return [
                 'data' => $this->$layout($data, $options),
             ];
         }
+    }
+
+    protected function mapData($data, $layout, $options) {
+        return $data->map(function ($item) use ($layout, $options) {
+            return $this->$layout($item, $options);
+        });
     }
 
     /**

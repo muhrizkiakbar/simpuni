@@ -54,6 +54,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(\App\Outputs\Admin\UserOutput::class, function ($app) {
             return new \App\Outputs\Admin\UserOutput();
         });
+
+        $this->app->singleton(\App\Outputs\Admin\AttachmentOutput::class, function ($app) {
+            return new \App\Outputs\Admin\AttachmentOutput();
+        });
     }
 
     /**

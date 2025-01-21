@@ -69,7 +69,7 @@ class AuthorizationController extends Controller
             'posisi' => 'required|string|max:255',
             'name' => 'required|string|max:255',
             'password' => 'nullable|min:8|confirmed',
-            'avatar' => 'nullable|mimetypes:image/jpeg,image/png,image/jpg|max:512',
+            'avatar' => 'nullable|file|mimetypes:image/jpeg,image/png,image/jpg|max:512',
         ]);
 
         $user =  User::find(Auth::user()->id);

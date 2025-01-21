@@ -29,4 +29,9 @@ class Building extends Model
     {
         return $this->belongsTo(FunctionBuilding::class, 'function_building_id');
     }
+
+    public function attachments()
+    {
+        return $this->morphMany(Attachment::class, 'attachable');
+    }
 }
