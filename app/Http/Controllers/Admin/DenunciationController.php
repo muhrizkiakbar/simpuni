@@ -4,12 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Outputs\Admin\DenunciationOutput;
-use App\Services\DenunciationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\Admin\Denunciations\InputRequest;
 use App\Http\Requests\Admin\Denunciations\WarningLetterRequest;
 use App\Models\Denunciation;
+use App\Services\DenunciationService;
 
 class DenunciationController extends Controller
 {

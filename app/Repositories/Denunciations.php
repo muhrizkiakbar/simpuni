@@ -12,6 +12,10 @@ class Denunciations extends Repository
         $this->model = Denunciation::query();
     }
 
+    protected function filterByAlamat($query,$value) {
+        $query->where('alamat', 'like', '%'.$value.'%');
+    }
+
     protected function filterByUserPelaporId($query, $value)
     {
         $query->where('user_pelapor_id', $value);

@@ -15,7 +15,7 @@ class WarningLetterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'state' => [ 'required', 'string' ],
+            'state' => [ 'nullable', 'string' ],
         ];
     }
 }

@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\FunctionBuildingController as AdminFunctionBuildingController;
 use App\Http\Controllers\Admin\TypeDenunciationController as AdminTypeDenunciationController;
 use App\Http\Controllers\Admin\BuildingController as AdminBuildingController;
+use App\Http\Controllers\Admin\DenunciationController as AdminDenunciationController;
 
 Route::middleware([
     EnsureFrontendRequestsAreStateful::class,
@@ -37,7 +38,7 @@ Route::middleware([
                 'index', 'store', 'update', 'destroy', 'show'
             ]);
 
-            Route::resource('denunciations', AdminUserController::class)->only([
+            Route::resource('denunciations', AdminDenunciationController::class)->only([
                 'index', 'update', 'show'
             ]);
         });

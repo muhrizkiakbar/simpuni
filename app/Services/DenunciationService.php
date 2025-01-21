@@ -9,8 +9,6 @@ use App\Services\ApplicationService;
 use App\Models\Denunciation;
 use App\Models\User;
 use Exception;
-use Illuminate\Support\Facades\DB;
-use Throwable;
 
 class DenunciationService extends ApplicationService
 {
@@ -72,8 +70,17 @@ class DenunciationService extends ApplicationService
         }
     }
 
-    public function warning_letter(Denunciation $denunciation, Request $request)
+    public function warning_letter(Denunciation $denunciation, $request)
     {
+
+        if (!empty($request->state)) {
+            if ($request->state == 'done') {
+                $denunciation->state = 'done';
+                $denunciation->save();
+                return $denunciation;
+            }
+        }
+
         $denunciation->state = $this->evolve_state($denunciation->state);
         $denunciation->save();
 

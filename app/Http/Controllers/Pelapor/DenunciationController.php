@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 
 class DenunciationController extends Controller
 {
-    //
     public function index()
     {
     }
