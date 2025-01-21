@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('created_by_user_id')->nullable()->constrained('users');
             $table->foreignId('updated_by_user_id')->nullable()->constrained('users');
 
-            $table->string('nomor_bangunan')->unique()->nullable();
+            $table->string('nomor_izin_bangunan')->unique()->nullable();
             $table->string('name');
             $table->text('alamat');
             $table->string('kecamatan_id');
@@ -30,7 +30,12 @@ return new class extends Migration
             $table->integer('ketinggian');
             $table->string('longitude');
             $table->string('latitude');
+            $table->string('nomor_bangunan');
+            $table->string('rt');
+            $table->string('rw');
             $table->string('state')->default('active');
+            $table->string('dokumen')->nullable(); // Store the file path
+            $table->string('foto'); // Store the file path
             $table->dateTime('deleted_at')->nullable();
             $table->timestamps();
         });

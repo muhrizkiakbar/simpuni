@@ -10,6 +10,7 @@ use App\Services\ApplicationService;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Throwable;
 
 class BuildingService extends ApplicationService
@@ -40,9 +41,11 @@ class BuildingService extends ApplicationService
     public function create($request)
     {
         $building = new Building();
+        $building->nomor_izin_bangunan = $request["nomor_izin_bangunan"];
         $building->nomor_bangunan = $request["nomor_bangunan"];
+        $building->rw = $request["rw"];
+        $building->rt = $request["rt"];
         $building->created_by_user_id = $this->currentUser->id;
-
         $building->function_building_id = $request["function_building_id"];
         $building->name = $request["name"];
         $building->alamat = $request["alamat"];
@@ -56,29 +59,50 @@ class BuildingService extends ApplicationService
         $building->longitude = $request["longitude"];
         $building->latitude = $request["latitude"];
 
-        $building->save();
 
-        if (!empty($request->attachments) && $request->hasFile('attachments')) {
-            foreach ($request['attachments'] as $file) {
-                $filePath = $file->store('buildings','public');
+        //komentar dlu gasan pelaporan
+        //if (!empty($request->attachments) && $request->hasFile('attachments')) {
+            //foreach ($request['attachments'] as $file) {
+                //$filePath = $file->store('buildings','public');
 
-                $building->attachments()->create([
-                    'file_name' => $file->getClientOriginalName(),
-                    'file_path' => $filePath,
-                    'mime_type' => $file->getMimeType(),
-                    'size' => $file->getSize(),
-                ]);
-            }
+                //$building->attachments()->create([
+                    //'file_name' => $file->getClientOriginalName(),
+                    //'file_path' => $filePath,
+                    //'mime_type' => $file->getMimeType(),
+                    //'size' => $file->getSize(),
+                //]);
+            //}
+        //}
+
+        if (!empty($request->file('foto')) && $request->hasFile('foto')) {
+            $file = $request->file('foto');
+            $filePath = $file->store('buildings/foto','public');
+
+            $building->foto = $filePath;
+            $building->save();
         }
+
+        if (!empty($request->dokumen) && $request->hasFile('dokumen')) {
+            $file = $request->file('dokumen');
+            $filePath = $file->store('buildings/dokumen','public');
+
+            $building->dokumen = $filePath;
+            $building->save();
+        }
+
+        $building->save();
 
         return $building;
     }
 
     public function update(Building $building, $request)
     {
+        $building->nomor_izin_bangunan = $request["nomor_izin_bangunan"];
+        $building->rw = $request["rw"];
+        $building->rt = $request["rt"];
 
         $building->nomor_bangunan = $request["nomor_bangunan"];
-        $building->updated_by_user = Auth::user()->id;
+        $building->updated_by_user = $this->currentUser->id;
         $building->function_building_id = $request["function_building_id"];
 
         $building->name = $request["name"];
@@ -92,25 +116,46 @@ class BuildingService extends ApplicationService
         $building->ketinggian = $request["ketinggian"];
         $building->longitude = $request["longitude"];
         $building->latitude = $request["latitude"];
-        $building->save();
 
-        $building->attachments()->where('attachable_type', 'App\Models\Building')->whereIn('attachments.id', $request["delete_attachment_ids"])->delete();
 
-        if (!empty($request->attachments) && $request->hasFile('attachments')) {
+        // gasan laporan
+        //$building->attachments()->where('attachable_type', 'App\Models\Building')->whereIn('attachments.id', $request["delete_attachment_ids"])->delete();
 
-            foreach ($request['attachments'] as $file) {
-                $filePath = $file->store('buildings','public');
+        //if (!empty($request->attachments) && $request->hasFile('attachments')) {
 
-                $building->attachments()->create([
-                    'file_name' => $file->getClientOriginalName(),
-                    'file_path' => $filePath,
-                    'mime_type' => $file->getMimeType(),
-                    'size' => $file->getSize(),
-                ]);
-            }
+            //foreach ($request['attachments'] as $file) {
+                //$filePath = $file->store('buildings','public');
+
+                //$building->attachments()->create([
+                    //'file_name' => $file->getClientOriginalName(),
+                    //'file_path' => $filePath,
+                    //'mime_type' => $file->getMimeType(),
+                    //'size' => $file->getSize(),
+                //]);
+            //}
+        //}
+
+        if (!empty($request->foto) && $request->hasFile('foto')) {
+            Storage::disk('public/buildings/foto')->delete($building->foto);
+
+            $file = $request->file('foto');
+            $filePath = $file->store('foto','buildings','public');
+
+            $building->foto = $filePath;
+            $building->save();
         }
 
+        if (!empty($request->dokumen) && $request->hasFile('dokumen')) {
+            Storage::disk('public/buildings/dokumen')->delete($building->dokumen);
 
+            $file = $request->file('dokumen');
+            $filePath = $file->store('dokumen','buildings','public');
+
+            $building->dokumen = $filePath;
+            $building->save();
+        }
+
+        $building->save();
         return $building;
     }
 

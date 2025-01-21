@@ -80,6 +80,11 @@ class DenunciationService extends ApplicationService
         return $denunciation;
     }
 
+    public function show(string $id)
+    {
+        return Denunciation::find($id)->load('user_pelapor', 'type_denunciation');
+    }
+
     protected function evolve_state($state){
         if ($state == 'sent') {
             return 'teguran_lisan';

@@ -15,7 +15,7 @@ class BuildingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nomor_bangunan' => ['nullable','string'],
+            'nomor_izin_bangunan' => ['nullable','string'],
             'alamat' => [ 'required', 'string' ],
             'kecamatan_id' => [ 'required', 'string', 'max:15'  ],
             'kecamatan' => [ 'required', 'string', 'max:255'  ],
@@ -26,11 +26,16 @@ class BuildingRequest extends FormRequest
             'ketinggian' => [ 'required', 'integer'  ],
             'longitude' => [ 'required', 'string', 'max:255'  ],
             'latitude' => [ 'required', 'string', 'max:255'  ],
+            'nomor_bangunan' => [ 'required', 'string', 'max:255'  ],
+            'rt' => [ 'required', 'string', 'max:255'  ],
+            'rw' => [ 'required', 'string', 'max:255'  ],
             'function_building_id' => ['required', 'integer'],
-            'attachments' => 'nullable|array|max:3',
-            'attachments.*' => 'nullable|file|mimetypes:image/jpeg,image/png,image/jpg|max:512',
-            'attachments_id_deleted' => 'nullable|array|'
+            'foto' => 'required|file|mimetypes:image/jpeg,image/png,image/jpg|max:2048',
+            'dokumen' => 'nullable|file|mimetypes:application/pdf|max:2048',
         ];
+            //'attachments' => 'nullable|array|max:3',
+            //'attachments.*' => 'nullable|file|mimetypes:image/jpeg,image/png,image/jpg|max:512',
+            //'attachments_id_deleted' => 'nullable|array|'
     }
 }
 

@@ -36,6 +36,10 @@ Route::middleware([
             Route::resource('users', AdminUserController::class)->only([
                 'index', 'store', 'update', 'destroy', 'show'
             ]);
+
+            Route::resource('denunciations', AdminUserController::class)->only([
+                'index', 'update', 'show'
+            ]);
         });
     });
 });

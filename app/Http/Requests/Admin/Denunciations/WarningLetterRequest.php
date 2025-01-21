@@ -15,8 +15,7 @@ class WarningLetterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'alamat' => [ 'required', 'string' ],
-            'catatan' => [ 'nullable', 'string', 'max:255'  ],
+            'state' => [ 'required', 'string' ],
         ];
     }
 }
