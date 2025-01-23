@@ -3,7 +3,6 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
-
 use App\Http\Controllers\Auth\AuthorizationController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\FunctionBuildingController as AdminFunctionBuildingController;
@@ -21,7 +20,7 @@ Route::middleware([
     Route::get('me', [AuthorizationController::class, 'me'])->middleware('auth:sanctum');
     Route::post('change_profile', [AuthorizationController::class, 'change_profile'])->middleware('auth:sanctum');
 
-    Route::middleware('auth:sanctum')->group(function() {
+    Route::middleware('auth:sanctum')->group(function () {
         Route::prefix('/admin')->group(function () {
             Route::resource('function_buildings', AdminFunctionBuildingController::class)->only([
                 'index', 'store', 'update', 'destroy', 'show'
@@ -34,6 +33,7 @@ Route::middleware([
             Route::resource('buildings', AdminBuildingController::class)->only([
                 'index', 'store', 'update', 'destroy', 'show'
             ]);
+            Route::get('buildings_count', [AdminBuildingController::class, 'buildings_count'])->middleware('auth:sanctum');
 
             Route::resource('users', AdminUserController::class)->only([
                 'index', 'store', 'update', 'destroy', 'show'
@@ -42,6 +42,7 @@ Route::middleware([
             Route::resource('denunciations', AdminDenunciationController::class)->only([
                 'index', 'update', 'show'
             ]);
+            Route::get('denunciations_count', [AdminDenunciationsController::class, 'denunciations_count'])->middleware('auth:sanctum');
         });
 
         Route::prefix('/pelapor')->group(function () {
@@ -51,5 +52,3 @@ Route::middleware([
         });
     });
 });
-
-

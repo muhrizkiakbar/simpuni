@@ -16,8 +16,7 @@ class WarningLetterRequest extends FormRequest
     {
         return [
             'state' => [ 'nullable', 'string' ],
+            'user_petugas_id' => ['required', 'integer']
         ];
     }
 }
-
-

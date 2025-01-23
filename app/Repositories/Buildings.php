@@ -40,7 +40,7 @@ class Buildings extends Repository
 
     protected function filterByQ($query, $value)
     {
-        $query->where('name','like', '%'.$value.'%');
+        $query->where('name', 'like', '%'.$value.'%');
     }
 
     protected function filterByKecamatanId($query, $value)
@@ -63,6 +63,13 @@ class Buildings extends Repository
         $query->where('state', $value);
     }
 
+    protected function filterByBulanTahun($query, $value)
+    {
+        $value = $carbonDate = Carbon::createFromFormat('d-m-Y', $value);
+        $month = $carbonDate->month;
+        $year = $carbonDate->year;
+
+        $query->whereMonth('created_at', $month)
+              ->whereYear('created_at', $year);
+    }
 }
-
-

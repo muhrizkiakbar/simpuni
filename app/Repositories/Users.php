@@ -19,8 +19,8 @@ class Users extends Repository
 
     protected function filterByQ($query, $value)
     {
-        $query->where('name','like', '%'.$value.'%')
-            ->orWhere('posisi','like', '%'.$value.'%')
+        $query->where('name', 'like', '%'.$value.'%')
+            ->orWhere('posisi', 'like', '%'.$value.'%')
             ->orWhere('instansi', 'like', '%'.$value.'%');
     }
 
@@ -35,5 +35,3 @@ class Users extends Repository
     }
 
 }
-
-

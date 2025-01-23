@@ -20,18 +20,21 @@ class DenunciationController extends Controller
     }
 
     //
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         $denunciations = $this->denunciationService->denunciations($request)->cursorPaginate(10);
 
         return $this->render_json_array(DenunciationOutput::class, "format", $denunciations);
     }
 
-    public function show(string $id) {
+    public function show(string $id)
+    {
         $denunciation = $this->denunciationService->show(decrypt($id));
         return $this->render_json(DenunciationOutput::class, "format", $denunciation);
     }
 
-    public function update(WarningLetterRequest $request, string $id) {
+    public function update(WarningLetterRequest $request, string $id)
+    {
         $denunciation = Denunciation::find(decrypt($id));
         $denunciation = $this->denunciationService->warning_letter($denunciation, $request);
 
@@ -39,6 +42,17 @@ class DenunciationController extends Controller
             DenunciationOutput::class,
             "format",
             $denunciation->load('log_denunciations', 'attachments')
+        );
+    }
+
+    public function denunciations_count(Request $request)
+    {
+        $denunciations_count = $this->denunciationService->denunciations($request)->count;
+        return response()->json(
+            [
+                'params' => $request->all(),
+                'result_count' => $denunciations_count,
+            ]
         );
     }
 }

@@ -22,7 +22,8 @@ class UserController extends Controller
     }
 
     //
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         $users = $this->userService->users($request)->cursorPaginate(10);
         return $this->render_json_array(UserOutput::class, "format", $users);
     }
@@ -100,5 +101,16 @@ class UserController extends Controller
     {
         $user = $this->userService->delete($id);
         return $this->render_json(UserOutput::class, "format", $user);
+    }
+
+    public function users_count(Request $request)
+    {
+        $users_count = $this->userService->users($request)->count();
+        return response()->json(
+            [
+                'params' => $request->all(),
+                'result_count' => $users_count,
+            ]
+        );
     }
 }

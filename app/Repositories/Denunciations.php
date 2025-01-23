@@ -12,7 +12,8 @@ class Denunciations extends Repository
         $this->model = Denunciation::query();
     }
 
-    protected function filterByAlamat($query,$value) {
+    protected function filterByAlamat($query, $value)
+    {
         $query->where('alamat', 'like', '%'.$value.'%');
     }
 
@@ -41,6 +42,13 @@ class Denunciations extends Repository
         $query->where('state', $value);
     }
 
+    protected function filterByBulanTahun($query, $value)
+    {
+        $value = $carbonDate = Carbon::createFromFormat('d-m-Y', $value);
+        $month = $carbonDate->month;
+        $year = $carbonDate->year;
+
+        $query->whereMonth('created_at', $month)
+              ->whereYear('created_at', $year);
+    }
 }
-
-

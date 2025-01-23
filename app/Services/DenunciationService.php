@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Exceptions\DenunciationException;
+use App\Models\Duty;
 use Illuminate\Http\Request;
 use App\Repositories\Denunciations;
 use App\Services\ApplicationService;
@@ -19,7 +20,7 @@ class DenunciationService extends ApplicationService
     public function __construct(User $user)
     {
         $this->currentUser = $user;
-        $this->denunciationRepository = new Denunciations;
+        $this->denunciationRepository = new Denunciations();
     }
 
     public function denunciations(Request $request)
@@ -44,7 +45,7 @@ class DenunciationService extends ApplicationService
 
         if (!empty($request->attachments) && $request->hasFile('attachments')) {
             foreach ($request['attachments'] as $file) {
-                $filePath = $file->store('denunciations','public');
+                $filePath = $file->store('denunciations', 'public');
 
                 $denunciation->attachments()->create([
                     'file_name' => $file->getClientOriginalName(),
@@ -81,7 +82,7 @@ class DenunciationService extends ApplicationService
             if (!empty($request->attachments) && $request->hasFile('attachments')) {
 
                 foreach ($request['attachments'] as $file) {
-                    $filePath = $file->store('denunciations','public');
+                    $filePath = $file->store('denunciations', 'public');
 
                     $denunciation->attachments()->create([
                         'file_name' => $file->getClientOriginalName(),
@@ -123,6 +124,13 @@ class DenunciationService extends ApplicationService
         $log_denunciation->new_state = $denunciation->state;
         $log_denunciation->save();
 
+        $duty = new Duty();
+        $duty->denunciation = $denunciation;
+        $duty->user_petugas_id = $request->user_petugas_id;
+        $duty->user_admin = $this->currentUser;
+        $duty->state_type = $denunciation->state;
+        $duty->save();
+
         return $denunciation;
     }
 
@@ -136,7 +144,8 @@ class DenunciationService extends ApplicationService
         );
     }
 
-    protected function evolve_state($state){
+    protected function evolve_state($state)
+    {
         if ($state == 'sent') {
             return 'teguran_lisan';
         } elseif ($state == 'teguran_lisan') {
@@ -152,5 +161,3 @@ class DenunciationService extends ApplicationService
         }
     }
 }
-
-
