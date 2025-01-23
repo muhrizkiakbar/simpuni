@@ -29,18 +29,18 @@ class BuildingOutput extends ApiOutput
             'rt' => $object->rt,
             'name' => $object->name,
             'alamat' => $object->alamat,
-            'kecamatan_id'=> $object->kecamatan_id,
+            'kecamatan_id' => $object->kecamatan_id,
             'kecamatan' => $object->kecamatan,
-            'kelurahan_id' => $object->keluarahan_id,
+            'kelurahan_id' => $object->kelurahan_id,
             'kelurahan' => $object->kelurahan,
             'luas_bangunan' => $object->luas_bangunan,
             'banyak_lantai' => $object->banyak_lantai,
             'ketinggian' => $object->ketinggian,
             'longitude' => $object->longitude,
             'latitude' => $object->latitude,
-            'function_building'=> $function_building_output->renderJson($object->function_building, "format", [ "mode" => "raw_data"]) ?? [],
-            'updated_by_user'=> $user_output->renderJson($object->updated_by_user ?? [], "format", [ "mode" => "raw_data"]) ?? [],
-            'created_by_user'=> $user_output->renderJson($object->created_by_user ?? [], "format", [ "mode" => "raw_data"]) ?? [],
+            'function_building' => $function_building_output->renderJson($object->function_building, "format", [ "mode" => "raw_data"]) ?? [],
+            'updated_by_user' => $user_output->renderJson($object->updated_by_user ?? [], "format", [ "mode" => "raw_data"]) ?? [],
+            'created_by_user' => $user_output->renderJson($object->created_by_user ?? [], "format", [ "mode" => "raw_data"]) ?? [],
             'state' => $object->state,
             'slug' => encrypt($object->id),
             'deleted_at' => $object->deleted_at,
@@ -48,8 +48,7 @@ class BuildingOutput extends ApiOutput
             'dokumen' => $object->dokumen ? asset('storage/'.$object->dokumen) : null,
         ];
 
-            //'attachments' => $object->attachments->count() > 0 ? $attachment_output->renderJson($object->attachments, "format", ["mode"=>"raw_many_data"]) : [],
+        //'attachments' => $object->attachments->count() > 0 ? $attachment_output->renderJson($object->attachments, "format", ["mode"=>"raw_many_data"]) : [],
         return $data;
     }
 }
-
