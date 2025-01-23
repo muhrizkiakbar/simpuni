@@ -63,6 +63,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(\App\Outputs\Admin\DenunciationOutput::class, function ($app) {
             return new \App\Outputs\Admin\DenunciationOutput();
         });
+
+        $this->app->singleton(\App\Outputs\Admin\LogDenunciationOutput::class, function ($app) {
+            return new \App\Outputs\Admin\LogDenunciationOutput();
+        });
     }
 
     /**

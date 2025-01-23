@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Repositories\Denunciations;
 use App\Services\ApplicationService;
 use App\Models\Denunciation;
+use App\Models\LogDenunciation;
 use App\Models\User;
 use Exception;
 
@@ -41,6 +42,19 @@ class DenunciationService extends ApplicationService
         $denunciation->catatan = $request['catatan'];
         $denunciation->save();
 
+        if (!empty($request->attachments) && $request->hasFile('attachments')) {
+            foreach ($request['attachments'] as $file) {
+                $filePath = $file->store('denunciations','public');
+
+                $denunciation->attachments()->create([
+                    'file_name' => $file->getClientOriginalName(),
+                    'file_path' => $filePath,
+                    'mime_type' => $file->getMimeType(),
+                    'size' => $file->getSize(),
+                ]);
+            }
+        }
+
         return $denunciation;
     }
 
@@ -62,6 +76,22 @@ class DenunciationService extends ApplicationService
             $denunciation->state = $request['state'];
             $denunciation->save();
 
+            $denunciation->attachments()->where('attachable_type', 'App\Models\Denunciation')->whereIn('attachments.id', $request["delete_attachment_ids"])->delete();
+
+            if (!empty($request->attachments) && $request->hasFile('attachments')) {
+
+                foreach ($request['attachments'] as $file) {
+                    $filePath = $file->store('denunciations','public');
+
+                    $denunciation->attachments()->create([
+                        'file_name' => $file->getClientOriginalName(),
+                        'file_path' => $filePath,
+                        'mime_type' => $file->getMimeType(),
+                        'size' => $file->getSize(),
+                    ]);
+                }
+            }
+
             return $denunciation;
         } catch (DenunciationException $e) {
             return response()->json(['error' => $e->getMessage()], 400);
@@ -81,15 +111,29 @@ class DenunciationService extends ApplicationService
             }
         }
 
+        $currentState = $denunciation->state;
+
         $denunciation->state = $this->evolve_state($denunciation->state);
         $denunciation->save();
+
+        $log_denunciation = new LogDenunciation();
+        $log_denunciation->denunciation_id = $denunciation->id;
+        $log_denunciation->user_admin_id = $this->currentUser->id;
+        $log_denunciation->current_state = $currentState;
+        $log_denunciation->new_state = $denunciation->state;
+        $log_denunciation->save();
 
         return $denunciation;
     }
 
     public function show(string $id)
     {
-        return Denunciation::find($id)->load('user_pelapor', 'type_denunciation');
+        return Denunciation::find($id)->with(
+            'user_pelapor',
+            'type_denunciation',
+            'attachments',
+            'log_denunciations'
+        );
     }
 
     protected function evolve_state($state){

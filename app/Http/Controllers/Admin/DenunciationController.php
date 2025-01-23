@@ -35,6 +35,10 @@ class DenunciationController extends Controller
         $denunciation = Denunciation::find(decrypt($id));
         $denunciation = $this->denunciationService->warning_letter($denunciation, $request);
 
-        return $this->render_json(DenunciationOutput::class, "format", $denunciation);
+        return $this->render_json(
+            DenunciationOutput::class,
+            "format",
+            $denunciation->load('log_denunciations', 'attachments')
+        );
     }
 }

@@ -28,7 +28,7 @@ class BuildingController extends Controller
 
     public function store(BuildingRequest $request) {
         $building = $this->buildingService->create($request);
-        return $this->render_json(BuildingOutput::class, "format", $building->load('attachments'));
+        return $this->render_json(BuildingOutput::class, "format", $building);
     }
 
     public function show(string $id) {

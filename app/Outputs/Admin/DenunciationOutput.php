@@ -19,6 +19,7 @@ class DenunciationOutput extends ApiOutput
     {
         $user_output = new UserOutput();
         $type_denunciation_output = new TypeDenunciation();
+        $attachment_output = new AttachmentOutput();
         $data = [
             'id' => $object->id,
             'alamat' => $object->alamat,
@@ -31,6 +32,7 @@ class DenunciationOutput extends ApiOutput
             'catatan' => $object->catatan,
             'user_pelapor'=> $user_output->renderJson($object->user_pelapor ?? [], "format", [ "mode" => "raw_data"]) ?? [],
             'type_denunciation'=> $type_denunciation_output->renderJson($object->type_denunciation ?? [], "format", [ "mode" => "raw_data" ]) ?? [],
+            'attachments' => $object->attachments->count() > 0 ? $attachment_output->renderJson($object->attachments, "format", ["mode"=>"raw_many_data"]) : [],
             'state' => $object->state,
             'slug' => encrypt($object->id)
         ];
@@ -43,6 +45,9 @@ class DenunciationOutput extends ApiOutput
         // TODO: add output duties
         $user_output = new UserOutput();
         $type_denunciation_output = new TypeDenunciation();
+        $attachment_output = new AttachmentOutput();
+        $log_output = new LogDenunciationOutput();
+
         $data = [
             'id' => $object->id,
             'alamat' => $object->alamat,
@@ -56,6 +61,8 @@ class DenunciationOutput extends ApiOutput
             'user_pelapor'=> $user_output->renderJson($object->user_pelapor ?? [], "format", [ "mode" => "raw_data"]) ?? [],
             'type_denunciation'=> $type_denunciation_output->renderJson($object->type_denunciation ?? [], "format", [ "mode" => "raw_data" ]) ?? [],
             'state' => $object->state,
+            'attachments' => $object->attachments->count() > 0 ? $attachment_output->renderJson($object->attachments, "format", ["mode"=>"raw_many_data"]) : [],
+            'logs' => $object->log_denunciations->count() > 0 ? $log_output->renderJson($object->log_denunciations, "format", ["mode"=>"raw_many_data"]) : [],
             'slug' => encrypt($object->id)
         ];
 

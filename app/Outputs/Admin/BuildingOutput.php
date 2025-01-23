@@ -20,7 +20,6 @@ class BuildingOutput extends ApiOutput
     {
         $function_building_output = new FunctionBuildingOutput();
         $user_output = new UserOutput();
-        $attachment_output = new AttachmentOutput();
 
         $data = [
             'id' => $object->id,

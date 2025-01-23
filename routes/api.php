@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\FunctionBuildingController as AdminFunctionBuildi
 use App\Http\Controllers\Admin\TypeDenunciationController as AdminTypeDenunciationController;
 use App\Http\Controllers\Admin\BuildingController as AdminBuildingController;
 use App\Http\Controllers\Admin\DenunciationController as AdminDenunciationController;
+use App\Http\Controllers\Pelapor\DenunciationController as PelaporDenunciationController;
 
 Route::middleware([
     EnsureFrontendRequestsAreStateful::class,
@@ -40,6 +41,12 @@ Route::middleware([
 
             Route::resource('denunciations', AdminDenunciationController::class)->only([
                 'index', 'update', 'show'
+            ]);
+        });
+
+        Route::prefix('/pelapor')->group(function () {
+            Route::resource('denunciations', PelaporDenunciationController::class)->only([
+                'index', 'store', 'update', 'show'
             ]);
         });
     });

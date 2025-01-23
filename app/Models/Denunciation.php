@@ -26,4 +26,14 @@ class Denunciation extends Model
     {
         return $this->hasMany(Duty::class, 'denunciation_id', 'id');
     }
+
+    public function log_denunciations() : HasMany
+    {
+        return $this->hasMany(LogDenunciation::class, 'denunciation_id', 'id');
+    }
+
+    public function attachments()
+    {
+        return $this->morphMany(Attachment::class, 'attachable');
+    }
 }
