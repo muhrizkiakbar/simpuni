@@ -48,8 +48,9 @@ Route::middleware([
 
         Route::prefix('/pelapor')->group(function () {
             Route::resource('denunciations', PelaporDenunciationController::class)->only([
-                'index', 'store', 'update', 'show'
+                'index', 'store', 'show'
             ]);
+            Route::post('/denunciations/{id}', [PelaporDenunciController::class, 'update'])->middleware('auth:sanctum');
         });
     });
 });

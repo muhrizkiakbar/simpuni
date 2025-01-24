@@ -15,18 +15,17 @@ class InputRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'alamat' => [ 'required', 'string' ],
-            'kecamatan_id' => [ 'required', 'string', 'max:15'  ],
-            'kecamatan' => [ 'required', 'string', 'max:255'  ],
-            'kelurahan_id' => [ 'required', 'string', 'max:15'  ],
-            'kelurahan' => [ 'required', 'string', 'max:255'  ],
-            'longitude' => [ 'required', 'string', 'max:255'  ],
-            'latitude' => [ 'required', 'string', 'max:255'  ],
-            'catatan' => [ 'required', 'string', 'max:255'  ],
+            'alamat' => [ 'nullable', 'filled', 'string' ],
+            'kecamatan_id' => [ 'nullable', 'filled', 'string', 'max:15'  ],
+            'kecamatan' => [ 'nullable', 'string', 'filled', 'max:255'  ],
+            'kelurahan_id' => [ 'nullable', 'string', 'filled', 'max:15'  ],
+            'kelurahan' => [ 'nullable', 'string', 'filled', 'max:255'  ],
+            'longitude' => [ 'nullable', 'string', 'filled', 'max:255'  ],
+            'latitude' => [ 'nullable', 'string', 'filled', 'max:255'  ],
+            'catatan' => [ 'nullable', 'string', 'filled', 'max:255'  ],
             'attachments' => 'nullable|array|max:3',
             'attachments.*' => 'nullable|file|mimetypes:image/jpeg,image/png,image/jpg|max:512',
-            'delete_attachment_ids' => 'nullable|array|'
+            'delete_attachment_ids' => 'nullable|array|filled'
         ];
     }
 }
-

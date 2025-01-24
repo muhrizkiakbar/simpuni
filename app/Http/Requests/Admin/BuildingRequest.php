@@ -15,27 +15,26 @@ class BuildingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nomor_izin_bangunan' => ['nullable','string'],
-            'alamat' => [ 'required', 'string' ],
-            'kecamatan_id' => [ 'required', 'string', 'max:15'  ],
-            'kecamatan' => [ 'required', 'string', 'max:255'  ],
-            'kelurahan_id' => [ 'required', 'string', 'max:15'  ],
-            'kelurahan' => [ 'required', 'string', 'max:255'  ],
-            'luas_bangunan' => [ 'required', 'integer' ],
-            'banyak_lantai' => [ 'required', 'integer'  ],
-            'ketinggian' => [ 'required', 'integer'  ],
-            'longitude' => [ 'required', 'string', 'max:255'  ],
-            'latitude' => [ 'required', 'string', 'max:255'  ],
-            'nomor_bangunan' => [ 'required', 'string', 'max:255'  ],
-            'rt' => [ 'required', 'string', 'max:255'  ],
-            'rw' => [ 'required', 'string', 'max:255'  ],
-            'function_building_id' => ['required', 'integer'],
+            'nomor_izin_bangunan' => ['nullable','string', 'filled'],
+            'alamat' => [ 'nullable','string', 'filled' ],
+            'kecamatan_id' => [ 'nullable','string', 'filled', 'max:15'  ],
+            'kecamatan' => [ 'nullable','string', 'filled', 'max:255'  ],
+            'kelurahan_id' => [ 'nullable', 'string', 'filled', 'max:15'  ],
+            'kelurahan' => [ 'nullable', 'string', 'filled', 'max:255'  ],
+            'luas_bangunan' => [ 'nullable', 'integer', 'filled' ],
+            'banyak_lantai' => [ 'required', 'integer', 'filled'  ],
+            'ketinggian' => [ 'nullable', 'integer', 'filled'  ],
+            'longitude' => [ 'nullable', 'string', 'filled', 'max:255'  ],
+            'latitude' => [ 'nullable', 'string', 'filled', 'max:255'  ],
+            'nomor_bangunan' => [ 'nullable', 'string', 'filled', 'max:255'  ],
+            'rt' => [ 'required', 'string', 'filled', 'max:255'  ],
+            'rw' => [ 'required', 'string', 'filled', 'max:255'  ],
+            'function_building_id' => ['required', 'filled', 'integer'],
             'foto' => 'required|file|mimetypes:image/jpeg,image/png,image/jpg|max:2048',
             'dokumen' => 'nullable|file|mimetypes:application/pdf|max:2048',
         ];
-            //'attachments' => 'nullable|array|max:3',
-            //'attachments.*' => 'nullable|file|mimetypes:image/jpeg,image/png,image/jpg|max:512',
-            //'attachments_id_deleted' => 'nullable|array|'
+        //'attachments' => 'nullable|array|max:3',
+        //'attachments.*' => 'nullable|file|mimetypes:image/jpeg,image/png,image/jpg|max:512',
+        //'attachments_id_deleted' => 'nullable|array|'
     }
 }
-
