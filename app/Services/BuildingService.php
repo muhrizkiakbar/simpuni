@@ -104,7 +104,7 @@ class BuildingService extends ApplicationService
 
 
         if (!empty($request->foto) && $request->hasFile('foto')) {
-            Storage::disk('public')->delete($building->foto);
+            Storage::delete($building->foto);
 
             $file = $request->file('foto');
             $filePath = $file->store('buildings/foto', 'public');
@@ -114,7 +114,7 @@ class BuildingService extends ApplicationService
         }
 
         if (!empty($request->dokumen) && $request->hasFile('dokumen')) {
-            Storage::disk('public')->delete($building->dokumen);
+            Storage::delete($building->dokumen);
 
             $file = $request->file('dokumen');
             $filePath = $file->store('buildings/dokumen', 'public');
