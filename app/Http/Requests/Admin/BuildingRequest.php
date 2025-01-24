@@ -15,7 +15,7 @@ class BuildingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nomor_izin_bangunan' => ['nullable','string', 'filled'],
+            'nomor_izin_bangunan' => ['nullable','string'],
             'alamat' => [ 'nullable','string', 'filled' ],
             'kecamatan_id' => [ 'nullable','string', 'filled', 'max:15'  ],
             'kecamatan' => [ 'nullable','string', 'filled', 'max:255'  ],

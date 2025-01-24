@@ -94,7 +94,7 @@ class BuildingService extends ApplicationService
             $request->except(['foto', 'dokumen'])
         );
 
-        $building->updated_by_user = $this->currentUser;
+        $building->updated_by_user_id = $this->currentUser->id;
 
         if ($this->currentUser->type_user == 'konsultan') {
             $building->state = 'waiting';
