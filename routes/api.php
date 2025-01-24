@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\TypeDenunciationController as AdminTypeDenunciati
 use App\Http\Controllers\Admin\BuildingController as AdminBuildingController;
 use App\Http\Controllers\Admin\DenunciationController as AdminDenunciationController;
 use App\Http\Controllers\Pelapor\DenunciationController as PelaporDenunciationController;
+use App\Http\Controllers\Petugas\BuildingController as PetugasBuildingController;
 
 Route::middleware([
     EnsureFrontendRequestsAreStateful::class,
@@ -34,8 +35,8 @@ Route::middleware([
                 Route::resource('buildings', AdminBuildingController::class)->only([
                     'index', 'store', 'destroy', 'show'
                 ]);
-                Route::get('buildings_count', [AdminBuildingController::class, 'buildings_count'])->middleware('auth:sanctum');
                 Route::post('/buildings/{id}', [AdminBuildingController::class, 'update'])->middleware('auth:sanctum');
+                Route::get('buildings_count', [AdminBuildingController::class, 'buildings_count'])->middleware('auth:sanctum');
 
                 Route::resource('users', AdminUserController::class)->only([
                     'index', 'store', 'update', 'destroy', 'show'
@@ -52,7 +53,13 @@ Route::middleware([
             Route::resource('denunciations', PelaporDenunciationController::class)->only([
                 'index', 'store', 'show'
             ]);
-            Route::post('/denunciations/{id}', [PelaporDenunciController::class, 'update']);
+            Route::post('/denunciations/{id}', [PelaporDenunciationController::class, 'update']);
+        });
+        Route::prefix('/petugas')->group(function () {
+            Route::resource('buildings', PetugasBuildingController::class)->only([
+                'index', 'store', 'destroy', 'show'
+            ]);
+            Route::post('/buildings/{id}', [PetugasBuildingController::class, 'update']);
         });
     });
 });
