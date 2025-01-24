@@ -14,7 +14,7 @@ class UserService extends ApplicationService
 
     public function __construct()
     {
-        $this->userRepository = new Users;
+        $this->userRepository = new Users();
     }
 
     public function users(Request $request)
@@ -89,14 +89,18 @@ class UserService extends ApplicationService
     public function delete($id)
     {
         $user = User::find(decrypt($id));
-        $user->state = 'archived';
-        $user->deleted_at = now();
+        // Example logic for deleting a photo record
+        if ($user->state == "active") {
+            $user->state = 'archived';
+            $user->deleted_at = now();
+        } else {
+            $user->state = "active";
+            $user->deleted_at = null;
+        }
+        $user->save();
 
         $user->tokens()->where('tokenable_id', $user->id)->where('tokenable_type', 'App\Models\User')->delete();
 
         return $user;
     }
 }
-
-
-
