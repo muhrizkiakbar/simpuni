@@ -8,6 +8,7 @@ class FunctionBuilding extends Model
 {
     //
     protected $table = 'function_buildings';
+    protected $guarded = [];
 
     protected $attributes = [
         'state' => 'active',

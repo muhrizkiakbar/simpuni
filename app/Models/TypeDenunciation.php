@@ -9,12 +9,13 @@ class TypeDenunciation extends Model
 {
     //
     protected $table = 'type_denunciations';
+    protected $guarded = [];
 
     protected $attributes = [
         'state' => 'active',
     ];
 
-    public function denunciations() : HasMany
+    public function denunciations(): HasMany
     {
         return $this->hasMany(Denunciation::class, 'type_denunciation_id', 'id');
     }

@@ -11,23 +11,24 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Denunciation extends Model
 {
     protected $table = 'denunciations';
+    protected $guarded = [];
 
-    public function user_pelapor() : BelongsTo
+    public function user_pelapor(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_pelapor_id');
     }
 
-    public function type_denunciation() : BelongsTo
+    public function type_denunciation(): BelongsTo
     {
         return $this->belongsTo(TypeDenunciation::class, 'type_denunciation_id');
     }
 
-    public function duties() : HasMany
+    public function duties(): HasMany
     {
         return $this->hasMany(Duty::class, 'denunciation_id', 'id');
     }
 
-    public function log_denunciations() : HasMany
+    public function log_denunciations(): HasMany
     {
         return $this->hasMany(LogDenunciation::class, 'denunciation_id', 'id');
     }
