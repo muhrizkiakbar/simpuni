@@ -65,17 +65,10 @@ class DenunciationService extends ApplicationService
             if ($denunciation->state != 'sent' && $request['state'] == 'cancel') {
                 throw new DenunciationException("Tidak bisa membatalkan laporan.");
             }
-            $denunciation->alamat = $request['alamat'];
-            $denunciation->kecamatan_id = $request['kecamatan_id'];
-            $denunciation->kecamatan = $request['kecamatan'];
-            $denunciation->kelurahan_id = $request['kelurahan_id'];
-            $denunciation->kelurahan = $request['kelurahan'];
-            $denunciation->longitude = $request['longitude'];
-            $denunciation->latitude = $request['latitude'];
-            $denunciation->catatan = $request['catatan'];
 
-            $denunciation->state = $request['state'];
-            $denunciation->save();
+            $denunciation->update(
+                $request->all()->except('attachments')
+            );
 
             $denunciation->attachments()->where('attachable_type', 'App\Models\Denunciation')->whereIn('attachments.id', $request["delete_attachment_ids"])->delete();
 

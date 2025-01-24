@@ -59,20 +59,12 @@ class BuildingService extends ApplicationService
         $building->longitude = $request["longitude"];
         $building->latitude = $request["latitude"];
 
+        if ($this->currentUser->type_user == 'konsultan') {
+            $building->state = 'waiting';
+        }
 
-        //komentar dlu gasan pelaporan
-        //if (!empty($request->attachments) && $request->hasFile('attachments')) {
-        //foreach ($request['attachments'] as $file) {
-        //$filePath = $file->store('buildings','public');
+        $building->save();
 
-        //$building->attachments()->create([
-        //'file_name' => $file->getClientOriginalName(),
-        //'file_path' => $filePath,
-        //'mime_type' => $file->getMimeType(),
-        //'size' => $file->getSize(),
-        //]);
-        //}
-        //}
 
         if (!empty($request->file('foto')) && $request->hasFile('foto')) {
             $file = $request->file('foto');
@@ -97,47 +89,19 @@ class BuildingService extends ApplicationService
 
     public function update(Building $building, $request)
     {
-        //$building->nomor_izin_bangunan = $request->nomor_izin_bangunan;
-        //$building->rw = $request->rw;
-        //$building->rt = $request->rt;
-
-        //$building->nomor_bangunan = $request->nomor_bangunan;
-        //$building->updated_by_user = $this->currentUser->id;
-        //$building->function_building_id = $request->function_building_id;
-
-        //$building->name = $request->name;
-        //$building->alamat = $request->alamat;
-        //$building->kecamatan_id = $request->kecamatan_id;
-        //$building->kecamatan = $request->kecamatan;
-        //$building->kelurahan_id = $request->kelurahan_id;
-        //$building->kelurahan = $request->kelurahan;
-        //$building->luas_bangunan = $request->luas_bangunan;
-        //$building->banyak_lantai = $request->banyak_lantai;
-        //$building->ketinggian = $request->ketinggian;
-        //$building->longitude = $request->longitude;
-        //$building->latitude = $request->latitude;
 
         $building->update(
             $request->except(['foto', 'dokumen'])
         );
 
+        $building->updated_by_user = $this->currentUser;
 
-        // gasan laporan
-        //$building->attachments()->where('attachable_type', 'App\Models\Building')->whereIn('attachments.id', $request["delete_attachment_ids"])->delete();
+        if ($this->currentUser->type_user == 'konsultan') {
+            $building->state = 'waiting';
+        }
 
-        //if (!empty($request->attachments) && $request->hasFile('attachments')) {
+        $building->save();
 
-        //foreach ($request['attachments'] as $file) {
-        //$filePath = $file->store('buildings','public');
-
-        //$building->attachments()->create([
-        //'file_name' => $file->getClientOriginalName(),
-        //'file_path' => $filePath,
-        //'mime_type' => $file->getMimeType(),
-        //'size' => $file->getSize(),
-        //]);
-        //}
-        //}
 
         if (!empty($request->foto) && $request->hasFile('foto')) {
             Storage::disk('public')->delete($building->foto);
@@ -159,7 +123,6 @@ class BuildingService extends ApplicationService
             $building->save();
         }
 
-        //$building->save();
         return $building;
     }
 

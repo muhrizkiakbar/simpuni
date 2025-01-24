@@ -32,6 +32,7 @@ class BuildingRequest extends FormRequest
             'function_building_id' => ['required', 'filled', 'integer'],
             'foto' => 'required|file|mimetypes:image/jpeg,image/png,image/jpg|max:2048',
             'dokumen' => 'nullable|file|mimetypes:application/pdf|max:2048',
+            'state' => [ 'nullable', 'string', 'filled', 'max:255'  ],
         ];
         //'attachments' => 'nullable|array|max:3',
         //'attachments.*' => 'nullable|file|mimetypes:image/jpeg,image/png,image/jpg|max:512',
