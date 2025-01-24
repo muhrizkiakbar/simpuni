@@ -21,7 +21,7 @@ class BuildingService extends ApplicationService
     public function __construct(User $user)
     {
         $this->currentUser = $user;
-        $this->buildingRepository = new Buildings;
+        $this->buildingRepository = new Buildings();
     }
 
     public function buildings(Request $request)
@@ -62,21 +62,21 @@ class BuildingService extends ApplicationService
 
         //komentar dlu gasan pelaporan
         //if (!empty($request->attachments) && $request->hasFile('attachments')) {
-            //foreach ($request['attachments'] as $file) {
-                //$filePath = $file->store('buildings','public');
+        //foreach ($request['attachments'] as $file) {
+        //$filePath = $file->store('buildings','public');
 
-                //$building->attachments()->create([
-                    //'file_name' => $file->getClientOriginalName(),
-                    //'file_path' => $filePath,
-                    //'mime_type' => $file->getMimeType(),
-                    //'size' => $file->getSize(),
-                //]);
-            //}
+        //$building->attachments()->create([
+        //'file_name' => $file->getClientOriginalName(),
+        //'file_path' => $filePath,
+        //'mime_type' => $file->getMimeType(),
+        //'size' => $file->getSize(),
+        //]);
+        //}
         //}
 
         if (!empty($request->file('foto')) && $request->hasFile('foto')) {
             $file = $request->file('foto');
-            $filePath = $file->store('buildings/foto','public');
+            $filePath = $file->store('buildings/foto', 'public');
 
             $building->foto = $filePath;
             $building->save();
@@ -84,7 +84,7 @@ class BuildingService extends ApplicationService
 
         if (!empty($request->dokumen) && $request->hasFile('dokumen')) {
             $file = $request->file('dokumen');
-            $filePath = $file->store('buildings/dokumen','public');
+            $filePath = $file->store('buildings/dokumen', 'public');
 
             $building->dokumen = $filePath;
             $building->save();
@@ -97,25 +97,29 @@ class BuildingService extends ApplicationService
 
     public function update(Building $building, $request)
     {
-        $building->nomor_izin_bangunan = $request["nomor_izin_bangunan"];
-        $building->rw = $request["rw"];
-        $building->rt = $request["rt"];
+        //$building->nomor_izin_bangunan = $request->nomor_izin_bangunan;
+        //$building->rw = $request->rw;
+        //$building->rt = $request->rt;
 
-        $building->nomor_bangunan = $request["nomor_bangunan"];
-        $building->updated_by_user = $this->currentUser->id;
-        $building->function_building_id = $request["function_building_id"];
+        //$building->nomor_bangunan = $request->nomor_bangunan;
+        //$building->updated_by_user = $this->currentUser->id;
+        //$building->function_building_id = $request->function_building_id;
 
-        $building->name = $request["name"];
-        $building->alamat = $request["alamat"];
-        $building->kecamatan_id = $request["kecamatan_id"];
-        $building->kecamatan = $request["kecamatan"];
-        $building->kelurahan_id = $request["kelurahan_id"];
-        $building->kelurahan = $request["kelurahan"];
-        $building->luas_bangunan = $request["luas_bangunan"];
-        $building->banyak_lantai = $request["banyak_lantai"];
-        $building->ketinggian = $request["ketinggian"];
-        $building->longitude = $request["longitude"];
-        $building->latitude = $request["latitude"];
+        //$building->name = $request->name;
+        //$building->alamat = $request->alamat;
+        //$building->kecamatan_id = $request->kecamatan_id;
+        //$building->kecamatan = $request->kecamatan;
+        //$building->kelurahan_id = $request->kelurahan_id;
+        //$building->kelurahan = $request->kelurahan;
+        //$building->luas_bangunan = $request->luas_bangunan;
+        //$building->banyak_lantai = $request->banyak_lantai;
+        //$building->ketinggian = $request->ketinggian;
+        //$building->longitude = $request->longitude;
+        //$building->latitude = $request->latitude;
+
+        $building->update(
+            $request->except(['foto', 'dokumen'])
+        );
 
 
         // gasan laporan
@@ -123,48 +127,48 @@ class BuildingService extends ApplicationService
 
         //if (!empty($request->attachments) && $request->hasFile('attachments')) {
 
-            //foreach ($request['attachments'] as $file) {
-                //$filePath = $file->store('buildings','public');
+        //foreach ($request['attachments'] as $file) {
+        //$filePath = $file->store('buildings','public');
 
-                //$building->attachments()->create([
-                    //'file_name' => $file->getClientOriginalName(),
-                    //'file_path' => $filePath,
-                    //'mime_type' => $file->getMimeType(),
-                    //'size' => $file->getSize(),
-                //]);
-            //}
+        //$building->attachments()->create([
+        //'file_name' => $file->getClientOriginalName(),
+        //'file_path' => $filePath,
+        //'mime_type' => $file->getMimeType(),
+        //'size' => $file->getSize(),
+        //]);
+        //}
         //}
 
         if (!empty($request->foto) && $request->hasFile('foto')) {
-            Storage::disk('public/buildings/foto')->delete($building->foto);
+            Storage::disk('public')->delete($building->foto);
 
             $file = $request->file('foto');
-            $filePath = $file->store('foto','buildings','public');
+            $filePath = $file->store('buildings/foto', 'public');
 
             $building->foto = $filePath;
             $building->save();
         }
 
         if (!empty($request->dokumen) && $request->hasFile('dokumen')) {
-            Storage::disk('public/buildings/dokumen')->delete($building->dokumen);
+            Storage::disk('public')->delete($building->dokumen);
 
             $file = $request->file('dokumen');
-            $filePath = $file->store('dokumen','buildings','public');
+            $filePath = $file->store('buildings/dokumen', 'public');
 
             $building->dokumen = $filePath;
             $building->save();
         }
 
-        $building->save();
+        //$building->save();
         return $building;
     }
 
     public function delete(Building $building)
     {
-        if ($building->state == "active"){
+        if ($building->state == "active") {
             $building->state = "archived";
             $building->deleted_at = now();
-        }else{
+        } else {
             $building->state = "active";
             $building->deleted_at = null;
         }
@@ -173,5 +177,3 @@ class BuildingService extends ApplicationService
         return $building;
     }
 }
-
-

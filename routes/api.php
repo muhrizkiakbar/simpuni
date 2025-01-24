@@ -31,9 +31,10 @@ Route::middleware([
             ]);
 
             Route::resource('buildings', AdminBuildingController::class)->only([
-                'index', 'store', 'update', 'destroy', 'show'
+                'index', 'store', 'destroy', 'show'
             ]);
             Route::get('buildings_count', [AdminBuildingController::class, 'buildings_count'])->middleware('auth:sanctum');
+            Route::post('/buildings/{id}', [AdminBuildingController::class, 'update'])->middleware('auth:sanctum');
 
             Route::resource('users', AdminUserController::class)->only([
                 'index', 'store', 'update', 'destroy', 'show'
@@ -42,7 +43,7 @@ Route::middleware([
             Route::resource('denunciations', AdminDenunciationController::class)->only([
                 'index', 'update', 'show'
             ]);
-            Route::get('denunciations_count', [AdminDenunciationsController::class, 'denunciations_count'])->middleware('auth:sanctum');
+            Route::get('denunciations_count', [AdminDenunciationController::class, 'denunciations_count'])->middleware('auth:sanctum');
         });
 
         Route::prefix('/pelapor')->group(function () {

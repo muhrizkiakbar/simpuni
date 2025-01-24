@@ -15,17 +15,19 @@ class Building extends Model
         'state' => 'active',
     ];
 
-    public function updated_by_user() : BelongsTo
+    protected $guarded = [];
+
+    public function updated_by_user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'updated_by_user_id');
     }
 
-    public function created_by_user() : BelongsTo
+    public function created_by_user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by_user_id');
     }
 
-    public function function_building() : BelongsTo
+    public function function_building(): BelongsTo
     {
         return $this->belongsTo(FunctionBuilding::class, 'function_building_id');
     }
