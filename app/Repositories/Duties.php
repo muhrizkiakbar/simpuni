@@ -12,37 +12,35 @@ class Duties extends Repository
         $this->model = Duty::query();
     }
 
-    protected function filterByDenunciationId($query, $value)
+    protected function filterByDenunciation_Id($query, $value)
     {
         $query->where('denunciation_id', $value);
     }
 
-    protected function filterByUserPetugasId($query, $value)
+    protected function filterByUser_Petugas_Id($query, $value)
     {
         $query->where('user_petugas_id', $value);
     }
 
 
-    protected function filterByUserAdminId($query, $value)
+    protected function filterByUser_Admin_Id($query, $value)
     {
         $query->where('user_admin_id', $value);
     }
 
-    protected function filterByTanggalPengantaran($query, $value)
+    protected function filterByTanggal_Pengantaran($query, $value)
     {
         $query->whereDate('tanggal_pengantaran', $value);
     }
 
-    protected function filterByTanggalPenugasan($query, $value)
+    protected function filterByTanggal_Penugasan($query, $value)
     {
         $query->whereDate('created_at', $value);
     }
 
-    protected function filterByStateType($query, $value)
+    protected function filterByState_Type($query, $value)
     {
         $query->where('state_type', $value);
     }
 
 }
-
-

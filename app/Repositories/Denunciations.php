@@ -17,22 +17,22 @@ class Denunciations extends Repository
         $query->where('alamat', 'like', '%'.$value.'%');
     }
 
-    protected function filterByUserPelaporId($query, $value)
+    protected function filterByUser_Pelapor_Id($query, $value)
     {
         $query->where('user_pelapor_id', $value);
     }
 
-    protected function filterByKecamatanId($query, $value)
+    protected function filterByKecamatan_Id($query, $value)
     {
         $query->where('kecamatan_id', $value);
     }
 
-    protected function filterByKelurahanId($query, $value)
+    protected function filterByKelurahan_Id($query, $value)
     {
         $query->where('kelurahan_id', $value);
     }
 
-    protected function filterByTanggalPengaduan($query, $value)
+    protected function filterByTanggal_Pengaduan($query, $value)
     {
         $query->whereDate('tanggal_pengaduan', $value);
     }
@@ -42,7 +42,7 @@ class Denunciations extends Repository
         $query->where('state', $value);
     }
 
-    protected function filterByBulanTahun($query, $value)
+    protected function filterByBulan_Tahun($query, $value)
     {
         $value = $carbonDate = Carbon::createFromFormat('d-m-Y', $value);
         $month = $carbonDate->month;
