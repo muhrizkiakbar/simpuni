@@ -46,6 +46,8 @@ class BuildingOutput extends ApiOutput
             'deleted_at' => $object->deleted_at,
             'foto' => $object->foto ? asset('storage/'.$object->foto) : null,
             'dokumen' => $object->dokumen ? asset('storage/'.$object->dokumen) : null,
+            'created_at' => $object->created_at,
+            'updated_at' => $object->updated_at,
         ];
 
         //'attachments' => $object->attachments->count() > 0 ? $attachment_output->renderJson($object->attachments, "format", ["mode"=>"raw_many_data"]) : [],
