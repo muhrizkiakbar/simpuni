@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
             'posisi' => 'vendor',
             'email' => 'vendor@mail.com',
             'password' => bcrypt('diskominfo'),
-            'type_user' => 'vendor',
+            'type_user' => 'kontraktor',
             'instansi' => 'vendor'
         ]);
         User::create([

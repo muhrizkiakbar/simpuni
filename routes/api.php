@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\BuildingController as AdminBuildingController;
 use App\Http\Controllers\Admin\DenunciationController as AdminDenunciationController;
 use App\Http\Controllers\Pelapor\DenunciationController as PelaporDenunciationController;
 use App\Http\Controllers\Petugas\BuildingController as PetugasBuildingController;
+use App\Http\Controllers\Admin\FunctionBuildingController as PetugasFunctionBuildingController;
 
 Route::middleware([
     EnsureFrontendRequestsAreStateful::class,
@@ -43,8 +44,9 @@ Route::middleware([
                 ]);
 
                 Route::resource('denunciations', AdminDenunciationController::class)->only([
-                    'index', 'update', 'show'
+                    'index', 'show'
                 ]);
+                Route::post('/denunciations/{id}', [AdminDenunciationController::class, 'update']);
                 Route::get('/denunciations_count', [AdminDenunciationController::class, 'denunciations_count']);
             });
         });
@@ -60,6 +62,10 @@ Route::middleware([
                 'index', 'store', 'destroy', 'show'
             ]);
             Route::post('/buildings/{id}', [PetugasBuildingController::class, 'update']);
+
+            Route::resource('function_buildings', PetugasFunctionBuildingController::class)->only([
+                'index'
+            ]);
         });
     });
 });

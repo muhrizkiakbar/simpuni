@@ -96,16 +96,26 @@ class DenunciationService extends ApplicationService
 
     public function warning_letter(Denunciation $denunciation, $request)
     {
+        $currentState = $denunciation->state;
 
         if (!empty($request->state)) {
             if ($request->state == 'done') {
                 $denunciation->state = 'done';
                 $denunciation->save();
+
+                $log_denunciation = new LogDenunciation();
+                $log_denunciation->denunciation_id = $denunciation->id;
+                $log_denunciation->user_admin_id = $this->currentUser->id;
+                $log_denunciation->current_state = $currentState;
+                $log_denunciation->new_state = $denunciation->state;
+                $log_denunciation->save();
+
+                $denunciation->duties
+                    ->update(['state' => 'done']);
+
                 return $denunciation;
             }
         }
-
-        $currentState = $denunciation->state;
 
         $denunciation->state = $this->evolve_state($denunciation->state);
         $denunciation->save();
@@ -122,6 +132,19 @@ class DenunciationService extends ApplicationService
         $duty->user_petugas_id = $request->user_petugas_id;
         $duty->user_admin = $this->currentUser;
         $duty->state_type = $denunciation->state;
+
+        if (!empty($request->surat_tugas) && $request->hasFile('surat_tugas')) {
+            if (!is_null($duty->surat_tugas)) {
+                Storage::delete($building->surat_tugas);
+            }
+
+            $file = $request->file('surat_tugas');
+            $filePath = $file->store('duties/surat_tugas', 'public');
+
+            $duty->surat_tugas = $filePath;
+            $duty->save();
+        }
+
         $duty->save();
 
         return $denunciation;

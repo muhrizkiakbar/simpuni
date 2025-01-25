@@ -12,30 +12,26 @@ class Buildings extends Repository
         $this->model = Building::query();
     }
 
-    protected function filterByTypeDenunciationId($query, $value)
-    {
-        $query->where('type_denunciation_id', $value);
-    }
 
-    protected function filterByFunctionBuildingId($query, $value)
+    protected function filterByFunction_Building_Id($query, $value)
     {
         $query->where('function_building_id', $value);
     }
 
-    protected function filterByNomorBangunan($query, $value)
+    protected function filterByNomor_Bangunan($query, $value)
     {
         $query->where('nomor_bangunan', $value);
     }
 
 
-    protected function filterByUserAdminId($query, $value)
+    protected function filterByUpdated_By_User_Id($query, $value)
     {
-        $query->where('user_admin_id', $value);
+        $query->where('updated_by_user_id', $value);
     }
 
-    protected function filterByUserSuperadminId($query, $value)
+    protected function filterByCreated_By_User_Id($query, $value)
     {
-        $query->where('user_superadmin_id', $value);
+        $query->where('created_by_user_id', $value);
     }
 
     protected function filterByQ($query, $value)
@@ -43,17 +39,17 @@ class Buildings extends Repository
         $query->where('name', 'like', '%'.$value.'%');
     }
 
-    protected function filterByKecamatanId($query, $value)
+    protected function filterByKecamatan_Id($query, $value)
     {
         $query->where('kecamatan_id', $value);
     }
 
-    protected function filterByKelurahanId($query, $value)
+    protected function filterByKelurahan_Id($query, $value)
     {
         $query->where('kelurahan_id', $value);
     }
 
-    protected function filterByTanggalPengaduan($query, $value)
+    protected function filterByTanggal_Pengaduan($query, $value)
     {
         $query->whereDate('tanggal_pengaduan', $value);
     }
@@ -63,7 +59,7 @@ class Buildings extends Repository
         $query->where('state', $value);
     }
 
-    protected function filterByBulanTahun($query, $value)
+    protected function filterByBulan_Tahun($query, $value)
     {
         $value = $carbonDate = Carbon::createFromFormat('d-m-Y', $value);
         $month = $carbonDate->month;

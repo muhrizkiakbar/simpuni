@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class () extends Migration {
     /**
      * Run the migrations.
      */
@@ -26,7 +25,7 @@ return new class extends Migration
             $table->string('nomor_bangunan')->nullable();
             $table->text('catatan')->nullable();
 
-            $table->string('state')->default('on_going');
+            $table->string('state')->default('waiting');
             $table->dateTime('deleted_at')->nullable();
 
             $table->timestamps();

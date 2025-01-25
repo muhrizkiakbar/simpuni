@@ -22,7 +22,11 @@ class BuildingController extends Controller
     //
     public function index(Request $request)
     {
-        $buildings = $this->buildingService->buildings($request, ['attachments'])->cursorPaginate(10);
+        $buildings = $this->buildingService->buildings(
+            $request->merge(
+                ['created_by_user_id' => Auth::user()->id]
+            )
+        )->cursorPaginate(10);
 
         return $this->render_json_array(BuildingOutput::class, "format", $buildings);
     }

@@ -63,8 +63,6 @@ class BuildingService extends ApplicationService
             $building->state = 'waiting';
         }
 
-        $building->save();
-
 
         if (!empty($request->file('foto')) && $request->hasFile('foto')) {
             $file = $request->file('foto');
