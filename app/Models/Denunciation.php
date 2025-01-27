@@ -31,7 +31,7 @@ class Denunciation extends Model
 
     public function function_building(): BelongsTo
     {
-        return $this->belongsTo(FunctionBuilding::class, 'functions_building_id');
+        return $this->belongsTo(FunctionBuilding::class, 'function_building_id');
     }
 
     public function duties(): HasMany
