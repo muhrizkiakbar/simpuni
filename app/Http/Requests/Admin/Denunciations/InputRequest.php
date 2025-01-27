@@ -18,7 +18,6 @@ class InputRequest extends FormRequest
             'type_denunciation_id' => [ 'nullable',  'integer' ],
             'function_building_id' => [ 'nullable',  'integer' ],
             'description' => [ 'nullable', 'string' ],
-            'description' => [ 'nullable', 'string' ],
             'warna_bangunan' => [ 'nullable', 'string' ],
             'pemilik_bangunan' => [ 'nullable', 'string' ],
             'jumlah_lantai' => [ 'nullable', 'integer' ],
