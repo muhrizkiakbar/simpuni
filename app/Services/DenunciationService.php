@@ -106,47 +106,6 @@ class DenunciationService extends ApplicationService
         }
     }
 
-    public function submit(Denunciation $denunciation, $request)
-    {
-        try {
-            $request_input = $request->merge(
-                [
-                    'user_pelapor_id' => $this->currentUser->id,
-                ]
-            );
-            $request_input = $request->except('attachments');
-
-
-            $denunciation->update(
-                $request_input
-            );
-
-
-            if (!empty($request->delete_attachment_ids)) {
-                $denunciation->attachments()->where('attachable_type', 'App\Models\Denunciation')->whereIn('attachments.id', $request->delete_attachment_ids)->delete();
-            }
-
-            if (!empty($request->attachments) && $request->hasFile('attachments')) {
-
-                foreach ($request['attachments'] as $file) {
-                    $filePath = $file->store('denunciations', 'public');
-
-                    $denunciation->attachments()->create([
-                        'file_name' => $file->getClientOriginalName(),
-                        'file_path' => $filePath,
-                        'mime_type' => $file->getMimeType(),
-                        'size' => $file->getSize(),
-                    ]);
-                }
-            }
-
-            return $denunciation;
-        } catch (DenunciationException $e) {
-            return response()->json(['error' => $e->getMessage()], 400);
-        } catch (Exception $e) {
-            throw new Exception('Something went wrong.');
-        }
-    }
     public function warning_letter(Denunciation $denunciation, $request)
     {
         $currentState = $denunciation->state;

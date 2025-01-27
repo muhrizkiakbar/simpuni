@@ -15,7 +15,7 @@ class WarningLetterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'state' => [ 'nullable', 'filled', 'string' ],
+            'state' => [ 'nullable', 'string' ],
             'user_petugas_id' => ['nullable', 'integer'],
             'surat_tugas' => 'nullable|file|mimetypes:application/pdf|max:2048',
             'foto' => 'nullable|file|mimetypes:image/jpeg,image/png,image/jpg|max:2048',
