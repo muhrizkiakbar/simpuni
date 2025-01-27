@@ -5,7 +5,7 @@ namespace App\Http\Requests\Admin\Denunciations;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class InputRequest extends FormRequest
+class SubmitRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -20,7 +20,6 @@ class InputRequest extends FormRequest
             'description' => [ 'nullable', 'string', 'filled' ],
             'description' => [ 'nullable', 'string', 'filled' ],
             'warna_bangunan' => [ 'nullable', 'string', 'filled' ],
-            'pemilik_bangunan' => [ 'nullable', 'string', 'filled' ],
             'jumlah_lantai' => [ 'nullable', 'integer', 'filled' ],
             'material_utama' => [ 'nullable', 'string', 'filled' ],
             'alamat' => [ 'nullable', 'filled', 'string' ],

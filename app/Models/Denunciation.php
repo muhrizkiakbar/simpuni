@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Models\User;
+use App\Models\TypeDenunciation;
+use App\Models\FunctionBuilding;
 use App\Models\Duty;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -13,6 +15,10 @@ class Denunciation extends Model
     protected $table = 'denunciations';
     protected $guarded = [];
 
+    protected $attributes = [
+        'state' => 'sent',
+    ];
+
     public function user_pelapor(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_pelapor_id');
@@ -21,6 +27,11 @@ class Denunciation extends Model
     public function type_denunciation(): BelongsTo
     {
         return $this->belongsTo(TypeDenunciation::class, 'type_denunciation_id');
+    }
+
+    public function function_building(): BelongsTo
+    {
+        return $this->belongsTo(FunctionBuilding::class, 'functions_building_id');
     }
 
     public function duties(): HasMany

@@ -10,6 +10,8 @@ use App\Http\Controllers\Admin\TypeDenunciationController as AdminTypeDenunciati
 use App\Http\Controllers\Admin\BuildingController as AdminBuildingController;
 use App\Http\Controllers\Admin\DenunciationController as AdminDenunciationController;
 use App\Http\Controllers\Pelapor\DenunciationController as PelaporDenunciationController;
+use App\Http\Controllers\Pelapor\FunctionBuildingController as PelaporFunctionBuildingController;
+use App\Http\Controllers\Pelapor\TypeDenunciationController as PelaporTypeDenunciationController;
 use App\Http\Controllers\Petugas\BuildingController as PetugasBuildingController;
 use App\Http\Controllers\Admin\FunctionBuildingController as PetugasFunctionBuildingController;
 
@@ -23,6 +25,7 @@ Route::middleware([
     Route::post('change_profile', [AuthorizationController::class, 'change_profile'])->middleware('auth:sanctum');
 
     Route::middleware('auth:sanctum')->group(function () {
+        // Admin
         Route::middleware('admin')->group(function () {
             Route::prefix('/admin')->group(function () {
                 Route::resource('function_buildings', AdminFunctionBuildingController::class)->only([
@@ -51,21 +54,39 @@ Route::middleware([
             });
         });
 
-        Route::prefix('/pelapor')->group(function () {
-            Route::resource('denunciations', PelaporDenunciationController::class)->only([
-                'index', 'store', 'show'
-            ]);
-            Route::post('/denunciations/{id}', [PelaporDenunciationController::class, 'update']);
-        });
-        Route::prefix('/petugas')->group(function () {
-            Route::resource('buildings', PetugasBuildingController::class)->only([
-                'index', 'store', 'destroy', 'show'
-            ]);
-            Route::post('/buildings/{id}', [PetugasBuildingController::class, 'update']);
+        // Pelapor
+        Route::middleware('pelapor')->group(function () {
+            Route::prefix('/pelapor')->group(function () {
+                Route::resource('denunciations', PelaporDenunciationController::class)->only([
+                    'index', 'store', 'show'
+                ]);
+                Route::post('/denunciations/{id}', [PelaporDenunciationController::class, 'update']);
 
-            Route::resource('function_buildings', PetugasFunctionBuildingController::class)->only([
-                'index'
-            ]);
+                Route::resource('type_denunciations', AdminTypeDenunciationController::class)->only([
+                    'index'
+                ]);
+            });
+        });
+
+
+        // Petugas
+        Route::middleware('petugas')->group(function () {
+            Route::prefix('/petugas')->group(function () {
+            });
+        });
+
+        // Konsultan
+        Route::middleware('konsultan')->group(function () {
+            Route::prefix('/petugas')->group(function () {
+                Route::resource('buildings', PetugasBuildingController::class)->only([
+                    'index', 'store', 'destroy', 'show'
+                ]);
+                Route::post('/buildings/{id}', [PetugasBuildingController::class, 'update']);
+
+                Route::resource('function_buildings', PetugasFunctionBuildingController::class)->only([
+                    'index'
+                ]);
+            });
         });
     });
 });

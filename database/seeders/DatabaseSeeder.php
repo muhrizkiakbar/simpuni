@@ -26,12 +26,12 @@ class DatabaseSeeder extends Seeder
             'instansi' => 'DISKOMINFO'
         ]);
         User::create([
-            'username' => 'vendor',
+            'username' => 'konsultan',
             'name' => 'vendor',
             'posisi' => 'vendor',
             'email' => 'vendor@mail.com',
             'password' => bcrypt('diskominfo'),
-            'type_user' => 'kontraktor',
+            'type_user' => 'konsultan',
             'instansi' => 'vendor'
         ]);
         User::create([

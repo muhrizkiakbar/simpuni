@@ -16,7 +16,7 @@ class WarningLetterRequest extends FormRequest
     {
         return [
             'state' => [ 'nullable', 'filled', 'string' ],
-            'user_petugas_id' => ['required', 'integer'],
+            'user_petugas_id' => ['nullable', 'integer'],
             'surat_tugas' => 'nullable|file|mimetypes:application/pdf|max:2048',
             'foto' => 'nullable|file|mimetypes:image/jpeg,image/png,image/jpg|max:2048',
         ];

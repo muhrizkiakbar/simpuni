@@ -25,23 +25,24 @@ class DenunciationService extends ApplicationService
 
     public function denunciations(Request $request)
     {
-        $denunciations = $this->denunciationRepository->filter($request->all());
+        $denunciations = $this->denunciationRepository->filter($request->all(), ["attachments", "function_building", "type_denunciation", "user_pelapor"]);
         return $denunciations;
     }
 
     public function create($request)
     {
+        $request_input = $request->merge(
+            [
+                'user_pelapor_id' => $this->currentUser->id,
+                'state' => 'sent'
+            ]
+        );
+        $request_input = $request->except('attachments');
+
         $denunciation = new Denunciation();
-        $denunciation->user_pelapor_id = $this->currentUser->id;
-        $denunciation->alamat = $request['alamat'];
-        $denunciation->kecamatan_id = $request['kecamatan_id'];
-        $denunciation->kecamatan = $request['kecamatan'];
-        $denunciation->kelurahan_id = $request['kelurahan_id'];
-        $denunciation->kelurahan = $request['kelurahan'];
-        $denunciation->longitude = $request['longitude'];
-        $denunciation->latitude = $request['latitude'];
-        $denunciation->catatan = $request['catatan'];
-        $denunciation->save();
+        $denunciation = $denunciation->create(
+            $request_input
+        );
 
         if (!empty($request->attachments) && $request->hasFile('attachments')) {
             foreach ($request['attachments'] as $file) {
@@ -66,11 +67,22 @@ class DenunciationService extends ApplicationService
                 throw new DenunciationException("Tidak bisa membatalkan laporan.");
             }
 
+            $request_input = $request->merge(
+                [
+                    'user_pelapor_id' => $this->currentUser->id,
+                ]
+            );
+            $request_input = $request->except('attachments');
+
+
             $denunciation->update(
-                $request->all()->except('attachments')
+                $request_input
             );
 
-            $denunciation->attachments()->where('attachable_type', 'App\Models\Denunciation')->whereIn('attachments.id', $request["delete_attachment_ids"])->delete();
+
+            if (!empty($request->delete_attachment_ids)) {
+                $denunciation->attachments()->where('attachable_type', 'App\Models\Denunciation')->whereIn('attachments.id', $request->delete_attachment_ids)->delete();
+            }
 
             if (!empty($request->attachments) && $request->hasFile('attachments')) {
 
@@ -94,6 +106,47 @@ class DenunciationService extends ApplicationService
         }
     }
 
+    public function submit(Denunciation $denunciation, $request)
+    {
+        try {
+            $request_input = $request->merge(
+                [
+                    'user_pelapor_id' => $this->currentUser->id,
+                ]
+            );
+            $request_input = $request->except('attachments');
+
+
+            $denunciation->update(
+                $request_input
+            );
+
+
+            if (!empty($request->delete_attachment_ids)) {
+                $denunciation->attachments()->where('attachable_type', 'App\Models\Denunciation')->whereIn('attachments.id', $request->delete_attachment_ids)->delete();
+            }
+
+            if (!empty($request->attachments) && $request->hasFile('attachments')) {
+
+                foreach ($request['attachments'] as $file) {
+                    $filePath = $file->store('denunciations', 'public');
+
+                    $denunciation->attachments()->create([
+                        'file_name' => $file->getClientOriginalName(),
+                        'file_path' => $filePath,
+                        'mime_type' => $file->getMimeType(),
+                        'size' => $file->getSize(),
+                    ]);
+                }
+            }
+
+            return $denunciation;
+        } catch (DenunciationException $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
+        } catch (Exception $e) {
+            throw new Exception('Something went wrong.');
+        }
+    }
     public function warning_letter(Denunciation $denunciation, $request)
     {
         $currentState = $denunciation->state;
@@ -127,6 +180,10 @@ class DenunciationService extends ApplicationService
         $log_denunciation->new_state = $denunciation->state;
         $log_denunciation->save();
 
+        if ($denunciation->state == 'diterima') {
+            return $denunciation;
+        }
+
         $duty = new Duty();
         $duty->denunciation = $denunciation;
         $duty->user_petugas_id = $request->user_petugas_id;
@@ -155,6 +212,7 @@ class DenunciationService extends ApplicationService
         return Denunciation::find($id)->with(
             'user_pelapor',
             'type_denunciation',
+            'function_building',
             'attachments',
             'log_denunciations'
         );
@@ -163,6 +221,8 @@ class DenunciationService extends ApplicationService
     protected function evolve_state($state)
     {
         if ($state == 'sent') {
+            return 'diterima';
+        } elseif ($state == 'diterima') {
             return 'teguran_lisan';
         } elseif ($state == 'teguran_lisan') {
             return 'sp1';
