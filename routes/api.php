@@ -65,6 +65,10 @@ Route::middleware([
                 Route::resource('type_denunciations', AdminTypeDenunciationController::class)->only([
                     'index'
                 ]);
+
+                Route::resource('function_buildings', PetugasFunctionBuildingController::class)->only([
+                    'index'
+                ]);
             });
         });
 
