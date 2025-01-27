@@ -12,7 +12,7 @@ return new class () extends Migration {
     {
         Schema::table('denunciations', function (Blueprint $table) {
             //
-            $table->integr('jumlah_lantai')->nullable(); // Store the file path
+            $table->integer('jumlah_lantai')->nullable(); // Store the file path
         });
     }
 
