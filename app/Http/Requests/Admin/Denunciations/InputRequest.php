@@ -32,7 +32,7 @@ class InputRequest extends FormRequest
             'latitude' => [ 'nullable', 'string', 'max:255'  ],
             'catatan' => [ 'nullable', 'string', 'max:255'  ],
             'attachments' => 'nullable|array|max:3',
-            'attachments.*' => 'nullable|file|mimetypes:image/jpeg,image/png,image/jpg|max:512',
+            'attachments.*' => 'nullable|file|mimetypes:image/jpeg,image/png,image/jpg|max:2048',
             'delete_attachment_ids' => 'nullable|array'
         ];
     }
