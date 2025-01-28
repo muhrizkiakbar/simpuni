@@ -25,6 +25,7 @@ class DenunciationOutput extends ApiOutput
         $data = [
             'id' => $object->id,
             'alamat' => $object->alamat,
+            'pemilik_bangunan' => $object->pemilik_bangunan,
             'kecamatan_id' => $object->kecamatan_id,
             'kecamatan' => $object->kecamatan,
             'kelurahan_id' => $object->kelurahan_id,
