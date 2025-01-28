@@ -111,7 +111,7 @@ class DenunciationService extends ApplicationService
         $currentState = $denunciation->state;
 
         if (!empty($request->state)) {
-            if ($request->state == 'done') {
+            if ($request->state == 'done' && $denunciation->state != 'sent') {
                 $denunciation->state = 'done';
                 $denunciation->save();
 
@@ -125,6 +125,20 @@ class DenunciationService extends ApplicationService
                 $denunciation->duties
                     ->update(['state' => 'done']);
 
+                return $denunciation;
+            } elseif ($request->state == 'reject' && $denunciation->state == 'sent') {
+                $denunciation->state = 'reject';
+                $denunciation->save();
+
+                $log_denunciation = new LogDenunciation();
+                $log_denunciation->denunciation_id = $denunciation->id;
+                $log_denunciation->user_admin_id = $this->currentUser->id;
+                $log_denunciation->current_state = $currentState;
+                $log_denunciation->new_state = $denunciation->state;
+                $log_denunciation->save();
+
+                return $denunciation;
+            } else {
                 return $denunciation;
             }
         }
@@ -151,7 +165,7 @@ class DenunciationService extends ApplicationService
 
         if (!empty($request->surat_tugas) && $request->hasFile('surat_tugas')) {
             if (!is_null($duty->surat_tugas)) {
-                Storage::delete($building->surat_tugas);
+                Storage::delete($duty->surat_tugas);
             }
 
             $file = $request->file('surat_tugas');
@@ -168,7 +182,7 @@ class DenunciationService extends ApplicationService
 
     public function show(string $id)
     {
-        return Denunciation::find($id)->with(
+        return Denunciation::find($id)->load(
             'user_pelapor',
             'type_denunciation',
             'function_building',
