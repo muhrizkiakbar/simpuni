@@ -27,7 +27,7 @@ class DenunciationOutput extends ApiOutput
             'alamat' => $object->alamat,
             'kecamatan_id' => $object->kecamatan_id,
             'kecamatan' => $object->kecamatan,
-            'kelurahan_id' => $object->keluarahan_id,
+            'kelurahan_id' => $object->kelurahan_id,
             'kelurahan' => $object->kelurahan,
             'longitude' => $object->longitude,
             'latitude' => $object->latitude,
