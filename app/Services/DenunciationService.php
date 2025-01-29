@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Exceptions\DenunciationException;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Duty;
 use Illuminate\Http\Request;
 use App\Repositories\Denunciations;
@@ -108,6 +109,10 @@ class DenunciationService extends ApplicationService
 
     public function warning_letter(Denunciation $denunciation, $request)
     {
+        if ($denunciation->state == "done" || $denunciation->state == 'reject') {
+            return [$denunciation, null];
+        }
+
         $currentState = $denunciation->state;
 
         if (!empty($request->state)) {
@@ -115,69 +120,37 @@ class DenunciationService extends ApplicationService
                 $denunciation->state = 'done';
                 $denunciation->save();
 
-                $log_denunciation = new LogDenunciation();
-                $log_denunciation->denunciation_id = $denunciation->id;
-                $log_denunciation->user_admin_id = $this->currentUser->id;
-                $log_denunciation->current_state = $currentState;
-                $log_denunciation->new_state = $denunciation->state;
-                $log_denunciation->save();
+
+                $log_denunciation = $this->create_log_denunciation($denunciation, $currentState);
 
                 $denunciation->duties
                     ->update(['state' => 'done']);
 
-                return $denunciation;
+                return [$denunciation, null];
             } elseif ($request->state == 'reject' && $denunciation->state == 'sent') {
                 $denunciation->state = 'reject';
                 $denunciation->save();
 
-                $log_denunciation = new LogDenunciation();
-                $log_denunciation->denunciation_id = $denunciation->id;
-                $log_denunciation->user_admin_id = $this->currentUser->id;
-                $log_denunciation->current_state = $currentState;
-                $log_denunciation->new_state = $denunciation->state;
-                $log_denunciation->save();
+                $log_denunciation = $this->create_log_denunciation($denunciation, $currentState);
 
-                return $denunciation;
+                return [$denunciation, null];
             } else {
-                return $denunciation;
+                return [$denunciation, null];
             }
         }
 
         $denunciation->state = $this->evolve_state($denunciation->state);
         $denunciation->save();
 
-        $log_denunciation = new LogDenunciation();
-        $log_denunciation->denunciation_id = $denunciation->id;
-        $log_denunciation->user_admin_id = $this->currentUser->id;
-        $log_denunciation->current_state = $currentState;
-        $log_denunciation->new_state = $denunciation->state;
-        $log_denunciation->save();
+        $log_denunciation = $this->create_log_denunciation($denunciation, $currentState);
 
         if ($denunciation->state == 'diterima') {
-            return $denunciation;
+            return [$denunciation, null];
         }
 
-        $duty = new Duty();
-        $duty->denunciation = $denunciation;
-        $duty->user_petugas_id = $request->user_petugas_id;
-        $duty->user_admin = $this->currentUser;
-        $duty->state_type = $denunciation->state;
+        $duty = $this->create_duty($denunciation, $request);
 
-        if (!empty($request->surat_tugas) && $request->hasFile('surat_tugas')) {
-            if (!is_null($duty->surat_tugas)) {
-                Storage::delete($duty->surat_tugas);
-            }
-
-            $file = $request->file('surat_tugas');
-            $filePath = $file->store('duties/surat_tugas', 'public');
-
-            $duty->surat_tugas = $filePath;
-            $duty->save();
-        }
-
-        $duty->save();
-
-        return $denunciation;
+        return [$denunciation, $duty];
     }
 
     public function show(string $id)
@@ -207,6 +180,45 @@ class DenunciationService extends ApplicationService
             return 'sk_bongkar';
         } elseif ($state == 'sk_bongkar') {
             return 'done';
+        } elseif ($state == 'done') {
+            return 'done';
         }
+    }
+
+    protected function create_log_denunciation($denunciation, $currentState)
+    {
+        $log_denunciation = new LogDenunciation();
+        $log_denunciation->denunciation_id = $denunciation->id;
+        $log_denunciation->user_admin_id = $this->currentUser->id;
+        $log_denunciation->current_state = $currentState;
+        $log_denunciation->new_state = $denunciation->state;
+        $log_denunciation->save();
+
+        return $log_denunciation;
+    }
+
+    protected function create_duty($denunciation, $request)
+    {
+        $duty = new Duty();
+        $duty->denunciation_id = $denunciation->id;
+        $duty->user_petugas_id = $request->user_petugas_id;
+        $duty->user_admin_id = $this->currentUser->id;
+        $duty->state_type = $denunciation->state;
+
+        if (!empty($request->surat_tugas) && $request->hasFile('surat_tugas')) {
+            if (!is_null($duty->surat_tugas)) {
+                Storage::delete($duty->surat_tugas);
+            }
+
+            $file = $request->file('surat_tugas');
+            $filePath = $file->store('duties/surat_tugas', 'public');
+
+            $duty->surat_tugas = $filePath;
+            $duty->save();
+        }
+
+        $duty->save();
+
+        return $duty;
     }
 }
