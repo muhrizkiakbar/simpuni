@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\Admin\Denunciations\WarningLetterRequest;
 use App\Models\Denunciation;
 use App\Services\DenunciationService;
+use App\Events\Duties\NewDutyEvent;
 
 class DenunciationController extends Controller
 {
@@ -36,7 +37,12 @@ class DenunciationController extends Controller
     public function update(WarningLetterRequest $request, string $id)
     {
         $denunciation = Denunciation::find(decrypt($id));
-        $denunciation = $this->denunciationService->warning_letter($denunciation, $request);
+        list($denunciationn, $duty) = $this->denunciationService->warning_letter($denunciation, $request);
+
+        if ($duty != null) {
+            //broadcast(new NewDutyEvent($duty, $duty->user_petugas));
+            broadcast(new NewDutyEvent($duty, $duty->user_petugas));
+        }
 
         return $this->render_json(
             DenunciationOutput::class,
