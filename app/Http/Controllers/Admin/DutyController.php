@@ -6,6 +6,7 @@ use App\Outputs\Admin\DutyOutput;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\DutyService;
+use Illuminate\Support\Facades\Auth;
 
 class DutyController extends Controller
 {
@@ -18,17 +19,19 @@ class DutyController extends Controller
 
     public function index(Request $request)
     {
-        $buildings = $this->dutyService->duties($request, [
+        $duties = $this->dutyService->duties($request, [
             'denunciation',
             'user_petugas',
             'user_admin',
         ])->cursorPaginate(10);
 
-        return $this->render_json_array(BuildingOutput::class, "format", $buildings);
+        return $this->render_json_array(DutyOutput::class, "format", $duties);
     }
 
-    public function show(Request $request)
+    public function show(string $id)
     {
+        $duty = $this->dutyService->show(decrypt($id));
 
+        return $this->render_json(DutyOutput::class, "format", $duty);
     }
 }

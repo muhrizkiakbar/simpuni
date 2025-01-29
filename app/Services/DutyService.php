@@ -64,7 +64,7 @@ class DutyService extends ApplicationService
 
     public function show(string $id)
     {
-        return Duty::find(decrypt($id))->with(
+        return Duty::find($id)->with(
             'denunciation',
             'user_petugas',
             'user_admin',
