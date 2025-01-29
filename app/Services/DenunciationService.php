@@ -12,6 +12,7 @@ use App\Models\Denunciation;
 use App\Models\LogDenunciation;
 use App\Models\User;
 use Exception;
+use Illuminate\Support\Facades\DB;
 
 class DenunciationService extends ApplicationService
 {
@@ -162,6 +163,54 @@ class DenunciationService extends ApplicationService
             'attachments',
             'log_denunciations'
         );
+    }
+
+    //API count pelaporan baru dan count pelaporan dalam proses (gabung)
+    public function count_by_new_and_in_progress(Request $request)
+    {
+        $results = Denunciation::select(
+            DB::raw("SUM(CASE WHEN state IN ('diterima', 'teguran_lisan', 'sp1','sp2', 'sp3', 'sk_bongkar') THEN 1 ELSE 0 END) as in_progress"),
+            DB::raw("SUM(CASE WHEN state = 'sent' THEN 1 ELSE 0 END) as sent"),
+        )
+        ->get();
+
+        return $results;
+    }
+
+    //API count index pelaporan per bulan berdasarkan status terakhir
+    public function count_every_state_by_month_year(Request $request)
+    {
+        $results = Denunciation::select(
+            DB::raw("SUM(CASE WHEN state = 'sent' THEN 1 ELSE 0 END) as sent"),
+            DB::raw("SUM(CASE WHEN state = 'diterima' THEN 1 ELSE 0 END) as diterima"),
+            DB::raw("SUM(CASE WHEN state = 'teguran_lisan' THEN 1 ELSE 0 END) as teguran_lisan"),
+            DB::raw("SUM(CASE WHEN state = 'sp1' THEN 1 ELSE 0 END) as sp1"),
+            DB::raw("SUM(CASE WHEN state = 'sp2' THEN 1 ELSE 0 END) as sp2"),
+            DB::raw("SUM(CASE WHEN state = 'sp3' THEN 1 ELSE 0 END) as sp3"),
+            DB::raw("SUM(CASE WHEN state = 'sk_bongkar' THEN 1 ELSE 0 END) as sk_bongkar"),
+            DB::raw("SUM(CASE WHEN state = 'done' THEN 1 ELSE 0 END) as done"),
+        )
+        ->whereMonth('created_at', $request->month)
+        ->whereYear('created_at', $request->year)
+        ->get();
+
+        return $results;
+    }
+
+    //API count statistik pelaporan pertahun setiap bulan
+    public function count_done_by_year(Request $request)
+    {
+
+        $results = Denunciation::select(
+            DB::raw("DATE_FORMAT(created_at, '%m') as month"),
+            DB::raw("SUM(CASE WHEN state = 'done' THEN 1 ELSE 0 END) as done"),
+        )
+        ->whereYear('created_at', $request->year)
+        ->groupBy('month')
+        ->orderBy('month')
+        ->get();
+
+        return $results;
     }
 
     protected function evolve_state($state)

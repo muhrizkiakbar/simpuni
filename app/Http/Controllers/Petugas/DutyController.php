@@ -7,6 +7,7 @@ use App\Outputs\Admin\DutyOutput;
 use App\Http\Controllers\Controller;
 use App\Services\DutyService;
 use Illuminate\Http\Request;
+use App\Models\Duty;
 
 class DutyController extends Controller
 {
@@ -34,17 +35,24 @@ class DutyController extends Controller
         return $this->render_json_array(DutyOutput::class, "format", $duties);
     }
 
+    public function show(string $id)
+    {
+        $duty = $this->dutyService->show(decrypt($id));
+
+        return $this->render_json(DutyOutput::class, "format", $duty);
+    }
+
     public function start(string $id)
     {
-        $duty = Duty::find(decrypt($id));j
+        $duty = Duty::find(decrypt($id));
         $duty = $this->dutyService->start($duty);
-        return $this->render_json(DutyOutput::class, "format", $building);
+        return $this->render_json(DutyOutput::class, "format", $duty);
     }
 
     public function submit(SubmitRequest $request, string $id)
     {
-        $duty = Duty::find(decrypt($id));j
+        $duty = Duty::find(decrypt($id));
         $duty = $this->dutyService->submit($duty, $request);
-        return $this->render_json(DutyOutput::class, "format", $building);
+        return $this->render_json(DutyOutput::class, "format", $duty);
     }
 }

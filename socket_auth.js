@@ -28,6 +28,7 @@ redis.psubscribe('*', (err, count) => {
 // Handle messages from Redis
 redis.on('pmessage', (subscribed, channel, message) => {
     try {
+        console.log(message)
         console.log(`Received message from channel: ${channel}`);
         message = JSON.parse(message); // Assuming the message is JSON-encoded
         // Emit to clients connected to socket.io

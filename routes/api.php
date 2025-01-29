@@ -14,6 +14,7 @@ use App\Http\Controllers\Pelapor\FunctionBuildingController as PelaporFunctionBu
 use App\Http\Controllers\Pelapor\TypeDenunciationController as PelaporTypeDenunciationController;
 use App\Http\Controllers\Petugas\BuildingController as PetugasBuildingController;
 use App\Http\Controllers\Admin\FunctionBuildingController as PetugasFunctionBuildingController;
+use App\Http\Controllers\Admin\DenunciationController as PetugasDenunciController;
 
 Route::middleware([
     EnsureFrontendRequestsAreStateful::class,
@@ -50,7 +51,9 @@ Route::middleware([
                     'index', 'show'
                 ]);
                 Route::post('/denunciations/{id}', [AdminDenunciationController::class, 'update']);
-                Route::get('/denunciations_count', [AdminDenunciationController::class, 'denunciations_count']);
+                Route::get('/denunciations/count/by_new_and_in_progress', [AdminDenunciationController::class, 'count_by_new_and_in_progress']);
+                Route::get('/denunciations/count/every_state_by_month_year', [AdminDenunciationController::class, 'count_every_state_by_month_year']);
+                Route::get('/denunciations/count/done_by_year', [AdminDenunciationController::class, 'count_done_by_year']);
             });
         });
 
@@ -76,6 +79,11 @@ Route::middleware([
         // Petugas
         Route::middleware('petugas')->group(function () {
             Route::prefix('/petugas')->group(function () {
+                Route::resource('denunciations', PetugasDenunciationController::class)->only([
+                    'index', 'show'
+                ]);
+                Route::post('/denunciations/{id}/start', [PetugasDenunciationController::class, 'start']);
+                Route::post('/denunciations/{id}/submit', [PetugasDenunciationController::class, 'start']);
             });
         });
 

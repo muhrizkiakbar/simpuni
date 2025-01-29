@@ -51,14 +51,24 @@ class DenunciationController extends Controller
         );
     }
 
-    public function denunciations_count(Request $request)
+    //API count pelaporan baru dan count pelaporan dalam proses (gabung)
+    public function count_by_new_and_in_progress(Request $request)
     {
-        $denunciations_count = $this->denunciationService->denunciations($request)->count;
-        return response()->json(
-            [
-                'params' => $request->all(),
-                'result_count' => $denunciations_count,
-            ]
-        );
+        $denunciations_count = $this->denunciationService->count_by_new_and_in_progress($request);
+        return response()->json($denunciations_count);
+    }
+
+    //API count index pelaporan per bulan berdasarkan status terakhir
+    public function count_every_state_by_month_year(Request $request)
+    {
+        $denunciations_count = $this->denunciationService->count_every_state_by_month_year($request);
+        return response()->json($denunciations_count);
+    }
+    //
+    //API count statistik pelaporan pertahun setiap bulan
+    public function count_done_by_year(Request $request)
+    {
+        $denunciations_count = $this->denunciationService->count_done_by_year($request);
+        return response()->json($denunciations_count);
     }
 }
