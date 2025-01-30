@@ -19,13 +19,13 @@ class LogDenunciationOutput extends ApiOutput
 
         $data = [
             'id' => $object->id,
-            'user_admin'=> $user_output->renderJson($object->user_admin ?? [], "format", ["mode" => "raw_data"]),
+            'user_admin' => $user_output->renderJson($object->user_admin ?? [], "format", ["mode" => "raw_data"]),
             'current_state' => $object->current_state,
             'new_state' => $object->new_state,
             'slug' => encrypt($object->id),
+            'created_at' => $object->created_at,
         ];
 
         return $data;
     }
 }
-
