@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\ArchiveFile;
 use App\Models\User;
-use App\Repositories\Buildings;
+use App\Repositories\ArchiveFiles;
 use Illuminate\Http\Request;
 use App\Services\ApplicationService;
 use Exception;
