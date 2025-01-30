@@ -31,7 +31,7 @@ class DenunciationController extends Controller
     public function show(string $id)
     {
         $denunciation = $this->denunciationService->show(decrypt($id));
-        return $this->render_json(DenunciationOutput::class, "format", $denunciation);
+        return $this->render_json(DenunciationOutput::class, "detail_format", $denunciation);
     }
 
     public function update(WarningLetterRequest $request, string $id)
