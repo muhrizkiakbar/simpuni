@@ -59,6 +59,10 @@ class DutyService extends ApplicationService
             $duty->save();
         }
 
+        $denunciation = $duty->denunciation;
+        $denunciation->upadated_at = now();
+        $denunciation->save();
+
         return $duty;
     }
 

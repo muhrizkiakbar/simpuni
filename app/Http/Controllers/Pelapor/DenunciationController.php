@@ -19,26 +19,40 @@ class DenunciationController extends Controller
         $this->denunciationService = new DenunciationService(Auth::user());
     }
 
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         $denunciations = $this->denunciationService->denunciations($request)->cursorPaginate(10);
 
         return $this->render_json_array(DenunciationOutput::class, "format", $denunciations);
     }
 
-    public function show(string $id) {
+    public function show(string $id)
+    {
         $denunciation = $this->denunciationService->show(decrypt($id));
         return $this->render_json(DenunciationOutput::class, "format", $denunciation);
     }
 
-    public function store(InputRequest $request) {
+    public function store(InputRequest $request)
+    {
         $denunciation = $this->denunciationService->create($request);
         return $this->render_json(DenunciationOutput::class, "format", $denunciation->load('attachments'));
     }
 
-    public function update(InputRequest $request, string $id) {
+    public function update(InputRequest $request, string $id)
+    {
         $denunciation = Denunciation::find(decrypt($id));
         $denunciation = $this->denunciationService->update($denunciation, $request);
 
         return $this->render_json(DenunciationOutput::class, "format", $denunciation->load('attachments'));
+    }
+
+    public function count_denunciation_in_progress(Request $request)
+    {
+        $denunciations_count = $this->denunciationService->count_denunciation_in_progress(
+            $request->merge(
+                ['user_pelapor_id' => Auth::user()->id]
+            )
+        );
+        return response()->json($denunciations_count);
     }
 }

@@ -64,6 +64,7 @@ Route::middleware([
                     'index', 'store', 'show'
                 ]);
                 Route::post('/denunciations/{id}', [PelaporDenunciationController::class, 'update']);
+                Route::get('/denunciations/count/in_progress', [PelaporDenunciationController::class, 'count_denunciation_in_progress']);
 
                 Route::resource('type_denunciations', AdminTypeDenunciationController::class)->only([
                     'index'
