@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\DenunciationsExport;
 use App\Http\Controllers\Controller;
 use App\Outputs\Admin\DenunciationOutput;
 use Illuminate\Http\Request;
@@ -23,6 +25,7 @@ class DenunciationController extends Controller
     //
     public function index(Request $request)
     {
+        dd($request);
         $denunciations = $this->denunciationService->denunciations($request)->orderBy('updated_at', 'asc')->cursorPaginate(10);
 
         return $this->render_json_array(DenunciationOutput::class, "format", $denunciations);
@@ -49,6 +52,15 @@ class DenunciationController extends Controller
             "detail_format",
             $denunciation->load('log_denunciations', 'attachments')
         );
+    }
+
+    public function export_excel(Request $request)
+    {
+        $request_input = $request->except(['start_date', 'end_date']);
+        $denunciations = $this->denunciationService->denunciations(new Request($request_input))
+            ->whereBetween('created_at', [$request->start_date, $request->end_date])->get();
+
+        return Excel::download(new DenunciationsExport($denunciations), 'pelaporan.xlsx');
     }
 
     //API count pelaporan baru dan count pelaporan dalam proses (gabung)

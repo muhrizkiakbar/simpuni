@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\BuildingsExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\BuildingRequest;
 use App\Models\Building;
@@ -53,6 +55,14 @@ class BuildingController extends Controller
         $building = $this->buildingService->delete($building);
 
         return $this->render_json(BuildingOutput::class, "format", $building);
+    }
+
+    public function export_excel(Request $request)
+    {
+        $buildings = $this->buildingService->buildings($request->except(['start_date', 'end_date']))
+            ->whereBetween('created_at', [$request->start_date, $request->end_date])->get();
+
+        return Excel::download(new BuildingsExport($buildings), 'bangunan.xlsx');
     }
 
     public function count_building_permit(Request $request)
