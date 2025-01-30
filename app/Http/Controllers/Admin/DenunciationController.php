@@ -23,7 +23,7 @@ class DenunciationController extends Controller
     //
     public function index(Request $request)
     {
-        $denunciations = $this->denunciationService->denunciations($request)->cursorPaginate(10);
+        $denunciations = $this->denunciationService->denunciations($request)->orderBy('updated_at', 'asc')->cursorPaginate(10);
 
         return $this->render_json_array(DenunciationOutput::class, "format", $denunciations);
     }

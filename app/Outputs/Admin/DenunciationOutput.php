@@ -7,6 +7,7 @@ use App\Outputs\Admin\DutyOutput;
 use App\Outputs\ApiOutput;
 use App\Outputs\Admin\UserOutput;
 use App\Outputs\Admin\FunctionBuildingOutput;
+use Carbon\Carbon;
 
 class DenunciationOutput extends ApiOutput
 {
@@ -23,6 +24,11 @@ class DenunciationOutput extends ApiOutput
         $type_denunciation_output = new TypeDenunciationOutput();
         $function_building_output = new FunctionBuildingOutput();
         $attachment_output = new AttachmentOutput();
+
+        $updated_at = Carbon::parse($object->updated_at);
+        $today = Carbon::now();
+        $diffDate = $today->diffInDays($updated_at);
+
         $data = [
             'id' => $object->id,
             'alamat' => $object->alamat,
@@ -43,6 +49,8 @@ class DenunciationOutput extends ApiOutput
             'function_building' => $function_building_output->renderJson($object->function_building ?? [], "format", [ "mode" => "raw_data"]) ?? [],
             'attachments' => $object->attachments->count() > 0 ? $attachment_output->renderJson($object->attachments, "format", ["mode" => "raw_many_data"]) : [],
             'state' => $object->state,
+            'require_action' => ($diffDate * -1) > 14 && !in_array($object->state, ['sent', 'reject', 'done']) ? true : false,
+            'updated_at' => $object->updated_at,
             'slug' => encrypt($object->id)
         ];
 
@@ -57,6 +65,10 @@ class DenunciationOutput extends ApiOutput
         $function_building_output = new FunctionBuildingOutput();
         $log_output = new LogDenunciationOutput();
         $duty_output = new DutyOutput();
+
+        $updated_at = Carbon::parse($object->updated_at);
+        $today = Carbon::now();
+        $diffDate = $today->diffInDays($updated_at);
 
         $data = [
             'id' => $object->id,
@@ -74,8 +86,9 @@ class DenunciationOutput extends ApiOutput
             'attachments' => $object->attachments->count() > 0 ? $attachment_output->renderJson($object->attachments, "format", ["mode" => "raw_many_data"]) : [],
             'logs' => $object->log_denunciations->count() > 0 ? $log_output->renderJson($object->log_denunciations, "format", ["mode" => "raw_many_data"]) : [],
             'duties' => $object->duties->count() > 0 ? $duty_output->renderJson($object->duties, "mini_format", ["mode" => "raw_many_data"]) : [],
-            'slug' => encrypt($object->id),
             'state' => $object->state,
+            'require_action' => $diffDate > 14 ? true : false,
+            'slug' => encrypt($object->id),
         ];
 
         return $data;
