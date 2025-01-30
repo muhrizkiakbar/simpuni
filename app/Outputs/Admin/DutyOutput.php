@@ -36,4 +36,24 @@ class DutyOutput extends ApiOutput
 
         return $data;
     }
+
+
+    public function mini_format($object, $options = [])
+    {
+        $user_output = new UserOutput();
+        $denunciation_output = new DenunciationOutput();
+        $data = [
+            'id' => $object->id,
+            'state_type' => $object->state_type,
+            'tanggal_pengiriman' => $object->tanggal_pengiriman,
+            'catatan' => $object->catatan,
+            'nomor_izin_bangunan' => $object->nomor_izin_bangunan,
+            'state' => $object->state,
+            'foto' => $object->foto ? asset('storage/'.$object->foto) : null,
+            'surat_tugas' => $object->surat_tugas ? asset('storage/'.$object->surat_tugas) : null,
+            'slug' => encrypt($object->id)
+        ];
+
+        return $data;
+    }
 }
