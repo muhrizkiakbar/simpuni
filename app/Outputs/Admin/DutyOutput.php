@@ -52,6 +52,8 @@ class DutyOutput extends ApiOutput
             'foto' => $object->foto ? asset('storage/'.$object->foto) : null,
             'surat_tugas' => $object->surat_tugas ? asset('storage/'.$object->surat_tugas) : null,
             'slug' => encrypt($object->id)
+            'user_petugas' => $user_output->renderJson($object->user_petugas ?? [], "format", [ "mode" => "raw_data"]) ?? [],
+            'user_admin' => $user_output->renderJson($object->user_admin ?? [], "format", [ "mode" => "raw_data" ]) ?? [],
         ];
 
         return $data;

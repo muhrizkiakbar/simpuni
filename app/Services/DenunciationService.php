@@ -162,7 +162,8 @@ class DenunciationService extends ApplicationService
             'function_building',
             'attachments',
             'log_denunciations',
-            'duties'
+            'duties.user_petugas',
+            'duties.user_petugas'
         );
     }
 
