@@ -157,13 +157,15 @@ class DenunciationService extends ApplicationService
     public function show(string $id)
     {
         return Denunciation::find($id)->load(
-            'user_pelapor',
-            'type_denunciation',
-            'function_building',
-            'attachments',
-            'log_denunciations',
-            'duties.user_petugas',
-            'duties.user_petugas'
+            [
+                'user_pelapor',
+                'type_denunciation',
+                'function_building',
+                'attachments',
+                'log_denunciations',
+                'duties.user_petugas',
+                'duties.user_petugas'
+            ]
         );
     }
 
