@@ -15,7 +15,7 @@ use App\Http\Controllers\Pelapor\FunctionBuildingController as PelaporFunctionBu
 use App\Http\Controllers\Pelapor\TypeDenunciationController as PelaporTypeDenunciationController;
 use App\Http\Controllers\Petugas\BuildingController as PetugasBuildingController;
 use App\Http\Controllers\Admin\FunctionBuildingController as PetugasFunctionBuildingController;
-use App\Http\Controllers\Admin\DenunciationController as PetugasDenunciController;
+use App\Http\Controllers\Admin\DenunciationController as PetugasDenunciationController;
 
 Route::middleware([
     EnsureFrontendRequestsAreStateful::class,
