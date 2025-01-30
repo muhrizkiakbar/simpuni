@@ -3,6 +3,7 @@
 namespace App\Outputs\Admin;
 
 use App\Outputs\Admin\TypeDenunciationOutput;
+use App\Outputs\Admin\DutyOutput;
 use App\Outputs\ApiOutput;
 use App\Outputs\Admin\UserOutput;
 use App\Outputs\Admin\FunctionBuildingOutput;
@@ -55,6 +56,7 @@ class DenunciationOutput extends ApiOutput
         $attachment_output = new AttachmentOutput();
         $function_building_output = new FunctionBuildingOutput();
         $log_output = new LogDenunciationOutput();
+        $duty_output = new DutyOutput();
 
         $data = [
             'id' => $object->id,
@@ -71,6 +73,7 @@ class DenunciationOutput extends ApiOutput
             'function_building' => $function_building_output->renderJson($object->function_building ?? [], "format", [ "mode" => "raw_data"]) ?? [],
             'attachments' => $object->attachments->count() > 0 ? $attachment_output->renderJson($object->attachments, "format", ["mode" => "raw_many_data"]) : [],
             'logs' => $object->log_denunciations->count() > 0 ? $log_output->renderJson($object->log_denunciations, "format", ["mode" => "raw_many_data"]) : [],
+            'duties' => $object->duties->count() > 0 ? $log_output->renderJson($object->duties, "format", ["mode" => "raw_many_data"]) : [],
             'slug' => encrypt($object->id),
             'state' => $object->state,
         ];
