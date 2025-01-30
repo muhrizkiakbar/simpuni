@@ -161,7 +161,8 @@ class DenunciationService extends ApplicationService
             'type_denunciation',
             'function_building',
             'attachments',
-            'log_denunciations'
+            'log_denunciations',
+            'duties'
         );
     }
 
