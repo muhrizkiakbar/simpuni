@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Models\Building;
+use App\Models\ArchiveFile;
 use App\Repositories\Repository;
 
 class ArchiveFiles extends Repository

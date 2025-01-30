@@ -22,7 +22,7 @@ class ArchiveFileController extends Controller
     //
     public function index(Request $request)
     {
-        $archive_files = $this->archiveFileService->archiveFiles($request)->cursorPaginate(10);
+        $archive_files = $this->archiveFileService->archive_files($request)->cursorPaginate(10);
 
         return $this->render_json_array(ArchiveFileOutput::class, "format", $archive_files);
     }
