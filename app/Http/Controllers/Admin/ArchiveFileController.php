@@ -50,7 +50,7 @@ class ArchiveFileController extends Controller
     public function destroy(string $id)
     {
         $archive_file = ArchiveFile::find(decrypt($id));
-        $archive_file = $this->buildingService->delete($archive_file);
+        $archive_file = $this->archiveFileService->delete($archive_file);
 
         return $this->render_json(ArchiveFileOutput::class, "format", $archive_file);
     }
