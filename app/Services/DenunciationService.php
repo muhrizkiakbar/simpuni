@@ -184,6 +184,7 @@ class DenunciationService extends ApplicationService
     {
         $results = Denunciation::select(
             DB::raw("SUM(CASE WHEN state = 'sent' THEN 1 ELSE 0 END) as sent"),
+            DB::raw("SUM(CASE WHEN state = 'reject' THEN 1 ELSE 0 END) as reject"),
             DB::raw("SUM(CASE WHEN state = 'diterima' THEN 1 ELSE 0 END) as diterima"),
             DB::raw("SUM(CASE WHEN state = 'teguran_lisan' THEN 1 ELSE 0 END) as teguran_lisan"),
             DB::raw("SUM(CASE WHEN state = 'sp1' THEN 1 ELSE 0 END) as sp1"),
