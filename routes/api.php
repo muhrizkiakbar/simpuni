@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\FunctionBuildingController as AdminFunctionBuildi
 use App\Http\Controllers\Admin\TypeDenunciationController as AdminTypeDenunciationController;
 use App\Http\Controllers\Admin\BuildingController as AdminBuildingController;
 use App\Http\Controllers\Admin\DenunciationController as AdminDenunciationController;
+use App\Http\Controllers\Admin\ArchiveFileController as AdminArchiveFileController;
 use App\Http\Controllers\Pelapor\DenunciationController as PelaporDenunciationController;
 use App\Http\Controllers\Pelapor\FunctionBuildingController as PelaporFunctionBuildingController;
 use App\Http\Controllers\Pelapor\TypeDenunciationController as PelaporTypeDenunciationController;
@@ -42,6 +43,11 @@ Route::middleware([
                 ]);
                 Route::post('/buildings/{id}', [AdminBuildingController::class, 'update'])->middleware('auth:sanctum');
                 Route::get('/buildings/count/building_permit', [AdminBuildingController::class, 'count_building_permit'])->middleware('auth:sanctum');
+
+                Route::resource('archive_files', AdminArchiveFileController::class)->only([
+                    'index', 'store', 'destroy', 'show'
+                ]);
+                Route::post('/archive_files/{id}', [AdminArchiveFileController::class, 'update'])->middleware('auth:sanctum');
 
                 Route::resource('users', AdminUserController::class)->only([
                     'index', 'store', 'update', 'destroy', 'show'
