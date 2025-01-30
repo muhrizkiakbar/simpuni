@@ -46,7 +46,7 @@ class DenunciationController extends Controller
 
         return $this->render_json(
             DenunciationOutput::class,
-            "format",
+            "detail_format",
             $denunciation->load('log_denunciations', 'attachments')
         );
     }

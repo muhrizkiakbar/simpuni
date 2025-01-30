@@ -141,4 +141,16 @@ class BuildingService extends ApplicationService
 
         return $building;
     }
+
+    public function count_building_permit(Request $request)
+    {
+        $results = Building::select(
+            DB::raw('COUNT(*) AS total_rows'),
+            DB::raw('COUNT(nomor_izin_bangunan) AS berizin'),
+            DB::raw('COUNT(*) - COUNT(nomor_izin_bangunan) AS tidak_berizin')
+        )
+        ->first();
+
+        return $results;
+    }
 }

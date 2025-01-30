@@ -55,14 +55,9 @@ class BuildingController extends Controller
         return $this->render_json(BuildingOutput::class, "format", $building);
     }
 
-    public function buildings_count(Request $request)
+    public function count_building_permit(Request $request)
     {
-        $buildings_count = $this->buildingService->buildings($request)->count();
-        return response()->json(
-            [
-                'params' => $request->all(),
-                'result_count' => $buildings_count,
-            ]
-        );
+        $buildings_count = $this->buildingService->count_building_permit($request);
+        return response()->json($buildings_count);
     }
 }

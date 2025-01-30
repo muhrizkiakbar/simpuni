@@ -41,7 +41,7 @@ Route::middleware([
                     'index', 'store', 'destroy', 'show'
                 ]);
                 Route::post('/buildings/{id}', [AdminBuildingController::class, 'update'])->middleware('auth:sanctum');
-                Route::get('buildings_count', [AdminBuildingController::class, 'buildings_count'])->middleware('auth:sanctum');
+                Route::get('/buildings/count/building_permit', [AdminBuildingController::class, 'count_building_permit'])->middleware('auth:sanctum');
 
                 Route::resource('users', AdminUserController::class)->only([
                     'index', 'store', 'update', 'destroy', 'show'
