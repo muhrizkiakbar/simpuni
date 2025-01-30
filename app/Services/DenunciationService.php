@@ -219,6 +219,7 @@ class DenunciationService extends ApplicationService
     public function count_denunciation_in_progress(Request $request)
     {
         $results = Denunciation::select(
+            DB::raw('COUNT(*) AS total_rows'),
             DB::raw("SUM(CASE WHEN state IN ('diterima', 'teguran_lisan', 'sp1','sp2', 'sp3', 'sk_bongkar') THEN 1 ELSE 0 END) as in_progress"),
         )
             ->where('user_pelapor_id', $request->user_pelapor_id)
@@ -226,6 +227,7 @@ class DenunciationService extends ApplicationService
 
         return $results;
     }
+
     protected function evolve_state($state)
     {
         if ($state == 'sent') {
