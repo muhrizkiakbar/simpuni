@@ -9,9 +9,9 @@ const io = new socketIo(server); // Initialize socket.io with the server
 
 // Adjust Redis connection
 const redis = new Redis({
-    host: 'redis',  // Redis host (adjust based on your environment)
+    host: 'localhost',  // Redis host (adjust based on your environment)
     port: 6379,     // Default Redis port
-    password: 'secret_redis', // Redis password (if set)
+    password: 'simpuni_redis', // Redis password (if set)
     db: 0,          // Optional: default Redis database
 });
 
