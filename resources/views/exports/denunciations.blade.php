@@ -23,9 +23,9 @@
     @foreach($denunciations as $denunciation)
         <tr>
             <td>{{ $denunciation->created_at->format('d-m-Y H:i:s') }}</td>
-            <td>{{ $denunciation->user_pelapor->name }}</td>
-            <td>{{ $denunciation->type_denunciation->name }}</td>
-            <td>{{ $denunciation->function_building->name }}</td>
+            <td>{{ $denunciation->user_pelapor->name ?? null }}</td>
+            <td>{{ $denunciation->type_denunciation->name ?? null }}</td>
+            <td>{{ $denunciation->function_building->name ?? null }}</td>
             <td>{{ $denunciation->pemilik_bangunan }}</td>
             <td>{{ $denunciation->description }}</td>
             <td>{{ $denunciation->alamat }}</td>

@@ -25,10 +25,10 @@
     @foreach($buildings as $building)
         <tr>
             <td>{{ $building->created_at->format('d-m-Y H:i:s') }}</td>
-            <td>{{ $building->created_by_user->name }}</td>
+            <td>{{ $building->created_by_user->name ?? null }}</td>
             <td>{{ $building->nomor_izin_bangunan }}</td>
             <td>{{ $building->name }}</td>
-            <td>{{ $building->function_building->name }}</td>
+            <td>{{ $building->function_building->name ?? null }}</td>
             <td>{{ $building->kecamatan }}</td>
             <td>{{ $building->kelurahan }}</td>
             <td>{{ $building->rt }}</td>
@@ -41,7 +41,7 @@
             <td>{{ $building->longitude }}</td>
             <td>{{ $building->latitude }}</td>
             <td>{{ $building->updated_at->format('d-m-Y H:i:s') }}</td>
-            <td>{{ $building->updated_by_user->name }}</td>
+            <td>{{ $building->updated_by_user->name ?? null }}</td>
         </tr>
     @endforeach
     </tbody>

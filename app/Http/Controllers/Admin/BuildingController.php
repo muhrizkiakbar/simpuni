@@ -63,7 +63,14 @@ class BuildingController extends Controller
         $buildings = $this->buildingService->buildings(new Request($request_input))
             ->whereBetween('created_at', [$request->start_date, $request->end_date])->get();
 
-        return Excel::download(new BuildingsExport($buildings), 'bangunan.xlsx');
+        return Excel::download(
+            new BuildingsExport($buildings),
+            'bangunan.xlsx',
+            \Maatwebsite\Excel\Excel::XLSX,
+            [
+                'Content-Type' => 'application/xlsx',
+            ]
+        );
     }
 
     public function count_building_permit(Request $request)

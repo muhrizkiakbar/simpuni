@@ -59,7 +59,14 @@ class DenunciationController extends Controller
         $denunciations = $this->denunciationService->denunciations(new Request($request_input))
             ->whereBetween('created_at', [$request->start_date, $request->end_date])->get();
 
-        return Excel::download(new DenunciationsExport($denunciations), 'pelaporan.xlsx');
+        return Excel::download(
+            new DenunciationsExport($denunciations),
+            'pelaporan.xlsx',
+            \Maatwebsite\Excel\Excel::XLSX,
+            [
+                'Content-Type' => 'application/xlsx',
+            ]
+        );
     }
 
     //API count pelaporan baru dan count pelaporan dalam proses (gabung)
