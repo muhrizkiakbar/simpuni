@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use Carbon\Carbon;
 use App\Models\Denunciation;
 use App\Repositories\Repository;
 
@@ -50,5 +51,12 @@ class Denunciations extends Repository
 
         $query->whereMonth('created_at', $month)
               ->whereYear('created_at', $year);
+    }
+
+    protected function filterByRequire_Action($query, $value)
+    {
+        if ($value) {
+            $query->where('updated_at', '<', Carbon::now()->subDays(14));
+        }
     }
 }
