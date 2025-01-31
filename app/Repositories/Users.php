@@ -29,6 +29,11 @@ class Users extends Repository
         $query->where('email', $value);
     }
 
+    protected function filterByType_User($query, $value)
+    {
+        $query->where('type_user', $value);
+    }
+
     protected function filterByState($query, $value)
     {
         $query->where('state', $value);
