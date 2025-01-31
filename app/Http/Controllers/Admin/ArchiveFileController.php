@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\ArchiveFileRequest;
+use App\Http\Requests\Admin\ArchiveFiles\CreateRequest;
+use App\Http\Requests\Admin\ArchiveFiles\UpdateRequest;
 use App\Models\ArchiveFile;
 use App\Outputs\Admin\ArchiveFileOutput;
 use App\Services\ArchiveFileService;
@@ -27,7 +28,7 @@ class ArchiveFileController extends Controller
         return $this->render_json_array(ArchiveFileOutput::class, "format", $archive_files);
     }
 
-    public function store(ArchiveFileRequest $request)
+    public function store(CreateRequest $request)
     {
         $archive_file = $this->archiveFileService->create($request);
         return $this->render_json(ArchiveFileOutput::class, "format", $archive_file);
@@ -39,7 +40,7 @@ class ArchiveFileController extends Controller
         return $this->render_json(ArchiveFileOutput::class, "format", $archive_file);
     }
 
-    public function update(ArchiveFileRequest $request, string $id)
+    public function update(UpdateRequest $request, string $id)
     {
         $archive_file = ArchiveFile::find(decrypt($id));
         $archive_file = $this->archiveFileService->update($archive_file, $request);

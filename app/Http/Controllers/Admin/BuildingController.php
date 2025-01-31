@@ -59,7 +59,8 @@ class BuildingController extends Controller
 
     public function export_excel(Request $request)
     {
-        $buildings = $this->buildingService->buildings($request->except(['start_date', 'end_date']))
+        $request_input = $request->except(['start_date', 'end_date']);
+        $buildings = $this->buildingService->buildings(new Request($request_input))
             ->whereBetween('created_at', [$request->start_date, $request->end_date])->get();
 
         return Excel::download(new BuildingsExport($buildings), 'bangunan.xlsx');
