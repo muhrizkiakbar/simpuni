@@ -10,7 +10,7 @@
     "license": "MIT",
     "classmap": [
         "vendor/google/apiclient/src/"
-    ]
+    ],
     "require": {
         "php": "^8.2",
         "google/apiclient": "^2.18",
