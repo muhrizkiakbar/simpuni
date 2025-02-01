@@ -55,24 +55,19 @@ io.use(async (socket, next) => {
     console.log('===============================================================================================')
 
     try {
-        //const response = await axios.get('http://89.116.20.101/api/me', {}, {
-        //    headers: {
-        //        'Authorization': `Bearer ${token}`
-        //    }
-        //});
         const options = {
             method: 'GET',
             url: 'http://89.116.20.101/api/me',
             params: { '': '' },
             headers: {
                 'Content-Type': 'application/json',
+                'User-Agent': 'insomnia/10.3.0',
                 Accept: 'application/json',
                 Authorization: 'Bearer 9|78r0zs9MWfYWa4p09kemJ3RoVKsphm9xufdwBmaXd4c21693'
             },
             data: {}
         };
-
-        const response = axios.request(options);
+        const response = await axios.get(options);
         console.log('===============================================================================================')
         console.log(response)
         console.log('===============================================================================================')
