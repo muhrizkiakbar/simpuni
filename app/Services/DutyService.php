@@ -8,7 +8,8 @@ use App\Repositories\Duties;
 use App\Services\ApplicationService;
 use App\Models\User;
 use Exception;
-use Google\Client as GoogleClient;
+use Kreait\Firebase\Factory;
+use Kreait\Firebase\Messaging\CloudMessage;
 use Illuminate\Support\Facades\Storage;
 
 class DutyService extends ApplicationService
@@ -87,51 +88,20 @@ class DutyService extends ApplicationService
         $procject_id = 'simpuni-banjarbaru';
         $fcm = $user->fcm_token;
 
-        $client = new GoogleClient();
+        //$credentialsFilePath = storage_path('app/public/app/json/google-services.json');
 
-        // Path ke file Service Account JSON
-        $credentialsFilePath = storage_path('app/public/app/json/google-services.json');
+        $firebase = (new Factory())->withServiceAccount(storage_path('app/public/app/json/google-services.json'));
 
-        // Set kredensial menggunakan setAuthConfig
-        $client->setAuthConfig($credentialsFilePath);
+        $messaging = $firebase->createMessaging();
 
-        // Tambahkan scope yang diperlukan
-        $client->addScope('https://www.googleapis.com/auth/firebase.messaging');
+        $message = CloudMessage::fromArray([
+            'notification' => [
+                'title' => 'Hello from Firebase!',
+                'body' => 'This is a test notification.'
+            ],
+            'topic' => 'global'
+        ]);
 
-        // Dapatkan token akses
-        $client->fetchAccessTokenWithAssertion();
-        $token = $client->getAccessToken();
-
-        $access_token = $token['access_token'];
-
-        $headers = [
-            "Authorization: Bearer $access_token",
-            'Content-Type: application/json'
-        ];
-
-        $data = [
-            "message" => [
-                "token" => $fcm,
-                "notification" => [
-                    "title" => $title,
-                    "body" => $description,
-                ],
-            ]
-        ];
-        $payload = json_encode($data);
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "https://fcm.googleapis.com/v1/projects/{$procject_id}/messages:send");
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-        curl_setopt($ch, CURLOPT_VERBOSE, true);
-        $response = curl_exec($ch);
-        $err = curl_error($ch);
-        curl_close($ch);
-
-        return $err;
+        $messaging->send($message);
     }
 }
