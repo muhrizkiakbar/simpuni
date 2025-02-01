@@ -52,7 +52,7 @@ io.use(async (socket, next) => {
     const token = socket.handshake.query.token;  // Get token from query string
 
     try {
-        const response = await axios.post('group.restuguru.com/api/me', {}, {
+        const response = await axios.post('http://89.116.20.101/api/me', {}, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
