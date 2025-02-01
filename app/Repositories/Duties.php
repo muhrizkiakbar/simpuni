@@ -43,4 +43,10 @@ class Duties extends Repository
         $query->where('state_type', $value);
     }
 
+    protected function filterByState($query, $value)
+    {
+        $query->where('state', $value);
+    }
+
+
 }
