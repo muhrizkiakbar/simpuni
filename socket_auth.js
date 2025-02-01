@@ -50,9 +50,6 @@ redis.on('pmessage', (subscribed, channel, message) => {
 
 io.use(async (socket, next) => {
     const token = socket.handshake.query.token;  // Get token from query string
-    console.log('===============================================================================================')
-    console.log(socket.handshake.query.token)
-    console.log('===============================================================================================')
 
     try {
         const url = 'http://89.116.20.101/api/me';
@@ -60,14 +57,9 @@ io.use(async (socket, next) => {
             'Content-Type': 'application/json',
             'User-Agent': 'insomnia/10.3.0',
             'Accept': 'application/json',
-            'Authorization': 'Bearer 9|78r0zs9MWfYWa4p09kemJ3RoVKsphm9xufdwBmaXd4c21693'
+            'Authorization': `Bearer ${token}`
         };
         const response = await axios.get(url, { headers })
-        //const response = await axios.get('http://89.116.20.101/api/me', {}, {
-        //    headers: {
-        //        'Authorization': `Bearer ${token}`
-        //    }
-        //});
         console.log('===============================================================================================')
         console.log(response)
         console.log('===============================================================================================')
