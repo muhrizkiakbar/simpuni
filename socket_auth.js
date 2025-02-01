@@ -50,6 +50,9 @@ redis.on('pmessage', (subscribed, channel, message) => {
 
 io.use(async (socket, next) => {
     const token = socket.handshake.query.token;  // Get token from query string
+    console.log('===============================================================================================')
+    console.log(socket.handshake.query)
+    console.log('===============================================================================================')
 
     try {
         const response = await axios.get('http://89.116.20.101/api/me', {}, {
