@@ -10,7 +10,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
-        "google/apiclient": "^2.18",
+        "kreait/firebase-php": "^7.16",
         "laravel/framework": "^11.31",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
@@ -31,10 +31,7 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        },
-        "classmap": [
-            "vendor/google/apiclient/src/"
-        ]
+        }
     },
     "autoload-dev": {
         "psr-4": {
