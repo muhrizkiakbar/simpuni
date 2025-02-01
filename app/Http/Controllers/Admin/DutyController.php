@@ -34,4 +34,9 @@ class DutyController extends Controller
 
         return $this->render_json(DutyOutput::class, "format", $duty);
     }
+
+    public function send($user, $title, $description)
+    {
+        $this->send_notification($user, $title, $description);
+    }
 }
