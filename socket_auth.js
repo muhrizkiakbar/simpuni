@@ -51,7 +51,7 @@ redis.on('pmessage', (subscribed, channel, message) => {
 io.use(async (socket, next) => {
     const token = socket.handshake.query.token;  // Get token from query string
     console.log('===============================================================================================')
-    console.log(socket.handshake.query)
+    console.log(socket.handshake.query.token)
     console.log('===============================================================================================')
 
     try {
@@ -60,6 +60,9 @@ io.use(async (socket, next) => {
                 'Authorization': `Bearer ${token}`
             }
         });
+        console.log('===============================================================================================')
+        console.log(response)
+        console.log('===============================================================================================')
 
         if (response.status === 200) {
             // Token is valid, proceed with connection
