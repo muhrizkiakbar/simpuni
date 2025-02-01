@@ -68,7 +68,7 @@ class DutyService extends ApplicationService
 
     public function show(string $id)
     {
-        return Duty::find($id)->with(
+        return Duty::find($id)->load(
             'denunciation',
             'user_petugas',
             'user_admin',
