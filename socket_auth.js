@@ -3,10 +3,22 @@ import http from 'http';
 import { Server as socketIo } from 'socket.io';  // Correct import
 import Redis from 'ioredis';
 import axios from 'axios';  // Used to send requests to your Laravel app
+import cors from 'cors';  // Import the cors package
 
 const app = express();
 const server = http.createServer(app); // Create an HTTP server
-const io = new socketIo(server); // Initialize socket.io with the server
+
+// Configure CORS for Express (optional, if you have REST endpoints)
+app.use(cors());
+
+// Initialize socket.io with the server and configure CORS
+const io = new socketIo(server, {
+    cors: {
+        origin: "*", // Allow all origins (replace with specific origins in production)
+        methods: ["GET", "POST"], // Allowed HTTP methods
+        credentials: true // Allow credentials (if needed)
+    }
+});
 
 // Adjust Redis connection
 const redis = new Redis({
@@ -74,4 +86,3 @@ server.listen(3000, () => {
 redis.on('error', (err) => {
     console.error('Redis connection error:', err);
 });
-
