@@ -27,7 +27,7 @@ abstract class Controller
         $procject_id = 'simpuni-banjarbaru';
         $fcm = $user->fcm_token;
 
-        $credentialsFilePath = Storage::path('app/json/file.json');
+        $credentialsFilePath = Storage::path('app/json/google-services.json');
         $client = new GoogleClient();
         $client->setAuthConfig($credentialsFilePath);
         $client->addScope('https://www.googleapis.com/auth/firebase.messaging');
