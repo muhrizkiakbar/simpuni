@@ -87,10 +87,18 @@ class DutyService extends ApplicationService
         $procject_id = 'simpuni-banjarbaru';
         $fcm = $user->fcm_token;
 
-        $credentialsFilePath = storage_path('app/public/app/json/google-services.json');
         $client = new GoogleClient();
+
+        // Path ke file Service Account JSON
+        $credentialsFilePath = storage_path('app/public/app/json/google-services.json');
+
+        // Set kredensial menggunakan setAuthConfig
         $client->setAuthConfig($credentialsFilePath);
+
+        // Tambahkan scope yang diperlukan
         $client->addScope('https://www.googleapis.com/auth/firebase.messaging');
+
+        // Dapatkan token akses
         $client->fetchAccessTokenWithAssertion();
         $token = $client->getAccessToken();
 
