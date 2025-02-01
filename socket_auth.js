@@ -60,9 +60,6 @@ io.use(async (socket, next) => {
             'Authorization': `Bearer ${token}`
         };
         const response = await axios.get(url, { headers })
-        console.log('===============================================================================================')
-        console.log(response)
-        console.log('===============================================================================================')
 
         if (response.status === 200) {
             // Token is valid, proceed with connection
