@@ -8,6 +8,8 @@ use App\Repositories\Duties;
 use App\Services\ApplicationService;
 use App\Models\User;
 use Exception;
+use Google\Client as GoogleClient;
+use Illuminate\Support\Facades\Storage;
 
 class DutyService extends ApplicationService
 {
