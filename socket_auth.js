@@ -62,7 +62,12 @@ io.use(async (socket, next) => {
             'Accept': 'application/json',
             'Authorization': 'Bearer 9|78r0zs9MWfYWa4p09kemJ3RoVKsphm9xufdwBmaXd4c21693'
         };
-        const response = axios.get(url, { headers })
+        const response = await axios.get(url, { headers })
+        //const response = await axios.get('http://89.116.20.101/api/me', {}, {
+        //    headers: {
+        //        'Authorization': `Bearer ${token}`
+        //    }
+        //});
         console.log('===============================================================================================')
         console.log(response)
         console.log('===============================================================================================')
