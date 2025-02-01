@@ -10,13 +10,12 @@ const io = new socketIo(server); // Initialize socket.io with the server
 
 // Adjust Redis connection
 const redis = new Redis({
-    host: 'redis',  // Redis host (adjust based on your environment)
+    host: 'localhost',  // Redis host (adjust based on your environment)
     port: 6379,     // Default Redis port
-    password: 'secret_redis', // Redis password (if set)
+    password: 'simpuni_redis', // Redis password (if set)
     db: 0,          // Optional: default Redis database
 });
 
-// Subscribe to Redis channels
 redis.psubscribe('*', (err, count) => {
     if (err) {
         console.error('Error subscribing to Redis channel:', err);
@@ -25,7 +24,6 @@ redis.psubscribe('*', (err, count) => {
     }
 });
 
-// Handle messages from Redis
 redis.on('pmessage', (subscribed, channel, message) => {
     try {
         console.log(message)
@@ -38,13 +36,11 @@ redis.on('pmessage', (subscribed, channel, message) => {
     }
 });
 
-// Setup WebSocket authentication middleware
 io.use(async (socket, next) => {
     const token = socket.handshake.query.token;  // Get token from query string
 
     try {
-        // Make a request to your Laravel app to verify the Sanctum token
-        const response = await axios.post('http://your-laravel-app.com/api/user', {}, {
+        const response = await axios.post('group.restuguru.com/api/me', {}, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
