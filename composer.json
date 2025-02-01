@@ -34,7 +34,7 @@
         },
         "classmap": [
             "vendor/google/apiclient/src/"
-        ],
+        ]
     },
     "autoload-dev": {
         "psr-4": {
