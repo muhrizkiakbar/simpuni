@@ -20,10 +20,10 @@ class AuthorizationController extends Controller
         $request->validate([
             'username' => 'required|max:15',
             'password' => 'required',
+            'fcm_token' => 'required'
         ]);
 
-        $user = User::
-            where('state', 'active')
+        $user = User::where('state', 'active')
             ->where('username', $request->username)
             ->orWhere('email', $request->username)
             ->first();
@@ -37,6 +37,9 @@ class AuthorizationController extends Controller
         // Create a personal access token
         $tokenResult = $user->createToken('auth_token', ['access-api'], now()->addMinutes(10080));
         $accessToken = $tokenResult->plainTextToken;
+
+        $user->fcm_token = $request->fcm_token;
+        $user->save();
 
         $user_output = new UserOutput();
         // Return response in desired format
@@ -52,7 +55,7 @@ class AuthorizationController extends Controller
 
     public function logout(Request $request)
     {
-        $request->user()->tokens()->delete();
+        Auth::user()->tokens()->delete();
 
         return response()->json(['message' => 'Logged out successfully']);
     }
@@ -98,4 +101,3 @@ class AuthorizationController extends Controller
         return $this->render_json(UserOutput::class, "format", $user);
     }
 }
-

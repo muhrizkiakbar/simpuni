@@ -39,11 +39,12 @@ class DenunciationController extends Controller
     public function update(WarningLetterRequest $request, string $id)
     {
         $denunciation = Denunciation::find(decrypt($id));
-        list($denunciationn, $duty) = $this->denunciationService->warning_letter($denunciation, $request);
+        list($denunciation, $duty) = $this->denunciationService->warning_letter($denunciation, $request);
 
         if ($duty != null) {
-            //broadcast(new NewDutyEvent($duty, $duty->user_petugas));
-            broadcast(new NewDutyEvent($duty, $duty->user_petugas));
+            $title = 'Tugas Baru.';
+            $description = 'Ada tugas baru nih dari laporan dengan jenis laporan '.$denunciation->type_denunciation->name.'., semangat yaa !';
+            $this->send_notification($duty->user_petugas, $title, $description);
         }
 
         return $this->render_json(
