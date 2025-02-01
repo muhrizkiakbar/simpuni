@@ -66,8 +66,8 @@ app.get('/', (req, res) => {
 });
 
 // Start HTTP server
-server.listen(6001, () => {
-    console.log('Server is running on port 6001');
+server.listen(3000, () => {
+    console.log('Server is running on port 3000');
 });
 
 // Handle Redis connection errors
