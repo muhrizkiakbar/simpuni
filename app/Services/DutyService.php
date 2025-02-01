@@ -90,7 +90,7 @@ class DutyService extends ApplicationService
 
         //$credentialsFilePath = storage_path('app/public/app/json/google-services.json');
 
-        $firebase = (new Factory())->withServiceAccount(storage_path('app/public/app/json/google-services.json'));
+        $firebase = (new Factory())->withServiceAccount(storage_path('app/json/account_google.json'));
 
         $messaging = $firebase->createMessaging();
 
@@ -102,6 +102,11 @@ class DutyService extends ApplicationService
             'topic' => 'global'
         ]);
 
-        $messaging->send($message);
+        try {
+            $messaging->send($message);
+            echo 'Notification sent successfully!';
+        } catch (\Throwable $e) {
+            echo 'Error: ' . $e->getMessage();
+        }
     }
 }
