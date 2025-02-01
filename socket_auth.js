@@ -55,6 +55,11 @@ io.use(async (socket, next) => {
     console.log('===============================================================================================')
 
     try {
+        //const response = await axios.get('http://89.116.20.101/api/me', {}, {
+        //    headers: {
+        //        'Authorization': `Bearer ${token}`
+        //    }
+        //});
         const options = {
             method: 'GET',
             url: 'http://89.116.20.101/api/me',
@@ -67,11 +72,7 @@ io.use(async (socket, next) => {
             data: {}
         };
 
-        const response = axios.request(options).then(function (response) {
-            console.log(response.data);
-        }).catch(function (error) {
-            console.error(error);
-        });
+        const response = axios.request(options);
         console.log('===============================================================================================')
         console.log(response)
         console.log('===============================================================================================')
