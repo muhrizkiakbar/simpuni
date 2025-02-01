@@ -55,10 +55,22 @@ io.use(async (socket, next) => {
     console.log('===============================================================================================')
 
     try {
-        const response = await axios.get('http://89.116.20.101/api/me', {}, {
+        const options = {
+            method: 'GET',
+            url: 'http://89.116.20.101/api/me',
+            params: { '': '' },
             headers: {
-                'Authorization': `Bearer ${token}`
-            }
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                Authorization: 'Bearer 9|78r0zs9MWfYWa4p09kemJ3RoVKsphm9xufdwBmaXd4c21693'
+            },
+            data: {}
+        };
+
+        const response = axios.request(options).then(function (response) {
+            console.log(response.data);
+        }).catch(function (error) {
+            console.error(error);
         });
         console.log('===============================================================================================')
         console.log(response)
