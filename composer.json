@@ -8,9 +8,6 @@
         "framework"
     ],
     "license": "MIT",
-    "classmap": [
-        "vendor/google/apiclient/src/"
-    ],
     "require": {
         "php": "^8.2",
         "google/apiclient": "^2.18",
@@ -34,7 +31,10 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "classmap": [
+            "vendor/google/apiclient/src/"
+        ],
     },
     "autoload-dev": {
         "psr-4": {
