@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "382772962428",
+    "project_id": "simpuni-banjarbaru",
+    "storage_bucket": "simpuni-banjarbaru.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:382772962428:android:86b928ea8ee5140f8155f9",
+        "android_client_info": {
+          "package_name": "com.simpuni"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAlgjJQNDdPyR4TU4GpFDZEXjq2so4dFls"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
