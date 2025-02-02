@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Exceptions\DenunciationException;
+use App\Jobs\SendNotificationAdminNewDenunciation;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Duty;
 use Illuminate\Http\Request;
@@ -58,6 +59,8 @@ class DenunciationService extends ApplicationService
                 ]);
             }
         }
+
+        SendNotificationAdminNewDenunciation::dispatch($denunciation->id);
 
         return $denunciation;
     }
@@ -284,5 +287,10 @@ class DenunciationService extends ApplicationService
         $duty->save();
 
         return $duty;
+    }
+
+    public function send_notification($denunciation, $user, $title, $description)
+    {
+        $this->sendNotification($user, $title, $description);
     }
 }
