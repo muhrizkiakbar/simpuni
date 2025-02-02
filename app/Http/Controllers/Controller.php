@@ -48,6 +48,9 @@ abstract class Controller
                     "title" => $title,
                     "body" => $description,
                 ],
+                'data' => [
+                    'user_id' => $user->id
+                ]
             ]
         ];
         $payload = json_encode($data);
