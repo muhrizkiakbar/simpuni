@@ -101,6 +101,11 @@ Route::middleware([
                 ]);
                 Route::post('/duties/{id}/start', [PetugasDutyController::class, 'start']);
                 Route::post('/duties/{id}/submit', [PetugasDutyController::class, 'start']);
+
+                Route::resource('buildings', PetugasBuildingController::class)->only([
+                    'index', 'show'
+                ]);
+                Route::get('/buildings/export/excel', [PetugasBuildingController::class, 'export_excel']);
             });
         });
 
@@ -111,6 +116,7 @@ Route::middleware([
                     'index', 'store', 'destroy', 'show'
                 ]);
                 Route::post('/buildings/{id}', [PetugasBuildingController::class, 'update']);
+                Route::get('/buildings/export/excel', [PetugasBuildingController::class, 'export_excel']);
 
                 Route::resource('function_buildings', PetugasFunctionBuildingController::class)->only([
                     'index'

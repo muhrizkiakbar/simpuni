@@ -50,4 +50,21 @@ class BuildingController extends Controller
 
         return $this->render_json(BuildingOutput::class, "format", $building);
     }
+
+    public function export_excel(Request $request)
+    {
+        $request_input = $request->except(['start_date', 'end_date']);
+        $buildings = $this->buildingService->buildings(new Request($request_input))
+            ->whereBetween('created_at', [$request->start_date, $request->end_date])->get();
+
+        return Excel::download(
+            new BuildingsExport($buildings),
+            'bangunan.xlsx',
+            \Maatwebsite\Excel\Excel::XLSX,
+            [
+                'Content-Type' => 'application/xlsx',
+            ]
+        );
+    }
+
 }
