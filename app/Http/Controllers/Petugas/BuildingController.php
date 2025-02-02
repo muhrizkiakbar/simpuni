@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Petugas;
 
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\BuildingsExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\BuildingRequest;
 use App\Models\Building;
