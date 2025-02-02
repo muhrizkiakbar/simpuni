@@ -94,19 +94,26 @@ class DutyService extends ApplicationService
 
         $messaging = $firebase->createMessaging();
 
+        $message = CloudMessage::new()
+        ->toToken($fcm);
+
         $message = CloudMessage::fromArray([
+            'token' => $fcm,
             'notification' => [
-                'title' => 'Hello from Firebase!',
-                'body' => 'This is a test notification.'
-            ],
-            'topic' => 'global'
+                "body" => "coba",
+                "title" => "masuk"
+            ], // optional
+            'data' => [
+                'user_id' => $user->id
+            ], // optional
         ]);
 
         try {
-            $messaging->send($message);
+            $result = $messaging->send($message);
             echo 'Notification sent successfully!';
         } catch (\Throwable $e) {
             echo 'Error: ' . $e->getMessage();
         }
+
     }
 }
