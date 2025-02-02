@@ -83,12 +83,10 @@ class DutyService extends ApplicationService
 
     }
 
-    public function send_notification($user, $title, $description)
+    public function send_notification($data, $user, $title, $description)
     {
         $procject_id = 'simpuni-banjarbaru';
         $fcm = $user->fcm_token;
-
-        //$credentialsFilePath = storage_path('app/public/app/json/google-services.json');
 
         $firebase = (new Factory())->withServiceAccount(storage_path('app/json/account_google.json'));
 
@@ -100,11 +98,12 @@ class DutyService extends ApplicationService
         $message = CloudMessage::fromArray([
             'token' => $fcm,
             'notification' => [
-                "body" => "coba",
-                "title" => "masuk"
+                "body" => $description,
+                "title" => $title
             ], // optional
             'data' => [
-                'user_id' => $user->id
+                'user_id' => $user->id,
+                'duty' => $data
             ], // optional
         ]);
 

@@ -14,6 +14,8 @@ use App\Models\LogDenunciation;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Kreait\Firebase\Factory;
+use Kreait\Firebase\Messaging\CloudMessage;
 
 class DenunciationService extends ApplicationService
 {
@@ -124,6 +126,9 @@ class DenunciationService extends ApplicationService
                 $denunciation->state = 'done';
                 $denunciation->save();
 
+                $title = "Laporan Selesai.";
+                $description = "Laporan telah selesai, dengan jenis laporan ". $denunciation->type_denunciation->name.".";
+                $this->send_notification($denunciation, $denunciation->user_pelapor_id, $title, $description);
 
                 $log_denunciation = $this->create_log_denunciation($denunciation, $currentState);
 
@@ -134,6 +139,11 @@ class DenunciationService extends ApplicationService
             } elseif ($request->state == 'reject' && $denunciation->state == 'sent') {
                 $denunciation->state = 'reject';
                 $denunciation->save();
+
+                $title = "Laporan Ditolak.";
+                $description = "Laporan telah ditolak, dengan jenis laporan ". $denunciation->type_denunciation->name.".";
+                $this->send_notification($denunciation, $denunciation->user_pelapor_id, $title, $description);
+
 
                 $log_denunciation = $this->create_log_denunciation($denunciation, $currentState);
 
@@ -284,13 +294,46 @@ class DenunciationService extends ApplicationService
             $duty->save();
         }
 
+        $duty_service = new DutyService(new User());
+        $title = "Tugas Baru.";
+        $description = "Tugas baru dengan jenis peringatan ". str_replace('_', ' ', strtoupper($duty->state_type)).".";
+        $this->send_notification($denunciation, $denunciation->user_pelapor_id, $title, $description);
+
+
         $duty->save();
 
         return $duty;
     }
 
-    public function send_notification($denunciation, $user, $title, $description)
+    public function send_notification($data, $user, $title, $description)
     {
-        $this->sendNotification($user, $title, $description);
+        $procject_id = 'simpuni-banjarbaru';
+        $fcm = $user->fcm_token;
+
+        $firebase = (new Factory())->withServiceAccount(storage_path('app/json/account_google.json'));
+
+        $messaging = $firebase->createMessaging();
+
+        $message = CloudMessage::new()
+        ->toToken($fcm);
+
+        $message = CloudMessage::fromArray([
+            'token' => $fcm,
+            'notification' => [
+                "body" => "coba",
+                "title" => "masuk"
+            ], // optional
+            'data' => [
+                'user_id' => $user->id,
+                'denunciation' => $data
+            ], // optional
+        ]);
+
+        try {
+            $result = $messaging->send($message);
+            echo 'Notification sent successfully!';
+        } catch (\Throwable $e) {
+            echo 'Error: ' . $e->getMessage();
+        }
     }
 }

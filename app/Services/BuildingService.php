@@ -2,16 +2,17 @@
 
 namespace App\Services;
 
+use App\Jobs\SendNotificationAdminNewBuilding;
 use App\Models\Building;
 use App\Models\User;
 use App\Repositories\Buildings;
 use Illuminate\Http\Request;
 use App\Services\ApplicationService;
-use Exception;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Throwable;
+use Kreait\Firebase\Factory;
+use Kreait\Firebase\Messaging\CloudMessage;
 
 class BuildingService extends ApplicationService
 {
@@ -61,6 +62,9 @@ class BuildingService extends ApplicationService
 
         if ($this->currentUser->type_user == 'konsultan') {
             $building->state = 'waiting';
+            $building->save();
+
+            SendNotificationAdminNewBuilding::dispatch($building->id);
         }
 
 
@@ -125,6 +129,12 @@ class BuildingService extends ApplicationService
             $building->save();
         }
 
+
+        if ($building->state == "active" && $building->created_by_user->type_user == 'konsultan') {
+            $title = "Bangunan Diaktifkan.";
+            $description = "Bangunan dengan fungsi bangunan ".$building->function_building->name.".";
+            $this->send_notification($building, $building->created_by_user_id, $title, $description);
+        }
         return $building;
     }
 
@@ -152,5 +162,37 @@ class BuildingService extends ApplicationService
         ->first();
 
         return $results;
+    }
+
+    public function send_notification($data, $user, $title, $description)
+    {
+        $procject_id = 'simpuni-banjarbaru';
+        $fcm = $user->fcm_token;
+
+        $firebase = (new Factory())->withServiceAccount(storage_path('app/json/account_google.json'));
+
+        $messaging = $firebase->createMessaging();
+
+        $message = CloudMessage::new()
+        ->toToken($fcm);
+
+        $message = CloudMessage::fromArray([
+            'token' => $fcm,
+            'notification' => [
+                "body" => "coba",
+                "title" => "masuk"
+            ], // optional
+            'data' => [
+                'user_id' => $user->id,
+                'building' => $data
+            ], // optional
+        ]);
+
+        try {
+            $result = $messaging->send($message);
+            echo 'Notification sent successfully!';
+        } catch (\Throwable $e) {
+            echo 'Error: ' . $e->getMessage();
+        }
     }
 }

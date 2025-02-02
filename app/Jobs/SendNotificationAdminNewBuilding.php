@@ -2,9 +2,8 @@
 
 namespace App\Jobs;
 
-use App\Models\Denunciation;
+use App\Models\Building;
 use App\Models\User;
-use App\Services\DenunciationService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
@@ -13,21 +12,21 @@ use Illuminate\Queue\SerializesModels;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Messaging\CloudMessage;
 
-class SendNotificationAdminNewDenunciation implements ShouldQueue
+class SendNotificationAdminNewBuilding implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
 
-    protected $denunciation_id;
+    protected $building_id;
 
     /**
      * Create a new job instance.
      */
-    public function __construct($denunciation_id)
+    public function __construct($building_id)
     {
-        $this->denunciation_id = $denunciation_id;
+        $this->building_id = $building_id;
     }
 
     /**
@@ -40,15 +39,15 @@ class SendNotificationAdminNewDenunciation implements ShouldQueue
 
         //echo($this->denunciation_id);
         //// Ambil data laporan berdasarkan ID
-        $denunciation = Denunciation::find($this->denunciation_id);
+        $building = Building::find($this->building_id);
 
         //// Buat instance service di dalam handle()
 
-        $title = 'Tugas Baru.';
-        $description = 'Ada laporan baru nih dari laporan dengan jenis laporan '.$denunciation->type_denunciation->name.'. Semangat yaa !';
+        $title = 'Bangunan Baru.';
+        $description = 'Ada bangunan baru nih dengan fungsi bangunan '.$building->function_building->name.'.';
 
         foreach ($admin_users as $user) {
-            $this->send_notification($denunciation, $user, $title, $description);
+            $this->send_notification($building, $user, $title, $description);
         }
     }
 
@@ -72,7 +71,7 @@ class SendNotificationAdminNewDenunciation implements ShouldQueue
             ], // optional
             'data' => [
                 'user_id' => $user->id,
-                'denunciation' => $data
+                'building' => $data
             ], // optional
         ]);
 
