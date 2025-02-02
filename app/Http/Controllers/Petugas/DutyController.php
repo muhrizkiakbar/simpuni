@@ -24,7 +24,7 @@ class DutyController extends Controller
     {
         $request_input = $request->merge(
             [
-                'user_petugas_id' => Auth::user()
+                'user_petugas_id' => Auth::user()->id
             ]
         );
         $duties = $this->dutyService->duties($request_input, [
