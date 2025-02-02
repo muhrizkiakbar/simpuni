@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Services\DutyService;
 use Illuminate\Http\Request;
 use App\Models\Duty;
+use Illuminate\Support\Facades\Auth;
 
 class DutyController extends Controller
 {
