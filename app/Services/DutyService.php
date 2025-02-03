@@ -38,9 +38,11 @@ class DutyService extends ApplicationService
     }
 
     // mulai pengantaran
-    public function start(Duty $duty)
+    public function start(Request $request, Duty $duty)
     {
         $duty->tanggal_pengantaran = now();
+        $duty->start_latitude = $request->start_latitude;
+        $duty->start_longitude = $request->start_longitude;
         $duty->state = "on_going";
         $duty->save();
 
@@ -52,6 +54,8 @@ class DutyService extends ApplicationService
     {
         $duty = $duty->update($request->except('foto'));
         $duty->state = "done";
+        $duty->submit_latitude = $request->submit_latitude;
+        $duty->submit_longitude = $request->submit_longitude;
         $duty->save();
 
         if (!empty($request->file('foto')) && $request->hasFile('foto')) {

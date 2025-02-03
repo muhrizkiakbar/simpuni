@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Petugas;
 
+use App\Http\Requests\Admin\Duties\StartRequest;
 use App\Http\Requests\Admin\Duties\SubmitRequest;
 use App\Outputs\Admin\DutyOutput;
 use App\Http\Controllers\Controller;
@@ -43,10 +44,10 @@ class DutyController extends Controller
         return $this->render_json(DutyOutput::class, "format", $duty);
     }
 
-    public function start(string $id)
+    public function start(StartRequest $request, string $id)
     {
         $duty = Duty::find(decrypt($id));
-        $duty = $this->dutyService->start($duty);
+        $duty = $this->dutyService->start($request, $duty);
         return $this->render_json(DutyOutput::class, "format", $duty);
     }
 

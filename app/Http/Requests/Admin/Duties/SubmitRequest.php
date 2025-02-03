@@ -15,6 +15,8 @@ class SubmitRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'submit_longitude' => [ 'required', 'string', 'max:255'  ],
+            'submit_latitude' => [ 'required', 'string', 'max:255'  ],
             'catatan' => [ 'nullable', 'string', 'max:255'  ],
             'nomor_izin_bangunan' => [ 'nullable', 'string', 'max:255'  ],
             'foto' => 'nullable|file|mimetypes:image/jpeg,image/png,image/jpg|max:2048',
