@@ -47,11 +47,11 @@ class SendNotificationAdminNewBuilding implements ShouldQueue
         $description = 'Ada bangunan baru nih dengan fungsi bangunan '.$building->function_building->name.'.';
 
         foreach ($admin_users as $user) {
-            $this->send_notification($building, $user, $title, $description);
+            $this->send_notification($building, $user, $title, $description, "building_new");
         }
     }
 
-    public function send_notification($data, $user, $title, $description)
+    public function send_notification($data, $user, $title, $description, $topic)
     {
         $procject_id = 'simpuni-banjarbaru';
         $fcm = $user->fcm_token;
@@ -71,7 +71,8 @@ class SendNotificationAdminNewBuilding implements ShouldQueue
             ], // optional
             'data' => [
                 'user_id' => $user->id,
-                'building' => $data
+                'slug' => encrypt($data->id),
+                'notification_type' => $topic
             ], // optional
         ]);
 

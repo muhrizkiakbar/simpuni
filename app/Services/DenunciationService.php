@@ -128,7 +128,7 @@ class DenunciationService extends ApplicationService
 
                 $title = "Laporan Selesai.";
                 $description = "Laporan telah selesai, dengan jenis laporan ". $denunciation->type_denunciation->name.".";
-                $this->send_notification($denunciation, $denunciation->user_pelapor_id, $title, $description);
+                $this->send_notification($denunciation, $denunciation->user_pelapor_id, $title, $description, "denunciation_done");
 
                 $log_denunciation = $this->create_log_denunciation($denunciation, $currentState);
 
@@ -142,7 +142,7 @@ class DenunciationService extends ApplicationService
 
                 $title = "Laporan Ditolak.";
                 $description = "Laporan telah ditolak, dengan jenis laporan ". $denunciation->type_denunciation->name.".";
-                $this->send_notification($denunciation, $denunciation->user_pelapor_id, $title, $description);
+                $this->send_notification($denunciation, $denunciation->user_pelapor_id, $title, $description, "denunciation_reject");
 
 
                 $log_denunciation = $this->create_log_denunciation($denunciation, $currentState);
@@ -297,7 +297,7 @@ class DenunciationService extends ApplicationService
         $duty_service = new DutyService(new User());
         $title = "Tugas Baru.";
         $description = "Tugas baru dengan jenis peringatan ". str_replace('_', ' ', strtoupper($duty->state_type)).".";
-        $this->send_notification($denunciation, $denunciation->user_pelapor_id, $title, $description);
+        $this->send_notification($denunciation, $denunciation->user_pelapor_id, $title, $description, "assignment_new");
 
 
         $duty->save();
@@ -305,7 +305,7 @@ class DenunciationService extends ApplicationService
         return $duty;
     }
 
-    public function send_notification($data, $user, $title, $description)
+    public function send_notification($data, $user, $title, $description, $topic)
     {
         $procject_id = 'simpuni-banjarbaru';
         $fcm = $user->fcm_token;
@@ -325,7 +325,8 @@ class DenunciationService extends ApplicationService
             ], // optional
             'data' => [
                 'user_id' => $user->id,
-                'denunciation' => $data
+                'slug' => encrypt($data->id),
+                'notification_type' => $topic
             ], // optional
         ]);
 

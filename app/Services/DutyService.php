@@ -83,7 +83,7 @@ class DutyService extends ApplicationService
 
     }
 
-    public function send_notification($data, $user, $title, $description)
+    public function send_notification($data, $user, $title, $description, $topic)
     {
         $procject_id = 'simpuni-banjarbaru';
         $fcm = $user->fcm_token;
@@ -103,7 +103,8 @@ class DutyService extends ApplicationService
             ], // optional
             'data' => [
                 'user_id' => $user->id,
-                'duty' => $data
+                'slug' => encrypt($data->id),
+                'notification_type' => $topic
             ], // optional
         ]);
 

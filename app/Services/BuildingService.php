@@ -133,7 +133,7 @@ class BuildingService extends ApplicationService
         if ($building->state == "active" && $building->created_by_user->type_user == 'konsultan') {
             $title = "Bangunan Diaktifkan.";
             $description = "Bangunan dengan fungsi bangunan ".$building->function_building->name.".";
-            $this->send_notification($building, $building->created_by_user_id, $title, $description);
+            $this->send_notification($building, $building->created_by_user_id, $title, $description, "building_confirmation");
         }
         return $building;
     }
@@ -164,7 +164,7 @@ class BuildingService extends ApplicationService
         return $results;
     }
 
-    public function send_notification($data, $user, $title, $description)
+    public function send_notification($data, $user, $title, $description, $topic)
     {
         $procject_id = 'simpuni-banjarbaru';
         $fcm = $user->fcm_token;
@@ -184,7 +184,8 @@ class BuildingService extends ApplicationService
             ], // optional
             'data' => [
                 'user_id' => $user->id,
-                'building' => $data
+                'slug' => encrypt($data->id),
+                'notification_type' => $topic
             ], // optional
         ]);
 

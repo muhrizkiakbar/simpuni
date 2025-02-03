@@ -48,11 +48,11 @@ class SendNotificationAdminNewDenunciation implements ShouldQueue
         $description = 'Ada laporan baru nih dari laporan dengan jenis laporan '.$denunciation->type_denunciation->name.'. Semangat yaa !';
 
         foreach ($admin_users as $user) {
-            $this->send_notification($denunciation, $user, $title, $description);
+            $this->send_notification($denunciation, $user, $title, $description, "denunciation_new");
         }
     }
 
-    public function send_notification($data, $user, $title, $description)
+    public function send_notification($data, $user, $title, $description, $topic)
     {
         $procject_id = 'simpuni-banjarbaru';
         $fcm = $user->fcm_token;
@@ -72,7 +72,8 @@ class SendNotificationAdminNewDenunciation implements ShouldQueue
             ], // optional
             'data' => [
                 'user_id' => $user->id,
-                'denunciation' => $data
+                'slug' => encrypt($data->id),
+                'notification_type' => $topic
             ], // optional
         ]);
 
