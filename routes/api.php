@@ -109,14 +109,15 @@ Route::middleware([
                 Route::get('/buildings', [PetugasBuildingController::class, 'index']);
                 Route::get('/buildings/{id}', [PetugasBuildingController::class, 'show']);
                 Route::get('/buildings/export/excel', [PetugasBuildingController::class, 'export_excel']);
+
+                Route::resource('function_buildings', PetugasFunctionBuildingController::class)->only([
+                    'index'
+                ]);
             });
         });
         // Konsultan
         Route::middleware('konsultan')->group(function () {
             Route::prefix('/petugas')->group(function () {
-                Route::resource('function_buildings', PetugasFunctionBuildingController::class)->only([
-                    'index'
-                ]);
 
                 Route::post('/buildings', [PetugasBuildingController::class, 'store']);
                 Route::post('/buildings/{id}', [PetugasBuildingController::class, 'update']);
