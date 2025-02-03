@@ -110,7 +110,7 @@ Route::middleware([
                 Route::get('/buildings/{id}', [PetugasBuildingController::class, 'show']);
                 Route::get('/buildings/export/excel', [PetugasBuildingController::class, 'export_excel']);
 
-                Route::resource('function_buildings', PetugasFunctionBuildingController::class)->only([
+                Route::resource('/function_buildings', PetugasFunctionBuildingController::class)->only([
                     'index'
                 ]);
             });
