@@ -1,91 +1,90 @@
 import express from 'express';
 import http from 'http';
-import { Server as socketIo } from 'socket.io';  // Correct import
+import { Server as socketIo } from 'socket.io';
 import Redis from 'ioredis';
-import axios from 'axios';  // Used to send requests to your Laravel app
-import cors from 'cors';  // Import the cors package
+import axios from 'axios';
+import cors from 'cors';
+import { createAdapter } from '@socket.io/redis-adapter'; // Changed to use proper adapter
 
 const app = express();
-const server = http.createServer(app); // Create an HTTP server
+const server = http.createServer(app);
 
-// Configure CORS for Express (optional, if you have REST endpoints)
 app.use(cors());
 
-// Initialize socket.io with the server and configure CORS
 const io = new socketIo(server, {
     cors: {
-        origin: "*", // Allow all origins (replace with specific origins in production)
-        methods: ["GET", "POST"], // Allowed HTTP methods
-        credentials: true // Allow credentials (if needed)
+        origin: "*",
+        methods: ["GET", "POST"],
+        credentials: true
     }
 });
 
-// Adjust Redis connection
-const redis = new Redis({
-    host: 'localhost',  // Redis host (adjust based on your environment)
-    port: 6379,     // Default Redis port
-    password: 'simpuni_redis', // Redis password (if set)
-    db: 0,          // Optional: default Redis database
-});
+// Redis configuration
+const redisConfig = {
+    host: 'localhost',
+    port: 6379,
+    password: 'simpuni_redis',
+    db: 0,
+};
 
-redis.psubscribe('*', (err, count) => {
-    if (err) {
-        console.error('Error subscribing to Redis channel:', err);
-    } else {
-        console.log(`Subscribed to ${count} channels`);
-    }
-});
+// Create Redis pub/sub clients
+const pubClient = new Redis(redisConfig);
+const subClient = pubClient.duplicate();
 
-redis.on('pmessage', (subscribed, channel, message) => {
-    try {
-        console.log(message)
-        console.log(`Received message from channel: ${channel}`);
-        message = JSON.parse(message); // Assuming the message is JSON-encoded
-        // Emit to clients connected to socket.io
-        io.emit(`${channel}:${message.event}`, message.data);
-    } catch (error) {
-        console.error('Error parsing Redis message:', error);
-    }
-});
+// Set up Redis adapter
+Promise.all([pubClient, subClient].map(client => client.ping()))
+    .then(() => {
+        io.adapter(createAdapter(pubClient, subClient));
+        console.log('Redis adapter connected');
+    })
+    .catch(err => {
+        console.error('Failed to connect to Redis:', err);
+        process.exit(1);
+    });
 
+// Authentication middleware (unchanged)
 io.use(async (socket, next) => {
-    const token = socket.handshake.query.token;  // Get token from query string
+    const token = socket.handshake.query.token;
 
     try {
-        const url = 'http://89.116.20.101/api/me';
-        const headers = {
-            'Content-Type': 'application/json',
-            'User-Agent': 'insomnia/10.3.0',
-            'Accept': 'application/json',
-            'Authorization': `Bearer ${token}`
-        };
-        const response = await axios.get(url, { headers })
+        const response = await axios.get('http://89.116.20.101/api/me', {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        });
 
-        if (response.status === 200) {
-            // Token is valid, proceed with connection
-            next();
-        } else {
-            // Invalid token, reject the connection
-            next(new Error('Authentication error'));
-        }
+        response.status === 200 ? next() : next(new Error('Authentication error'));
     } catch (error) {
-        // If the verification request fails, reject the connection
         console.error('Authentication error:', error);
         next(new Error('Authentication error'));
     }
 });
 
-// Set up a simple route to check if server is running
+// Socket.IO connection handler
+io.on('connection', (socket) => {
+    console.log('User connected:', socket.id);
+
+    // Example event handler
+    socket.on('chat message', (msg) => {
+        console.log('Message received:', msg);
+        io.emit('chat message', msg);
+    });
+
+    socket.on('disconnect', () => {
+        console.log('User disconnected:', socket.id);
+    });
+});
+
+// Remove the old Redis pub/sub code and keep the rest below
 app.get('/', (req, res) => {
     res.send('Socket.io server is running!');
 });
 
-// Start HTTP server
 server.listen(3000, () => {
     console.log('Server is running on port 3000');
 });
 
-// Handle Redis connection errors
-redis.on('error', (err) => {
-    console.error('Redis connection error:', err);
-});
+// Error handling
+pubClient.on('error', (err) => console.error('Redis pub error:', err));
+subClient.on('error', (err) => console.error('Redis sub error:', err)); j
