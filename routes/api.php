@@ -100,7 +100,7 @@ Route::middleware([
                     'index', 'show'
                 ]);
                 Route::post('/duties/{id}/start', [PetugasDutyController::class, 'start']);
-                Route::post('/duties/{id}/submit', [PetugasDutyController::class, 'start']);
+                Route::post('/duties/{id}/submit', [PetugasDutyController::class, 'submit']);
             });
         });
 
