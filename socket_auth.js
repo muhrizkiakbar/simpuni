@@ -35,7 +35,7 @@ const subClient = pubClient.duplicate();
 Promise.all([pubClient, subClient].map(client => client.ping()))
     .then(() => {
         io.adapter(createAdapter(pubClient, subClient));
-        //console.log('Redis adapter connected');
+        console.log('Redis adapter connected');
     })
     .catch(err => {
         console.error('Failed to connect to Redis:', err);
@@ -63,26 +63,26 @@ io.use(async (socket, next) => {
 
 // Socket.IO connection handler
 io.on('connection', (socket) => {
-    //console.log('User connected:', socket.id);
+    console.log('User connected:', socket.id);
 
 
     // Join private room
     socket.on('join assignment', (roomId) => {
         // Validate room access here (e.g., check if user is allowed to join)
         socket.join(roomId);
-        //console.log(`User ${socket.id} joined room ${roomId}`);
+        console.log(`User ${socket.id} joined room ${roomId}`);
     });
 
     // Leave private room
     socket.on('leave assignment', (roomId) => {
         socket.leave(roomId);
-        //console.log(`User ${socket.id} left room ${roomId}`);
+        console.log(`User ${socket.id} left room ${roomId}`);
     });
 
     // Private message handler
     socket.on('assignment', (data) => {
         // Data should contain { roomId: string, message: string }
-        //console.log(`Message received for room ${data.roomId}:`, data.message);
+        console.log(`Message received for room ${data.roomId}:`, data.message);
 
         // Broadcast to specific room
         io.to(data.roomId).emit('assignment', {
@@ -92,7 +92,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('disconnect', () => {
-        //console.log('User disconnected:', socket.id);
+        console.log('User disconnected:', socket.id);
     });
 });
 
@@ -102,7 +102,7 @@ app.get('/', (req, res) => {
 });
 
 server.listen(3000, () => {
-    //console.log('Server is running on port 3000');
+    console.log('Server is running on port 3000');
 });
 
 // Error handling
