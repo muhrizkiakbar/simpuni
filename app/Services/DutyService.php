@@ -52,7 +52,7 @@ class DutyService extends ApplicationService
     // selesai pengantaran
     public function submit(Duty $duty, $request)
     {
-        $duty = $duty->update($request->except('foto'));
+        $duty->update($request->except('foto'));
         $duty->state = "done";
         $duty->submit_latitude = $request->submit_latitude;
         $duty->submit_longitude = $request->submit_longitude;
