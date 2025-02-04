@@ -85,7 +85,7 @@ io.on('connection', (socket) => {
         console.log(`Message received for room ${data.roomId}:`, data.message);
 
         // Broadcast to specific room
-        io.to(data.roomId).emit('chat message', {
+        io.to(data.roomId).emit('assignment', {
             sender: socket.id,
             message: data.message
         });
