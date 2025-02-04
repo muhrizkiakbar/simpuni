@@ -65,10 +65,30 @@ io.use(async (socket, next) => {
 io.on('connection', (socket) => {
     console.log('User connected:', socket.id);
 
-    // Example event handler
-    socket.on('chat message', (msg) => {
-        console.log('Message received:', msg);
-        io.emit('chat message', msg);
+
+    // Join private room
+    socket.on('join assignment', (roomId) => {
+        // Validate room access here (e.g., check if user is allowed to join)
+        socket.join(roomId);
+        console.log(`User ${socket.id} joined room ${roomId}`);
+    });
+
+    // Leave private room
+    socket.on('leave assignment', (roomId) => {
+        socket.leave(roomId);
+        console.log(`User ${socket.id} left room ${roomId}`);
+    });
+
+    // Private message handler
+    socket.on('assignment', (data) => {
+        // Data should contain { roomId: string, message: string }
+        console.log(`Message received for room ${data.roomId}:`, data.message);
+
+        // Broadcast to specific room
+        io.to(data.roomId).emit('chat message', {
+            sender: socket.id,
+            message: data.message
+        });
     });
 
     socket.on('disconnect', () => {
