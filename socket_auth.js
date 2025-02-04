@@ -87,4 +87,4 @@ server.listen(3000, () => {
 
 // Error handling
 pubClient.on('error', (err) => console.error('Redis pub error:', err));
-subClient.on('error', (err) => console.error('Redis sub error:', err)); j
+subClient.on('error', (err) => console.error('Redis sub error:', err));
