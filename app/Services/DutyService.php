@@ -60,7 +60,7 @@ class DutyService extends ApplicationService
 
         if (!empty($request->file('foto')) && $request->hasFile('foto')) {
             $file = $request->file('foto');
-            $filePath = $file->store('buildings/foto', 'public');
+            $filePath = $file->store('duties/foto', 'public');
 
             $duty->foto = $filePath;
             $duty->save();
