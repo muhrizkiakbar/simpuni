@@ -78,4 +78,11 @@ class BuildingController extends Controller
         $buildings_count = $this->buildingService->count_building_permit($request);
         return response()->json($buildings_count);
     }
+
+    public function cluster(Request $request)
+    {
+        $buildings = $this->buildingService->buildings($request)->get();
+
+        return $this->render_json_array(BuildingOutput::class, "format", $buildings);
+    }
 }

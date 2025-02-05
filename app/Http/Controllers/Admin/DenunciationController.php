@@ -90,4 +90,11 @@ class DenunciationController extends Controller
         $denunciations_count = $this->denunciationService->count_done_by_year($request);
         return response()->json($denunciations_count);
     }
+
+    public function cluster(Request $request)
+    {
+        $denunciations = $this->denunciationService->denunciations($request)->get();
+
+        return $this->render_json_array(DenunciationOutput::class, "format", $denunciations);
+    }
 }

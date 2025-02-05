@@ -48,6 +48,7 @@ Route::middleware([
                 Route::post('/buildings/{id}', [AdminBuildingController::class, 'update'])->middleware('auth:sanctum');
                 Route::get('/buildings/count/building_permit', [AdminBuildingController::class, 'count_building_permit'])->middleware('auth:sanctum');
                 Route::get('/buildings/export/excel', [AdminBuildingController::class, 'export_excel']);
+                Route::get('/buildings/cluster', [AdminBuildingController::class, 'cluster']);
 
                 Route::resource('archive_files', AdminArchiveFileController::class)->only([
                     'index', 'store', 'destroy', 'show'
@@ -66,6 +67,7 @@ Route::middleware([
                 Route::get('/denunciations/count/every_state_by_month_year', [AdminDenunciationController::class, 'count_every_state_by_month_year']);
                 Route::get('/denunciations/count/done_by_year', [AdminDenunciationController::class, 'count_done_by_year']);
                 Route::get('/denunciations/export/excel', [AdminDenunciationController::class, 'export_excel']);
+                Route::get('/denunciations/cluster', [AdminDenunciationController::class, 'cluster']);
 
                 Route::resource('duties', AdminDutyController::class)->only([
                     'index', 'show'
