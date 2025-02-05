@@ -22,7 +22,7 @@ class DutyOutput extends ApiOutput
         $data = [
             'id' => $object->id,
             'state_type' => $object->state_type,
-            'tanggal_pengiriman' => $object->tanggal_pengiriman,
+            'tanggal_pengantaran' => $object->tanggal_pengantaran,
             'catatan' => $object->catatan,
             'nomor_izin_bangunan' => $object->nomor_izin_bangunan,
             'start_longitude' => $object->start_longitude,
@@ -49,7 +49,7 @@ class DutyOutput extends ApiOutput
         $data = [
             'id' => $object->id,
             'state_type' => $object->state_type,
-            'tanggal_pengiriman' => $object->tanggal_pengiriman,
+            'tanggal_pengantaran' => $object->tanggal_pengantaran,
             'catatan' => $object->catatan,
             'nomor_izin_bangunan' => $object->nomor_izin_bangunan,
             'start_longitude' => $object->start_longitude,
