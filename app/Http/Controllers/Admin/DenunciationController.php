@@ -95,6 +95,7 @@ class DenunciationController extends Controller
     {
         $denunciations = $this->denunciationService->denunciations($request)->get();
 
-        return $this->render_json_array(DenunciationOutput::class, "format", $denunciations);
+        $denunciationOutput = new DenunciationOutput();
+        return response()->json(['data' => $denunciationOutput->renderJson($denunciations, "format", [ "mode" => "raw_many_data"])]);
     }
 }

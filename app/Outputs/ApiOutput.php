@@ -54,8 +54,7 @@ abstract class ApiOutput
     {
         if ($data instanceof LengthAwarePaginator) {
             return $this->paginated($data, $layout, $options);
-        }
-        elseif ($data instanceof CursorPaginator) {
+        } elseif ($data instanceof CursorPaginator) {
             return $this->paginated($data, $layout, $options);
         } else {
 
@@ -63,13 +62,10 @@ abstract class ApiOutput
                 return [];
             }
 
-            if (array_key_exists('mode',$options)) {
-                if ($options["mode"] == "raw_many_data")
-                {
+            if (array_key_exists('mode', $options)) {
+                if ($options["mode"] == "raw_many_data") {
                     return $this->mapData($data, $layout, $options);
-                }
-                elseif ($options["mode"] == "raw_data")
-                {
+                } elseif ($options["mode"] == "raw_data") {
                     return $this->$layout($data, $options);
                 }
             }
@@ -80,7 +76,8 @@ abstract class ApiOutput
         }
     }
 
-    protected function mapData($data, $layout, $options) {
+    protected function mapData($data, $layout, $options)
+    {
         return $data->map(function ($item) use ($layout, $options) {
             return $this->$layout($item, $options);
         });
@@ -95,4 +92,3 @@ abstract class ApiOutput
      */
     abstract public function format($object, $options);
 }
-

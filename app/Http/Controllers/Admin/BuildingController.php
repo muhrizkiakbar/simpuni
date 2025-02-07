@@ -83,6 +83,7 @@ class BuildingController extends Controller
     {
         $buildings = $this->buildingService->buildings($request)->get();
 
-        return $this->render_json_array(BuildingOutput::class, "format", $buildings);
+        $buildingOutput = new BuildingOutput();
+        return response()->json(['data' => $buildingOutput->renderJson($buildings, "format", [ "mode" => "raw_many_data"])]);
     }
 }
