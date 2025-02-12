@@ -19,6 +19,7 @@ class DutyOutput extends ApiOutput
     {
         $user_output = new UserOutput();
         $denunciation_output = new DenunciationOutput();
+        $attachment_output = new AttachmentOutput();
         $data = [
             'id' => $object->id,
             'state_type' => $object->state_type,
@@ -33,7 +34,7 @@ class DutyOutput extends ApiOutput
             'user_admin' => $user_output->renderJson($object->user_admin ?? [], "format", [ "mode" => "raw_data" ]) ?? [],
             'denunciation' => $denunciation_output->renderJson($object->denunciation ?? [], "format", [ "mode" => "raw_data"]) ?? [],
             'state' => $object->state,
-            'foto' => $object->foto ? asset('storage/'.$object->foto) : null,
+            'attachments' => $object->attachments->count() > 0 ? $attachment_output->renderJson($object->attachments, "format", ["mode" => "raw_many_data"]) : [],
             'surat_tugas' => $object->surat_tugas ? asset('storage/'.$object->surat_tugas) : null,
             'slug' => encrypt($object->id)
         ];
@@ -44,6 +45,7 @@ class DutyOutput extends ApiOutput
 
     public function mini_format($object, $options = [])
     {
+        $attachment_output = new AttachmentOutput();
         $user_output = new UserOutput();
         $denunciation_output = new DenunciationOutput();
         $data = [
@@ -62,6 +64,7 @@ class DutyOutput extends ApiOutput
             'slug' => encrypt($object->id),
             'user_petugas' => $user_output->renderJson($object->user_petugas ?? [], "format", [ "mode" => "raw_data"]) ?? [],
             'user_admin' => $user_output->renderJson($object->user_admin ?? [], "format", [ "mode" => "raw_data" ]) ?? [],
+            'attachments' => $object->attachments->count() > 0 ? $attachment_output->renderJson($object->attachments, "format", ["mode" => "raw_many_data"]) : [],
         ];
 
         return $data;

@@ -25,4 +25,8 @@ class Duty extends Model
         return $this->belongsTo(User::class, 'user_admin_id');
     }
 
+    public function attachments()
+    {
+        return $this->morphMany(Attachment::class, 'attachable');
+    }
 }

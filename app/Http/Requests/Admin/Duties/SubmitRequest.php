@@ -19,7 +19,8 @@ class SubmitRequest extends FormRequest
             'submit_latitude' => [ 'required', 'string', 'max:255'  ],
             'catatan' => [ 'nullable', 'string', 'max:255'  ],
             'nomor_izin_bangunan' => [ 'nullable', 'string', 'max:255'  ],
-            'foto' => 'nullable|file|mimetypes:image/jpeg,image/png,image/jpg|max:2048',
+            'attachments' => 'nullable|array|max:4',
+            'attachments.*' => 'nullable|file|mimetypes:image/jpeg,image/png,image/jpg|max:2048',
         ];
     }
 }
