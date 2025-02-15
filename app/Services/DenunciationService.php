@@ -320,8 +320,8 @@ class DenunciationService extends ApplicationService
         $message = CloudMessage::fromArray([
             'token' => $fcm,
             'notification' => [
-                "body" => "coba",
-                "title" => "masuk"
+                "body" => $description,
+                "title" => $title,
             ], // optional
             'data' => [
                 'user_id' => $user->id,
