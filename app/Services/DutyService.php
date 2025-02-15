@@ -89,7 +89,7 @@ class DutyService extends ApplicationService
 
     public function send_notification($data, $user, $title, $description, $topic)
     {
-        $procject_id = 'simpuni-banjarbaru';
+        $project_id = 'simpuni-banjarbaru';
         $fcm = $user->fcm_token;
 
         $firebase = (new Factory())->withServiceAccount(storage_path('app/json/account_google.json'));
