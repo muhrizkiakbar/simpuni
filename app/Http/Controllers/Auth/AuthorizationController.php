@@ -55,6 +55,10 @@ class AuthorizationController extends Controller
 
     public function logout(Request $request)
     {
+        $user = User::find(Auth::user()->id);
+        $user->fcm_token = null;
+        $user->save();
+
         Auth::user()->tokens()->delete();
 
         return response()->json(['message' => 'Logged out successfully']);
