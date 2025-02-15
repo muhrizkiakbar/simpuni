@@ -128,7 +128,7 @@ class DenunciationService extends ApplicationService
 
                 $title = "Laporan Selesai.";
                 $description = "Laporan telah selesai, dengan jenis laporan ". $denunciation->type_denunciation->name.".";
-                $this->send_notification($denunciation, $denunciation->user_pelapor_id, $title, $description, "denunciation_done");
+                $this->send_notification($denunciation, $denunciation->user_pelapor, $title, $description, "denunciation_done");
 
                 $log_denunciation = $this->create_log_denunciation($denunciation, $currentState);
 
@@ -142,7 +142,7 @@ class DenunciationService extends ApplicationService
 
                 $title = "Laporan Ditolak.";
                 $description = "Laporan telah ditolak, dengan jenis laporan ". $denunciation->type_denunciation->name.".";
-                $this->send_notification($denunciation, $denunciation->user_pelapor_id, $title, $description, "denunciation_reject");
+                $this->send_notification($denunciation, $denunciation->user_pelapor, $title, $description, "denunciation_reject");
 
 
                 $log_denunciation = $this->create_log_denunciation($denunciation, $currentState);
