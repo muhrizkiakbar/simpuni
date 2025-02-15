@@ -77,20 +77,22 @@ class AuthorizationController extends Controller
 
         $user =  User::find(Auth::user()->id);
 
-        if (!empty($request->password)) {
-            $user->password = Hash::make($request->password);
-        }
+        if (!empty($request->avatar) && $request->hasFile('avatar')) {
+            if (!is_null($user->avatar)) {
+                Storage::delete($user->avatar);
+            }
 
-        if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
-            Storage::disk('public')->delete($user->avatar);
-        }
-
-        if ($request->hasFile('avatar')) {
             $file = $request->file('avatar');
-            $filePath = $file->store('avatars', 'public'); // Save to 'storage/app/public/avatars'
+            $filePath = $file->store('avatars', 'public');
 
             $user->avatar = $filePath;
             $user->save();
+        }
+
+
+
+        if (!empty($request->password)) {
+            $user->password = Hash::make($request->password);
         }
 
         $user->instansi = $request->instansi;
