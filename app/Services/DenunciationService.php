@@ -297,7 +297,7 @@ class DenunciationService extends ApplicationService
         $duty_service = new DutyService(new User());
         $title = "Tugas Baru.";
         $description = "Tugas baru dengan jenis peringatan ". str_replace('_', ' ', strtoupper($duty->state_type)).".";
-        $this->send_notification($denunciation, $denunciation->user_pelapor_id, $title, $description, "assignment_new");
+        $this->send_notification($denunciation, $duty->user_petugas, $title, $description, "assignment_new");
 
 
         $duty->save();
