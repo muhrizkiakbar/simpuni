@@ -51,19 +51,24 @@ class DutyService extends ApplicationService
     // selesai pengantaran
     public function submit(Duty $duty, $request)
     {
-        $duty->update($request->except('foto'));
+        $duty->update($request->except('attachments'));
         $duty->state = "done";
         $duty->tanggal_pengantaran = now();
         $duty->submit_latitude = $request->submit_latitude;
         $duty->submit_longitude = $request->submit_longitude;
         $duty->save();
 
-        if (!empty($request->file('foto')) && $request->hasFile('foto')) {
-            $file = $request->file('foto');
-            $filePath = $file->store('duties/foto', 'public');
+        if (!empty($request->file('attachments')) && $request->hasFile('attachments')) {
+            foreach ($request['attachments'] as $file) {
+                $filePath = $file->store('duties', 'public');
 
-            $duty->foto = $filePath;
-            $duty->save();
+                $duty->attachments()->create([
+                    'file_name' => $file->getClientOriginalName(),
+                    'file_path' => $filePath,
+                    'mime_type' => $file->getMimeType(),
+                    'size' => $file->getSize(),
+                ]);
+            }
         }
 
         $denunciation = $duty->denunciation;
