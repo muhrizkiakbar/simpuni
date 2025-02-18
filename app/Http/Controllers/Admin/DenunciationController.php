@@ -44,12 +44,6 @@ class DenunciationController extends Controller
         $denunciation = Denunciation::find(decrypt($id));
         list($denunciation, $duty) = $this->denunciationService->warning_letter($denunciation, $request);
 
-        if ($duty != null) {
-            $title = 'Tugas Baru.';
-            $description = 'Ada tugas baru nih dari laporan dengan jenis laporan '.$denunciation->type_denunciation->name.'., semangat yaa !';
-            $this->dutyService->send_notification($duty, $duty->user_petugas, $title, $description, 'assignment_new');
-        }
-
         return $this->render_json(
             DenunciationOutput::class,
             "detail_format",
