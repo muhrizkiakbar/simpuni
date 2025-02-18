@@ -309,6 +309,9 @@ class DenunciationService extends ApplicationService
     {
         $project_id = 'simpuni-banjarbaru';
         $fcm = $user->fcm_token;
+        if ($fcm == null) {
+            return;
+        }
 
         $firebase = (new Factory())->withServiceAccount(storage_path('app/json/account_google.json'));
 
