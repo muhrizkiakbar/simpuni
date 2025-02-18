@@ -332,9 +332,8 @@ class DenunciationService extends ApplicationService
 
         try {
             $result = $messaging->send($message);
-            echo 'Notification sent successfully!';
         } catch (\Throwable $e) {
-            echo 'Error: ' . $e->getMessage();
+            return 'Error: ' . $e->getMessage();
         }
     }
 }

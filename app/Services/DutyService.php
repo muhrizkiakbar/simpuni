@@ -119,7 +119,6 @@ class DutyService extends ApplicationService
 
         try {
             $result = $messaging->send($message);
-            return 'Notification sent successfully!';
         } catch (\Throwable $e) {
             return 'Error: ' . $e->getMessage();
         }
