@@ -12,14 +12,17 @@ use App\Http\Requests\Admin\Denunciations\WarningLetterRequest;
 use App\Models\Denunciation;
 use App\Services\DenunciationService;
 use App\Events\Duties\NewDutyEvent;
+use App\Services\DutyService;
 
 class DenunciationController extends Controller
 {
     protected $denunciationService;
+    protected $dutyService;
 
     public function __construct()
     {
         $this->denunciationService = new DenunciationService(Auth::user());
+        $this->dutyService = new DutyService(Auth::user());
     }
 
     //
@@ -44,7 +47,7 @@ class DenunciationController extends Controller
         if ($duty != null) {
             $title = 'Tugas Baru.';
             $description = 'Ada tugas baru nih dari laporan dengan jenis laporan '.$denunciation->type_denunciation->name.'., semangat yaa !';
-            $this->send_notification($duty->user_petugas, $title, $description);
+            $this->dutyService->send_notification($duty, $duty->user_petugas, $title, $description, 'assignment_new');
         }
 
         return $this->render_json(
