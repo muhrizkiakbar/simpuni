@@ -23,38 +23,37 @@ use App\Http\Controllers\Petugas\FunctionBuildingController as PetugasFunctionBu
 use App\Http\Controllers\Petugas\DutyController as PetugasDutyController;
 use Illuminate\Support\Facades\Storage;
 
+Route::get('/storage/{path_file}/{file}', function ($path_file, $file, Request $request) {
+    $path = storage_path('/app/public/'.$path_file.'/'.$file);
+    return response()->json([], 200);
+
+    return response()->stream(function () use ($path) {
+        readfile($path);
+    }, 200, ['Content-Type' => 'image/jpg']);
+
+    //return response()->file($path, [
+    //        'Content-Type' => mime_content_type($path),
+    //    ])->setStatusCode(200);
+
+    //$fullPath = trim($path_file . '/' . $file, '/');
+
+    //Log::info("Mencoba mengakses file: $fullPath");
+
+    //if (!Storage::disk('public')->exists($fullPath)) {
+    //    Log::error("File $fullPath tidak ditemukan");
+    //    abort(404);
+    //}
+
+    //Log::info("File ditemukan. Mengirim dengan status 200.");
+    //return response()->file(Storage::disk('public')->path($fullPath))
+    //    ->setStatusCode(200);
+
+});
 Route::middleware([
     EnsureFrontendRequestsAreStateful::class,
     'throttle:api',
 ])->group(function () {
     Route::post('login', [AuthorizationController::class, 'login']);
-
-    Route::get('/storage/{path_file}/{file}', function ($path_file, $file, Request $request) {
-        $path = storage_path('/app/public/'.$path_file.'/'.$file);
-        return response()->json([], 200);
-
-        return response()->stream(function () use ($path) {
-            readfile($path);
-        }, 200, ['Content-Type' => 'image/jpg']);
-
-        //return response()->file($path, [
-        //        'Content-Type' => mime_content_type($path),
-        //    ])->setStatusCode(200);
-
-        //$fullPath = trim($path_file . '/' . $file, '/');
-
-        //Log::info("Mencoba mengakses file: $fullPath");
-
-        //if (!Storage::disk('public')->exists($fullPath)) {
-        //    Log::error("File $fullPath tidak ditemukan");
-        //    abort(404);
-        //}
-
-        //Log::info("File ditemukan. Mengirim dengan status 200.");
-        //return response()->file(Storage::disk('public')->path($fullPath))
-        //    ->setStatusCode(200);
-
-    });
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('logout', [AuthorizationController::class, 'logout'])->middleware('auth:sanctum');
