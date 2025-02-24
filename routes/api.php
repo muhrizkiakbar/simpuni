@@ -24,7 +24,7 @@ use App\Http\Controllers\Petugas\DutyController as PetugasDutyController;
 
 function revertUrlFormat($formattedUrl)
 {
-    $originalPath = str_replace('#', '/', $formattedUrl);
+    $originalPath = str_replace('-', '/', $formattedUrl);
 
     return $originalPath;
 }

@@ -115,7 +115,7 @@ abstract class ApiOutput
         $fileNameWithoutExt = implode('.', $fileParts);
 
         // Buat path dengan "#" sebagai pemisah
-        $pathParam = implode('#', $pathSegments) . "#$fileNameWithoutExt";
+        $pathParam = implode('-', $pathSegments) . "-$fileNameWithoutExt";
 
         // Buat URL baru dengan query parameters
         $newUrl = "{$parsedUrl['scheme']}://{$parsedUrl['host']}/api/storage?path=$pathParam&extension=$extension";
