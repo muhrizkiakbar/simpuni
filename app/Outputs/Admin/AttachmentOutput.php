@@ -20,7 +20,7 @@ class AttachmentOutput extends ApiOutput
     {
         $data = [
             'id' => $object->id,
-            'path' => '/api/'.asset('storage/'.$object->file_path),
+            'path' => asset('storage/'.$object->file_path),
         ];
 
         return $data;

@@ -26,4 +26,3 @@ class FunctionBuildingOutput extends ApiOutput
         return $data;
     }
 }
-
