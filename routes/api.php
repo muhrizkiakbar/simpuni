@@ -24,31 +24,20 @@ use App\Http\Controllers\Petugas\DutyController as PetugasDutyController;
 
 function revertUrlFormat($formattedUrl)
 {
-    // Parse URL
-    $parsedUrl = parse_url($formattedUrl);
+    // Pisahkan path dan query string
+    $urlParts = explode("?", $formattedUrl);
+    $path = $urlParts[0];
+    parse_str($urlParts[1] ?? '', $queryParams);
 
-    // Extract components
-    $scheme = isset($parsedUrl['scheme']) ? $parsedUrl['scheme'] . '://' : '';
-    $host = isset($parsedUrl['host']) ? $parsedUrl['host'] : '';
-    $path = $parsedUrl['path'];
-    $query = isset($parsedUrl['query']) ? '?' . $parsedUrl['query'] : ''; // Preserve extension param
+    // Ubah # kembali ke /
+    $originalPath = str_replace('#', '/', $path);
 
-    // Find `/api/storage/` and replace `#` with `/`
-    $pattern = "/\/api\/storage\//";
-    if (preg_match($pattern, $path, $matches, PREG_OFFSET_CAPTURE)) {
-        $storagePos = $matches[0][1] + strlen($matches[0][0]);
-        $pathBeforeStorage = substr($path, 0, $storagePos);
-        $pathAfterStorage = substr($path, $storagePos);
-
-        // Replace `#` with `/`
-        $originalPath = str_replace('#', '/', $pathAfterStorage);
-
-        // Rebuild the full URL (without modifying `extension` param)
-        $originalUrl = $scheme . $host . $pathBeforeStorage . $originalPath . $query;
-        return $originalUrl;
+    // Tambahkan kembali ekstensi jika ada
+    if (isset($queryParams['extension'])) {
+        $originalPath .= "." . $queryParams['extension'];
     }
 
-    return $formattedUrl; // Return as is if no changes needed
+    return $originalPath;
 }
 
 Route::middleware([
@@ -65,7 +54,6 @@ Route::middleware([
         Route::get('/storage/{path_file}', function ($path_file, Request $request) {
 
             $path_file = revertUrlFormat($path_file);
-            dd($path_file);
             $path = storage_path('/app/public/'.$path_file.".".$request->extension);
 
             return response()->stream(function () use ($path) {
