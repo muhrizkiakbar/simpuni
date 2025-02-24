@@ -3,6 +3,7 @@
 namespace App\Outputs\Admin;
 
 use App\Outputs\ApiOutput;
+use Illuminate\Support\Facades\Storage;
 
 class UserOutput extends ApiOutput
 {
