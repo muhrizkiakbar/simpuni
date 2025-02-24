@@ -20,7 +20,7 @@ class AttachmentOutput extends ApiOutput
     {
         $data = [
             'id' => $object->id,
-            'path' => Storage::disk('public')->url($object->file_path),
+            'path' => convertUrlFormatStorage(Storage::disk('public')->url($object->file_path)),
         ];
 
         return $data;

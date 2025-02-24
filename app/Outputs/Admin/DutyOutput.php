@@ -36,7 +36,7 @@ class DutyOutput extends ApiOutput
             'denunciation' => $denunciation_output->renderJson($object->denunciation ?? [], "format", [ "mode" => "raw_data"]) ?? [],
             'state' => $object->state,
             'attachments' => $object->attachments->count() > 0 ? $attachment_output->renderJson($object->attachments, "format", ["mode" => "raw_many_data"]) : [],
-            'surat_tugas' => $object->surat_tugas ? asset('storage/'.$object->surat_tugas) : null,
+            'surat_tugas' => $object->surat_tugas ? $this->convertUrlFormatStorage(Storage::disk('public')->url($object->surat_tugas)) : null,
             'slug' => encrypt($object->id)
         ];
 
@@ -60,8 +60,8 @@ class DutyOutput extends ApiOutput
             'submit_longitude' => $object->submit_longitude,
             'submit_latitude' => $object->submit_latitude,
             'state' => $object->state,
-            'foto' => $object->foto ? Storage::disk('public')->url($object->foto) : null,
-            'surat_tugas' => $object->surat_tugas ? Storage::disk('public')->url($object->surat_tugas) : null,
+            'foto' => $object->foto ? $this->convertUrlFormatStorage(Storage::disk('public')->url($object->foto)) : null,
+            'surat_tugas' => $object->surat_tugas ? $this->convertUrlFormatStorage(Storage::disk('public')->url($object->surat_tugas)) : null,
             'slug' => encrypt($object->id),
             'user_petugas' => $user_output->renderJson($object->user_petugas ?? [], "format", [ "mode" => "raw_data"]) ?? [],
             'user_admin' => $user_output->renderJson($object->user_admin ?? [], "format", [ "mode" => "raw_data" ]) ?? [],

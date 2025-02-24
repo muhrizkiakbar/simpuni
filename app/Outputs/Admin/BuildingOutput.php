@@ -45,8 +45,8 @@ class BuildingOutput extends ApiOutput
             'state' => $object->state,
             'slug' => encrypt($object->id),
             'deleted_at' => $object->deleted_at,
-            'foto' => $object->foto ? Storage::disk('public')->url($object->foto) : null,
-            'dokumen' => $object->dokumen ? Storage::disk('public')->url($object->dokumen) : null,
+            'foto' => $object->foto ? convertUrlFormatStorage(Storage::disk('public')->url($object->foto)) : null,
+            'dokumen' => $object->dokumen ? convertUrlFormatStorage(Storage::disk('public')->url($object->dokumen)) : null,
             'created_at' => $object->created_at,
             'updated_at' => $object->updated_at,
         ];

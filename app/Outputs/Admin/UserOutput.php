@@ -18,7 +18,8 @@ class UserOutput extends ApiOutput
     {
         $data = [
             'id' => $object->id,
-            'avatar' => $object->avatar ? Storage::disk('public')->url($object->avatar) : null,
+            'avatar' => $object->avatar ? $this->convertUrlFormatStorage(Storage::disk('public')->url($object->avatar)) : null,
+            'surat_tugas' => $object->surat_tugas ? $this->convertUrlFormatStorage(Storage::disk('public')->url($object->surat_tugas)) : null,
             'name' => $object->name,
             'posisi' => $object->posisi,
             'instansi' => $object->instansi,

@@ -25,7 +25,7 @@ class ArchiveFileOutput extends ApiOutput
             'type' => $object->type,
             'year' => $object->year,
             'description' => $object->description,
-            'attachment' => $object->attachment ? Storage::disk('public')->url($object->attachment) : null,
+            'attachment' => $object->attachment ? convertUrlFormatStorage(Storage::disk('public')->url($object->attachment)) : null,
             'slug' => encrypt($object->id),
         ];
 
