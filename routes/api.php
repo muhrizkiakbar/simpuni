@@ -21,7 +21,6 @@ use App\Http\Controllers\Pelapor\TypeDenunciationController as PelaporTypeDenunc
 use App\Http\Controllers\Petugas\BuildingController as PetugasBuildingController;
 use App\Http\Controllers\Petugas\FunctionBuildingController as PetugasFunctionBuildingController;
 use App\Http\Controllers\Petugas\DutyController as PetugasDutyController;
-use Illuminate\Support\Facades\Storage;
 
 Route::get('/storage/{path_file}/{file}', function ($path_file, $file, Request $request) {
     $path = storage_path('/app/public/'.$path_file.'/'.$file);
