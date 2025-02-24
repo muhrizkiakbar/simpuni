@@ -34,7 +34,7 @@ Route::middleware([
 
         return response()->stream(function () use ($path) {
             readfile($path);
-        }, 200, ['Content-Type' => 'image/png']);
+        }, 200, ['Content-Type' => 'image/jpg']);
 
         //return response()->file($path, [
         //        'Content-Type' => mime_content_type($path),
