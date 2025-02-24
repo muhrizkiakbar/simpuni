@@ -28,7 +28,7 @@ Route::middleware([
 ])->group(function () {
     Route::post('login', [AuthorizationController::class, 'login']);
 
-    Route::middleware('auth:sanctum')->get('/app/{path_file}/{file}', function ($path_file, $file) {
+    Route::middleware('auth:sanctum')->get('/app/{file}', function ($file) {
         return response('not found', 200);
     });
 
