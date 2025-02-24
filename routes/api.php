@@ -29,16 +29,19 @@ Route::middleware([
     Route::post('login', [AuthorizationController::class, 'login']);
 
     Route::middleware('auth:sanctum')->get('/storage/{path_file}/{file}', function ($path_file, $file) {
-        //$path = storage_path('/app/public/'.$path_file.'/'.$file);
-        //return response()->file($path);
+        $path = storage_path('/app/public/'.$path_file.'/'.$file);
+        return response()->file($path, [
+                'Content-Type' => 'application/pdf',
+                'Content-disposition' => 'filename=' . $file,
+            ]);
 
-        $fullPath = trim($path_file . '/' . $file, '/'); // Hindari double slash
+        //$fullPath = trim($path_file . '/' . $file, '/'); // Hindari double slash
 
-        if (!Storage::disk('public')->exists($fullPath)) {
-            abort(404, "File $fullPath tidak ditemukan.");
-        }
+        //if (!Storage::disk('public')->exists($fullPath)) {
+        //    abort(404, "File $fullPath tidak ditemukan.");
+        //}
 
-        return response()->file(Storage::disk('public')->path($fullPath));
+        //return response()->file(Storage::disk('public')->path($fullPath));
     });
 
     Route::middleware('auth:sanctum')->group(function () {
