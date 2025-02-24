@@ -9,6 +9,6 @@ class FileController extends Controller
 {
     public function index(string $id)
     {
-        return response('found'.$file, 200);
+        return response('found'.$id, 200);
     }
 }
