@@ -65,6 +65,7 @@ Route::middleware([
         Route::get('/storage/{path_file}', function ($path_file, Request $request) {
 
             $path_file = revertUrlFormat($path_file);
+            dd($path_file);
             $path = storage_path('/app/public/'.$path_file.".".$request->extension);
 
             return response()->stream(function () use ($path) {
