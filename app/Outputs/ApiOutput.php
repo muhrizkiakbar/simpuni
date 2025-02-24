@@ -85,55 +85,43 @@ abstract class ApiOutput
 
     public function convertUrlFormatStorage($url)
     {
-        // Parse URL
+        // Parse URL untuk mendapatkan path
         $parsedUrl = parse_url($url);
 
-        // Extract components
-        $scheme = isset($parsedUrl['scheme']) ? $parsedUrl['scheme'] . '://' : '';
-        $host = isset($parsedUrl['host']) ? $parsedUrl['host'] : '';
-        $path = $parsedUrl['path'];
+        // Ambil path dari URL
+        $path = $parsedUrl['path'] ?? '';
 
-        // Find the position of `/api/storage/`
-        $pattern = "/\/api\/storage\//";
-        if (preg_match($pattern, $path, $matches, PREG_OFFSET_CAPTURE)) {
-            $storagePos = $matches[0][1] + strlen($matches[0][0]);
-            $pathBeforeStorage = substr($path, 0, $storagePos);
-            $pathAfterStorage = substr($path, $storagePos);
+        // Pisahkan path berdasarkan "/"
+        $segments = explode('/', trim($path, '/'));
 
-            // Extract file extension
-            $pathParts = pathinfo($pathAfterStorage);
-            $filenameWithoutExt = $pathParts['dirname'] . '/' . $pathParts['filename'];
-            $filenameWithoutExt = str_replace('/', '&', $filenameWithoutExt); // Replace `/` with `#`
-
-            // Build the new path with extension as query param
-            $newPath = $pathBeforeStorage . $filenameWithoutExt . "?extension=" . $pathParts['extension'];
-
-            // Rebuild the full URL
-            $newUrl = $scheme . $host . $newPath;
-            return $newUrl;
+        // Pastikan URL sesuai dengan pola yang diharapkan
+        if (count($segments) < 3) {
+            return false; // Tidak sesuai format yang diharapkan
         }
 
-        return $url; // Return original if no match is found
-    }
-
-    public function revertUrlFormat($formattedUrl)
-    {
-        // Pisahkan path dan query string
-        $urlParts = explode("?", $formattedUrl);
-        $path = $urlParts[0];
-        parse_str($urlParts[1] ?? '', $queryParams);
-
-        // Ubah # kembali ke /
-        $originalPath = str_replace('#', '/', $path);
-
-        // Tambahkan kembali ekstensi jika ada
-        if (isset($queryParams['extension'])) {
-            $originalPath .= "." . $queryParams['extension'];
+        // Ambil bagian path setelah "storage"
+        $storageIndex = array_search('storage', $segments);
+        if ($storageIndex === false || $storageIndex + 1 >= count($segments)) {
+            return false; // Tidak ada "storage" dalam URL
         }
 
-        return $originalPath;
-    }
+        // Ambil path setelah "storage"
+        $pathSegments = array_slice($segments, $storageIndex + 1);
 
+        // Ambil nama file dan pisahkan ekstensi
+        $fileName = array_pop($pathSegments);
+        $fileParts = explode('.', $fileName);
+        $extension = array_pop($fileParts);
+        $fileNameWithoutExt = implode('.', $fileParts);
+
+        // Buat path dengan "#" sebagai pemisah
+        $pathParam = implode('#', $pathSegments) . "#$fileNameWithoutExt";
+
+        // Buat URL baru dengan query parameters
+        $newUrl = "{$parsedUrl['scheme']}://{$parsedUrl['host']}/api/storage?path=$pathParam&extension=$extension";
+
+        return $newUrl;
+    }
 
 
     /**
