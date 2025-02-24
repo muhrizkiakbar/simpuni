@@ -44,6 +44,7 @@ return [
             'root' => storage_path('app/public'),
             'url' => env('APP_URL').'/api/storage',
             'visibility' => 'public',
+            'serve' => true,
             'throw' => false,
         ],
 
