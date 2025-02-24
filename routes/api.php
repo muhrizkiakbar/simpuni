@@ -29,9 +29,12 @@ Route::middleware([
 ])->group(function () {
     Route::post('login', [AuthorizationController::class, 'login']);
 
-    Route::middleware('auth:sanctum')->get('/storage/{path_file}/{file}', function ($path_file, $file) {
+    Route::get('/storage/{path_file}/{file}', function ($path_file, $file, Request $request) {
+        dd($request);
         $path = storage_path('/app/public/'.$path_file.'/'.$file);
-        return response('', 200)->file($path, [
+        $getFile = Storage::path($filepath);
+
+        return response()->file($path, [
                 'Content-Type' => mime_content_type($path),
             ])->setStatusCode(200);
 
