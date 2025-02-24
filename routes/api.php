@@ -30,10 +30,11 @@ Route::middleware([
 
     Route::middleware('auth:sanctum')->get('/storage/{path_file}/{file}', function ($path_file, $file) {
         $path = storage_path('/app/public/'.$path_file.'/'.$file);
-        return response()->file($path, [
-                'Content-Type' => mime_content_type($path),
-            ])->setStatusCode(200);
+        //return response()->file($path, [
+        //        'Content-Type' => mime_content_type($path),
+        //    ])->setStatusCode(200);
 
+        return response("Test 200", 200);
         //$fullPath = trim($path_file . '/' . $file, '/');
 
         //Log::info("Mencoba mengakses file: $fullPath");
