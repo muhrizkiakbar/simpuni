@@ -31,6 +31,7 @@ function revertUrlFormat($formattedUrl)
     $scheme = isset($parsedUrl['scheme']) ? $parsedUrl['scheme'] . '://' : '';
     $host = isset($parsedUrl['host']) ? $parsedUrl['host'] : '';
     $path = $parsedUrl['path'];
+    $query = isset($parsedUrl['query']) ? '?' . $parsedUrl['query'] : ''; // Preserve extension param
 
     // Find `/api/storage/` and replace `#` with `/`
     $pattern = "/\/api\/storage\//";
@@ -42,8 +43,8 @@ function revertUrlFormat($formattedUrl)
         // Replace `#` with `/`
         $originalPath = str_replace('#', '/', $pathAfterStorage);
 
-        // Rebuild the full URL
-        $originalUrl = $scheme . $host . $pathBeforeStorage . $originalPath;
+        // Rebuild the full URL (without modifying `extension` param)
+        $originalUrl = $scheme . $host . $pathBeforeStorage . $originalPath . $query;
         return $originalUrl;
     }
 

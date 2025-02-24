@@ -100,15 +100,20 @@ abstract class ApiOutput
             $pathBeforeStorage = substr($path, 0, $storagePos);
             $pathAfterStorage = substr($path, $storagePos);
 
-            // Replace `/` with `#` in the path after `/api/storage/`
-            $formattedPath = str_replace('/', '#', $pathAfterStorage);
+            // Extract file extension
+            $pathParts = pathinfo($pathAfterStorage);
+            $filenameWithoutExt = $pathParts['dirname'] . '/' . $pathParts['filename'];
+            $filenameWithoutExt = str_replace('/', '#', $filenameWithoutExt); // Replace `/` with `#`
+
+            // Build the new path with extension as query param
+            $newPath = $pathBeforeStorage . $filenameWithoutExt . "?extension=" . $pathParts['extension'];
 
             // Rebuild the full URL
-            $newUrl = $scheme . $host . $pathBeforeStorage . $formattedPath;
+            $newUrl = $scheme . $host . $newPath;
             return $newUrl;
         }
 
-        return $url; // Return the original if no match is found
+        return $url; // Return original if no match is found
     }
 
     public function revertUrlFormat($formattedUrl)
