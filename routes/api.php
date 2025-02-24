@@ -30,13 +30,15 @@ Route::middleware([
     Route::post('login', [AuthorizationController::class, 'login']);
 
     Route::get('/storage/{path_file}/{file}', function ($path_file, $file, Request $request) {
-        dd($request);
         $path = storage_path('/app/public/'.$path_file.'/'.$file);
-        $getFile = Storage::path($filepath);
 
-        return response()->file($path, [
-                'Content-Type' => mime_content_type($path),
-            ])->setStatusCode(200);
+        return response()->stream(function () use ($path) {
+            readfile($path);
+        }, 200, ['Content-Type' => 'image/png']);
+
+        //return response()->file($path, [
+        //        'Content-Type' => mime_content_type($path),
+        //    ])->setStatusCode(200);
 
         //$fullPath = trim($path_file . '/' . $file, '/');
 
