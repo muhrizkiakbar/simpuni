@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
 use App\Http\Controllers\Auth\AuthorizationController;
+use App\Http\Controllers\FileController;
 // Admin
 use App\Http\Controllers\Admin\FunctionBuildingController as AdminFunctionBuildingController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
@@ -27,10 +28,6 @@ Route::middleware([
     'throttle:api',
 ])->group(function () {
     Route::post('login', [AuthorizationController::class, 'login']);
-
-    Route::middleware('auth:sanctum')->get('/app/{file}', function ($file) {
-        return response('not found', 200);
-    });
 
     Route::middleware('auth:sanctum')->get('/storage/{path_file}/{file}', function ($path_file, $file) {
         $path = storage_path('/app/public/'.$path_file.'/'.$file);
@@ -58,6 +55,9 @@ Route::middleware([
         Route::post('logout', [AuthorizationController::class, 'logout'])->middleware('auth:sanctum');
         Route::get('me', [AuthorizationController::class, 'me'])->middleware('auth:sanctum');
         Route::post('change_profile', [AuthorizationController::class, 'change_profile'])->middleware('auth:sanctum');
+
+        Route::get('/app/{file}', [FileController::class, 'index']);
+
 
         // Admin
         Route::middleware('admin')->group(function () {
