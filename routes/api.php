@@ -23,7 +23,7 @@ use App\Http\Controllers\Petugas\FunctionBuildingController as PetugasFunctionBu
 use App\Http\Controllers\Petugas\DutyController as PetugasDutyController;
 
 Route::get('/storage/{path_file}/{file}', function ($path_file, $file, Request $request) {
-    $path = storage_path('/app/public/'.$path_file.'/'.$file.$request->extension);
+    $path = storage_path('/app/public/'.$path_file.'/'.$file.".".$request->extension);
 
     return response()->stream(function () use ($path) {
         readfile($path);
