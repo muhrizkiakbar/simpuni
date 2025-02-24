@@ -20,7 +20,7 @@ class AuthorizationController extends Controller
         $request->validate([
             'username' => 'required|max:15',
             'password' => 'required',
-            'fcm_token' => 'required'
+            'fcm_token' => 'nullable'
         ]);
 
         $user = User::where('state', 'active')
