@@ -33,13 +33,13 @@ return [
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/api/public',
+            'url' => env('APP_URL').'/api/storage',
         ],
 
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/api/public',
+            'url' => env('APP_URL').'/api/storage',
         ],
 
         's3' => [
