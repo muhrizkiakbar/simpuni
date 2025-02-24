@@ -31,6 +31,7 @@ Route::middleware([
 
     Route::get('/storage/{path_file}/{file}', function ($path_file, $file, Request $request) {
         $path = storage_path('/app/public/'.$path_file.'/'.$file);
+        return response()->json([], 200);
 
         return response()->stream(function () use ($path) {
             readfile($path);
