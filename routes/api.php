@@ -45,7 +45,7 @@ Route::middleware([
 
         //Log::info("File ditemukan. Mengirim dengan status 200.");
         //return response()->file(Storage::disk('public')->path($fullPath))
-            ->setStatusCode(200);
+        //    ->setStatusCode(200);
 
     });
 
