@@ -24,20 +24,30 @@ use App\Http\Controllers\Petugas\DutyController as PetugasDutyController;
 
 function revertUrlFormat($formattedUrl)
 {
-    // Pisahkan path dan query string
-    $urlParts = explode("?", $formattedUrl);
-    $path = $urlParts[0];
-    parse_str($urlParts[1] ?? '', $queryParams);
+    // Parse URL
+    $parsedUrl = parse_url($formattedUrl);
 
-    // Ubah # kembali ke /
-    $originalPath = str_replace('#', '/', $path);
+    // Extract components
+    $scheme = isset($parsedUrl['scheme']) ? $parsedUrl['scheme'] . '://' : '';
+    $host = isset($parsedUrl['host']) ? $parsedUrl['host'] : '';
+    $path = $parsedUrl['path'];
 
-    // Tambahkan kembali ekstensi jika ada
-    if (isset($queryParams['extension'])) {
-        $originalPath .= "." . $queryParams['extension'];
+    // Find `/api/storage/` and replace `#` with `/`
+    $pattern = "/\/api\/storage\//";
+    if (preg_match($pattern, $path, $matches, PREG_OFFSET_CAPTURE)) {
+        $storagePos = $matches[0][1] + strlen($matches[0][0]);
+        $pathBeforeStorage = substr($path, 0, $storagePos);
+        $pathAfterStorage = substr($path, $storagePos);
+
+        // Replace `#` with `/`
+        $originalPath = str_replace('#', '/', $pathAfterStorage);
+
+        // Rebuild the full URL
+        $originalUrl = $scheme . $host . $pathBeforeStorage . $originalPath;
+        return $originalUrl;
     }
 
-    return $originalPath;
+    return $formattedUrl; // Return as is if no changes needed
 }
 
 Route::middleware([

@@ -87,25 +87,28 @@ abstract class ApiOutput
     {
         // Parse URL
         $parsedUrl = parse_url($url);
+
+        // Extract components
+        $scheme = isset($parsedUrl['scheme']) ? $parsedUrl['scheme'] . '://' : '';
+        $host = isset($parsedUrl['host']) ? $parsedUrl['host'] : '';
         $path = $parsedUrl['path'];
 
-        // Pisahkan base URL dan path setelah /storage/
+        // Find the position of `/api/storage/`
         $pattern = "/\/api\/storage\//";
         if (preg_match($pattern, $path, $matches, PREG_OFFSET_CAPTURE)) {
             $storagePos = $matches[0][1] + strlen($matches[0][0]);
+            $pathBeforeStorage = substr($path, 0, $storagePos);
             $pathAfterStorage = substr($path, $storagePos);
 
-            // Pisahkan ekstensi file
-            $pathParts = pathinfo($pathAfterStorage);
-            $filenameWithoutExt = $pathParts['dirname'] . '/' . $pathParts['filename'];
-            $filenameWithoutExt = str_replace('/', '#', $filenameWithoutExt); // Ganti / dengan #
+            // Replace `/` with `#` in the path after `/api/storage/`
+            $formattedPath = str_replace('/', '#', $pathAfterStorage);
 
-            // Bangun URL baru
-            $newPath = $filenameWithoutExt . "?extension=" . $pathParts['extension'];
-            return $newPath;
+            // Rebuild the full URL
+            $newUrl = $scheme . $host . $pathBeforeStorage . $formattedPath;
+            return $newUrl;
         }
 
-        return $url; // Jika tidak cocok dengan format yang diinginkan, kembalikan original URL
+        return $url; // Return the original if no match is found
     }
 
     public function revertUrlFormat($formattedUrl)
