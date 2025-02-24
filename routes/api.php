@@ -31,7 +31,7 @@ Route::middleware([
     Route::middleware('auth:sanctum')->get('/storage/{path_file}/{file}', function ($path_file, $file) {
         $path = storage_path('/app/public/'.$path_file.'/'.$file);
         return response()->file($path, [
-                'Content-Type' => 'application/pdf',
+                'Content-Type' => 'application/jpg',
                 'Content-disposition' => 'filename=' . $file,
             ]);
 
