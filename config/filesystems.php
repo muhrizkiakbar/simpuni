@@ -33,7 +33,7 @@ return [
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/api/storage',
+            'url' => "https://".env('APP_URL').'/api/storage',
             'visibility' => 'public',
             'serve' => true,
             'throw' => false,
@@ -42,7 +42,7 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/api/storage',
+            'url' => "https://".env('APP_URL').'/api/storage',
             'visibility' => 'public',
             'throw' => false,
         ],
