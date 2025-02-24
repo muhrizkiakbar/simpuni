@@ -22,31 +22,24 @@ use App\Http\Controllers\Petugas\BuildingController as PetugasBuildingController
 use App\Http\Controllers\Petugas\FunctionBuildingController as PetugasFunctionBuildingController;
 use App\Http\Controllers\Petugas\DutyController as PetugasDutyController;
 
-Route::get('/storage/{path_file}/{file}', function ($path_file, $file, Request $request) {
-    $path = storage_path('/app/public/'.$path_file.'/'.$file.".".$request->extension);
+function revertUrlFormat($formattedUrl)
+{
+    // Pisahkan path dan query string
+    $urlParts = explode("?", $formattedUrl);
+    $path = $urlParts[0];
+    parse_str($urlParts[1] ?? '', $queryParams);
 
-    return response()->stream(function () use ($path) {
-        readfile($path);
-    }, 200, ['Content-Type' => 'image/jpg']);
+    // Ubah # kembali ke /
+    $originalPath = str_replace('#', '/', $path);
 
-    //return response()->file($path, [
-    //        'Content-Type' => mime_content_type($path),
-    //    ])->setStatusCode(200);
+    // Tambahkan kembali ekstensi jika ada
+    if (isset($queryParams['extension'])) {
+        $originalPath .= "." . $queryParams['extension'];
+    }
 
-    //$fullPath = trim($path_file . '/' . $file, '/');
+    return $originalPath;
+}
 
-    //Log::info("Mencoba mengakses file: $fullPath");
-
-    //if (!Storage::disk('public')->exists($fullPath)) {
-    //    Log::error("File $fullPath tidak ditemukan");
-    //    abort(404);
-    //}
-
-    //Log::info("File ditemukan. Mengirim dengan status 200.");
-    //return response()->file(Storage::disk('public')->path($fullPath))
-    //    ->setStatusCode(200);
-
-});
 Route::middleware([
     EnsureFrontendRequestsAreStateful::class,
     'throttle:api',
@@ -58,7 +51,15 @@ Route::middleware([
         Route::get('me', [AuthorizationController::class, 'me'])->middleware('auth:sanctum');
         Route::post('change_profile', [AuthorizationController::class, 'change_profile'])->middleware('auth:sanctum');
 
-        Route::get('/app/{id}', [FileController::class, 'index']);
+        Route::get('/storage/{path_file}', function ($path_file, Request $request) {
+
+            $path_file = revertUrlFormat($path_file);
+            $path = storage_path('/app/public/'.$path_file.".".$request->extension);
+
+            return response()->stream(function () use ($path) {
+                readfile($path);
+            }, 200, ['Content-Type' => mime_content_type($path)]);
+        });
 
 
         // Admin

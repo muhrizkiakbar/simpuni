@@ -85,42 +85,47 @@ abstract class ApiOutput
 
     public function convertUrlFormatStorage($url)
     {
-        // Parse URL untuk mendapatkan path dan query
+        // Parse URL
         $parsedUrl = parse_url($url);
-
-        // Ambil path dari URL
         $path = $parsedUrl['path'];
 
-        // Pisahkan path berdasarkan `/`
-        $pathParts = explode('/', $path);
+        // Pisahkan base URL dan path setelah /storage/
+        $pattern = "/\/api\/storage\//";
+        if (preg_match($pattern, $path, $matches, PREG_OFFSET_CAPTURE)) {
+            $storagePos = $matches[0][1] + strlen($matches[0][0]);
+            $pathAfterStorage = substr($path, $storagePos);
 
-        // Ambil bagian terakhir dari path (nama file)
-        $filename = array_pop($pathParts);
+            // Pisahkan ekstensi file
+            $pathParts = pathinfo($pathAfterStorage);
+            $filenameWithoutExt = $pathParts['dirname'] . '/' . $pathParts['filename'];
+            $filenameWithoutExt = str_replace('/', '#', $filenameWithoutExt); // Ganti / dengan #
 
-        // Pisahkan nama file dari ekstensi
-        $fileParts = explode('.', $filename);
-
-        // Jika ada ekstensi, pisahkan
-        if (count($fileParts) > 1) {
-            $extension = array_pop($fileParts); // Ambil ekstensi
-            $filenameWithoutExt = implode('.', $fileParts); // Gabungkan kembali nama file tanpa ekstensi
-        } else {
-            return $url; // Jika tidak ada ekstensi, kembalikan URL asli
+            // Bangun URL baru
+            $newPath = $filenameWithoutExt . "?extension=" . $pathParts['extension'];
+            return $newPath;
         }
 
-        // Bangun ulang path tanpa ekstensi
-        $newPath = implode('/', $pathParts) . '/' . $filenameWithoutExt;
-
-        // Bangun ulang URL dengan query extension
-        $newUrl = "{$parsedUrl['scheme']}://{$parsedUrl['host']}{$newPath}?extension={$extension}";
-
-        // Tambahkan kembali query string jika ada
-        if (!empty($parsedUrl['query'])) {
-            $newUrl .= "&" . $parsedUrl['query'];
-        }
-
-        return $newUrl;
+        return $url; // Jika tidak cocok dengan format yang diinginkan, kembalikan original URL
     }
+
+    public function revertUrlFormat($formattedUrl)
+    {
+        // Pisahkan path dan query string
+        $urlParts = explode("?", $formattedUrl);
+        $path = $urlParts[0];
+        parse_str($urlParts[1] ?? '', $queryParams);
+
+        // Ubah # kembali ke /
+        $originalPath = str_replace('#', '/', $path);
+
+        // Tambahkan kembali ekstensi jika ada
+        if (isset($queryParams['extension'])) {
+            $originalPath .= "." . $queryParams['extension'];
+        }
+
+        return $originalPath;
+    }
+
 
 
     /**
