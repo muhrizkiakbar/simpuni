@@ -103,7 +103,7 @@ abstract class ApiOutput
             // Extract file extension
             $pathParts = pathinfo($pathAfterStorage);
             $filenameWithoutExt = $pathParts['dirname'] . '/' . $pathParts['filename'];
-            $filenameWithoutExt = str_replace('/', '#', $filenameWithoutExt); // Replace `/` with `#`
+            $filenameWithoutExt = str_replace('/', '&', $filenameWithoutExt); // Replace `/` with `#`
 
             // Build the new path with extension as query param
             $newPath = $pathBeforeStorage . $filenameWithoutExt . "?extension=" . $pathParts['extension'];
