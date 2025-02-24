@@ -24,7 +24,7 @@ class ArchiveFileOutput extends ApiOutput
             'type' => $object->type,
             'year' => $object->year,
             'description' => $object->description,
-            'attachment' => $object->attachment ? asset('storage/'.$object->attachment) : null,
+            'attachment' => $object->attachment ? '/api/'.asset('storage/'.$object->attachment) : null,
             'slug' => encrypt($object->id),
         ];
 
