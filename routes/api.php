@@ -20,6 +20,7 @@ use App\Http\Controllers\Pelapor\TypeDenunciationController as PelaporTypeDenunc
 use App\Http\Controllers\Petugas\BuildingController as PetugasBuildingController;
 use App\Http\Controllers\Petugas\FunctionBuildingController as PetugasFunctionBuildingController;
 use App\Http\Controllers\Petugas\DutyController as PetugasDutyController;
+use Illuminate\Support\Facades\Storage;
 
 Route::middleware([
     EnsureFrontendRequestsAreStateful::class,
@@ -28,8 +29,16 @@ Route::middleware([
     Route::post('login', [AuthorizationController::class, 'login']);
 
     Route::middleware('auth:sanctum')->get('/storage/{path_file}/{file}', function ($path_file, $file) {
-        $path = storage_path('/app/public/'.$path_file.'/'.$file);
-        return response()->file($path);
+        //$path = storage_path('/app/public/'.$path_file.'/'.$file);
+        //return response()->file($path);
+
+        $fullPath = trim($path_file . '/' . $file, '/'); // Hindari double slash
+
+        if (!Storage::disk('public')->exists($fullPath)) {
+            abort(404, "File $fullPath tidak ditemukan.");
+        }
+
+        return response()->file(Storage::disk('public')->path($fullPath));
     });
 
     Route::middleware('auth:sanctum')->group(function () {
