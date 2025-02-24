@@ -6,6 +6,7 @@ use App\Outputs\ApiOutput;
 use App\Outputs\Admin\FunctionBuildingOutput;
 use App\Outputs\Admin\UserOutput;
 use App\Outputs\Admin\AttachmentOutput;
+use Illuminate\Support\Facades\Storage;
 
 class BuildingOutput extends ApiOutput
 {
@@ -44,13 +45,12 @@ class BuildingOutput extends ApiOutput
             'state' => $object->state,
             'slug' => encrypt($object->id),
             'deleted_at' => $object->deleted_at,
-            'foto' => $object->foto ? asset('storage/'.$object->foto) : null,
-            'dokumen' => $object->dokumen ? asset('storage/'.$object->dokumen) : null,
+            'foto' => $object->foto ? Storage::disk('public')->url($object->foto) : null,
+            'dokumen' => $object->dokumen ? Storage::disk('public')->url($object->dokumen) : null,
             'created_at' => $object->created_at,
             'updated_at' => $object->updated_at,
         ];
 
-        //'attachments' => $object->attachments->count() > 0 ? $attachment_output->renderJson($object->attachments, "format", ["mode"=>"raw_many_data"]) : [],
         return $data;
     }
 }

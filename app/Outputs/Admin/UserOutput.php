@@ -17,7 +17,7 @@ class UserOutput extends ApiOutput
     {
         $data = [
             'id' => $object->id,
-            'avatar' => $object->avatar ? asset('storage/'.$object->avatar) : null,
+            'avatar' => $object->avatar ? Storage::disk('public')->url($object->avatar) : null,
             'name' => $object->name,
             'posisi' => $object->posisi,
             'instansi' => $object->instansi,

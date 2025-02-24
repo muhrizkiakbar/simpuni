@@ -5,6 +5,7 @@ namespace App\Outputs\Admin;
 use App\Outputs\Admin\DenunciationOutput;
 use App\Outputs\ApiOutput;
 use App\Outputs\Admin\UserOutput;
+use Illuminate\Support\Facades\Storage;
 
 class DutyOutput extends ApiOutput
 {
@@ -59,8 +60,8 @@ class DutyOutput extends ApiOutput
             'submit_longitude' => $object->submit_longitude,
             'submit_latitude' => $object->submit_latitude,
             'state' => $object->state,
-            'foto' => $object->foto ? asset('storage/'.$object->foto) : null,
-            'surat_tugas' => $object->surat_tugas ? asset('storage/'.$object->surat_tugas) : null,
+            'foto' => $object->foto ? Storage::disk('public')->url($object->foto) : null,
+            'surat_tugas' => $object->surat_tugas ? Storage::disk('public')->url($object->surat_tugas) : null,
             'slug' => encrypt($object->id),
             'user_petugas' => $user_output->renderJson($object->user_petugas ?? [], "format", [ "mode" => "raw_data"]) ?? [],
             'user_admin' => $user_output->renderJson($object->user_admin ?? [], "format", [ "mode" => "raw_data" ]) ?? [],

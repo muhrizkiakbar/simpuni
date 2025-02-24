@@ -2,6 +2,7 @@
 
 namespace App\Outputs\Admin;
 
+use Illuminate\Support\Facades\Storage;
 use App\Outputs\ApiOutput;
 
 class ArchiveFileOutput extends ApiOutput
@@ -24,7 +25,7 @@ class ArchiveFileOutput extends ApiOutput
             'type' => $object->type,
             'year' => $object->year,
             'description' => $object->description,
-            'attachment' => $object->attachment ? asset('storage/'.$object->attachment) : null,
+            'attachment' => $object->attachment ? Storage::disk('public')->url($object->attachment) : null,
             'slug' => encrypt($object->id),
         ];
 
