@@ -29,23 +29,22 @@ Route::middleware([
     Route::post('login', [AuthorizationController::class, 'login']);
 
     Route::middleware('auth:sanctum')->get('/storage/{path_file}/{file}', function ($path_file, $file) {
-        //$path = storage_path('/app/public/'.$path_file.'/'.$file);
-        //return response()->file($path, [
-        //        'Content-Type' => 'application/jpg',
-        //        'Content-disposition' => 'filename=' . $file,
-        //    ])->setStatusCode(200);
+        $path = storage_path('/app/public/'.$path_file.'/'.$file);
+        return response()->file($path, [
+                'Content-Type' => mime_content_type($path),
+            ])->setStatusCode(200);
 
-        $fullPath = trim($path_file . '/' . $file, '/');
+        //$fullPath = trim($path_file . '/' . $file, '/');
 
-        Log::info("Mencoba mengakses file: $fullPath");
+        //Log::info("Mencoba mengakses file: $fullPath");
 
-        if (!Storage::disk('public')->exists($fullPath)) {
-            Log::error("File $fullPath tidak ditemukan");
-            abort(404);
-        }
+        //if (!Storage::disk('public')->exists($fullPath)) {
+        //    Log::error("File $fullPath tidak ditemukan");
+        //    abort(404);
+        //}
 
-        Log::info("File ditemukan. Mengirim dengan status 200.");
-        return response()->file(Storage::disk('public')->path($fullPath))
+        //Log::info("File ditemukan. Mengirim dengan status 200.");
+        //return response()->file(Storage::disk('public')->path($fullPath))
             ->setStatusCode(200);
 
     });
