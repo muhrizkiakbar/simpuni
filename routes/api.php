@@ -56,7 +56,7 @@ Route::middleware([
         Route::get('me', [AuthorizationController::class, 'me'])->middleware('auth:sanctum');
         Route::post('change_profile', [AuthorizationController::class, 'change_profile'])->middleware('auth:sanctum');
 
-        Route::get('/app/{file}', [FileController::class, 'index']);
+        Route::get('/app/{id}', [FileController::class, 'index']);
 
 
         // Admin
