@@ -33,7 +33,7 @@ Route::middleware([
         return response()->file($path, [
                 'Content-Type' => 'application/jpg',
                 'Content-disposition' => 'filename=' . $file,
-            ]);
+            ])->setStatusCode(200);
 
         //$fullPath = trim($path_file . '/' . $file, '/'); // Hindari double slash
 
