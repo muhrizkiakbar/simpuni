@@ -41,6 +41,7 @@ Route::middleware([
         Route::post('change_profile', [AuthorizationController::class, 'change_profile'])->middleware('auth:sanctum');
 
         Route::get('/storage/{path_file}', function ($path_file, Request $request) {
+            dd($path_file);
 
             $path_file = revertUrlFormat($path_file);
             $path = storage_path('/app/public/'.$path_file.".".$request->extension);
