@@ -38,12 +38,13 @@ class SendNotificationAdminRequireActionDenunciation implements ShouldQueue
         $admin_users = User::where('type_user', 'admin')->get();
         $denunciations = Denunciation::where('updated_at', '<', Carbon::now()->subDays(14))->get();
 
-        foreach ($admin_users as $user) {
-
-            foreach ($denunciations as $denunciation) {
-                $title = 'Ada Laporan Yang Perlu Ditindak.';
-                $description = 'Ada laporan yang perlu ditindak, laporan dengan jenis laporan '.$denunciation->type_denunciation->name.'. Semangat yaa !';
-                $this->send_notification($denunciation, $user, $title, $description, "denunciation_need_action");
+        if ($denunciations->count() > 0) {
+            foreach ($admin_users as $user) {
+                foreach ($denunciations as $denunciation) {
+                    $title = 'Ada Laporan Yang Perlu Ditindak.';
+                    $description = 'Ada laporan yang perlu ditindak, laporan dengan jenis laporan '.$denunciation->type_denunciation->name.'. Semangat yaa !';
+                    $this->send_notification($denunciation, $user, $title, $description, "denunciation_need_action");
+                }
             }
         }
     }
