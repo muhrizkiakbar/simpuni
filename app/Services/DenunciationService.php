@@ -132,7 +132,7 @@ class DenunciationService extends ApplicationService
 
                 $log_denunciation = $this->create_log_denunciation($denunciation, $currentState);
 
-                $denunciation->duties
+                Duty::where('denunciation_id', $denunciation->id)
                     ->update(['state' => 'done']);
 
                 return [$denunciation, null];

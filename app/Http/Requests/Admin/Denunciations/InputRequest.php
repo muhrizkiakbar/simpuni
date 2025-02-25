@@ -30,7 +30,7 @@ class InputRequest extends FormRequest
             'longitude' => [ 'nullable', 'string', 'max:255'  ],
             'latitude' => [ 'nullable', 'string', 'max:255'  ],
             'catatan' => [ 'nullable', 'string', 'max:255'  ],
-            'attachments' => 'nullable|array|max:3',
+            'attachments' => 'nullable|array|min:1|max:4',
             'attachments.*' => 'nullable|file|mimetypes:image/jpeg,image/png,image/jpg|max:2048',
             'delete_attachment_ids' => 'nullable|array'
         ];
