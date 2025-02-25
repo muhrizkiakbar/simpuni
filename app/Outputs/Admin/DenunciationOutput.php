@@ -80,6 +80,7 @@ class DenunciationOutput extends ApiOutput
             'longitude' => $object->longitude,
             'latitude' => $object->latitude,
             'catatan' => $object->catatan,
+            'catatan_reject' => $object->catatan_reject,
             'user_pelapor' => $user_output->renderJson($object->user_pelapor ?? [], "format", [ "mode" => "raw_data"]) ?? [],
             'type_denunciation' => $type_denunciation_output->renderJson($object->type_denunciation ?? [], "format", [ "mode" => "raw_data" ]) ?? [],
             'function_building' => $function_building_output->renderJson($object->function_building ?? [], "format", [ "mode" => "raw_data"]) ?? [],

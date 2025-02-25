@@ -19,6 +19,7 @@ class WarningLetterRequest extends FormRequest
             'user_petugas_id' => ['nullable', 'integer'],
             'surat_tugas' => 'nullable|file|mimetypes:application/pdf|max:2048',
             'foto' => 'nullable|file|mimetypes:image/jpeg,image/png,image/jpg|max:2048',
+            'catatan_reject' => [ 'nullable', 'string', 'max:255'  ],
         ];
     }
 }
