@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use Illuminate\Support\Facades\Log;
 use App\Models\Building;
 use App\Models\User;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -34,6 +35,7 @@ class SendNotificationAdminNewBuilding implements ShouldQueue
      */
     public function handle(): void
     {
+        Log::info('SendNotificationAdminNewBuilding memulai pada ' . now());
         // Ambil semua user dengan type_user = 'admin'
         $admin_users = User::where('type_user', 'admin')->get();
 

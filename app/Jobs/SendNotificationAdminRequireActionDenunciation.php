@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use Illuminate\Support\Facades\Log;
 use App\Models\Denunciation;
 use App\Models\User;
 use Carbon\Carbon;
@@ -34,6 +35,7 @@ class SendNotificationAdminRequireActionDenunciation implements ShouldQueue
      */
     public function handle(): void
     {
+        Log::info('SendNotificationAdminRequireActionDenunciation memulai pada ' . now());
         // Ambil semua user dengan type_user = 'admin'
         $admin_users = User::where('type_user', 'admin')->get();
         $denunciations = Denunciation::where('updated_at', '<', Carbon::now()->subDays(14))->get();

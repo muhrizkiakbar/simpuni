@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use Illuminate\Support\Facades\Log;
 use App\Models\Denunciation;
 use App\Models\User;
 use App\Services\DenunciationService;
@@ -35,6 +36,7 @@ class SendNotificationAdminNewDenunciation implements ShouldQueue
      */
     public function handle(): void
     {
+        Log::info('SendNotificationAdminNewDenunciation memulai pada ' . now());
         // Ambil semua user dengan type_user = 'admin'
         $admin_users = User::where('type_user', 'admin')->get();
 
