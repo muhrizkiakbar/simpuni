@@ -37,7 +37,7 @@ class SendNotificationAdminNewBuilding implements ShouldQueue
     {
         Log::info('SendNotificationAdminNewBuilding memulai pada ' . now());
         // Ambil semua user dengan type_user = 'admin'
-        $admin_users = User::where('type_user', 'admin')->get();
+        $admin_users = User::where('type_user', 'admin')->whereNotNull('fcm_token')->get();
 
         //echo($this->denunciation_id);
         //// Ambil data laporan berdasarkan ID
