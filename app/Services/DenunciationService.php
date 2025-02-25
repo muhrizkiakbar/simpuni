@@ -137,6 +137,9 @@ class DenunciationService extends ApplicationService
 
                 return [$denunciation, null];
             } elseif ($request->state == 'reject' && $denunciation->state == 'sent') {
+                if (!empty($request->catatan_reject)) {
+                    $denunciation->catatan_reject = $request->catatan_reject;
+                }
                 $denunciation->state = 'reject';
                 $denunciation->save();
 
