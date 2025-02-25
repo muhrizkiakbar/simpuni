@@ -21,6 +21,7 @@ use App\Http\Controllers\Pelapor\TypeDenunciationController as PelaporTypeDenunc
 use App\Http\Controllers\Petugas\BuildingController as PetugasBuildingController;
 use App\Http\Controllers\Petugas\FunctionBuildingController as PetugasFunctionBuildingController;
 use App\Http\Controllers\Petugas\DutyController as PetugasDutyController;
+use App\Http\Controllers\Petugas\DenunciationController as PetugasDenunciationController;
 
 function revertUrlFormat($formattedUrl)
 {
@@ -82,8 +83,8 @@ Route::middleware([
                 Route::resource('denunciations', AdminDenunciationController::class)->only([
                     'index', 'show'
                 ]);
-                Route::get('/cluster/denunciations', [AdminDenunciationController::class, 'cluster']);
                 Route::post('/denunciations/{id}', [AdminDenunciationController::class, 'update']);
+                Route::get('/cluster/denunciations', [AdminDenunciationController::class, 'cluster']);
                 Route::get('/denunciations/count/by_new_and_in_progress', [AdminDenunciationController::class, 'count_by_new_and_in_progress']);
                 Route::get('/denunciations/count/every_state_by_month_year', [AdminDenunciationController::class, 'count_every_state_by_month_year']);
                 Route::get('/denunciations/count/done_by_year', [AdminDenunciationController::class, 'count_done_by_year']);
@@ -103,6 +104,7 @@ Route::middleware([
                 ]);
                 Route::post('/denunciations/{id}', [PelaporDenunciationController::class, 'update']);
                 Route::get('/denunciations/count/in_progress', [PelaporDenunciationController::class, 'count_denunciation_in_progress']);
+                Route::get('/denunciations/export/excel', [PelaporDenunciationController::class, 'export_excel']);
 
                 Route::resource('type_denunciations', PelaporTypeDenunciationController::class)->only([
                     'index'
@@ -123,6 +125,14 @@ Route::middleware([
                 ]);
                 Route::post('/duties/{id}/start', [PetugasDutyController::class, 'start']);
                 Route::post('/duties/{id}/submit', [PetugasDutyController::class, 'submit']);
+
+                Route::resource('denunciations', PetugasDenunciationController::class)->only([
+                    'index', 'store', 'show'
+                ]);
+                Route::post('/denunciations/{id}', [PetugasDenunciationController::class, 'update']);
+                Route::get('/cluster/denunciations', [PetugasDenunciationController::class, 'cluster']);
+                Route::get('/denunciations/count/in_progress', [PelaporDenunciationController::class, 'count_denunciation_in_progress']);
+                Route::get('/denunciations/export/excel', [PetugasDenunciationController::class, 'export_excel']);
             });
         });
 
