@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Denunciation;
 use App\Models\User;
 use Carbon\Carbon;
-use App\Services\DenunciationService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
@@ -35,12 +34,13 @@ class SendNotificationAdminRequireActionDenunciation implements ShouldQueue
      */
     public function handle(): void
     {
-        Log::info('SendNotificationAdminRequireActionDenunciation memulai pada ' . now());
         // Ambil semua user dengan type_user = 'admin'
         $admin_users = User::where('type_user', 'admin')->get();
+        echo $admin_users;
         $denunciations = Denunciation::where('updated_at', '<', Carbon::now()->subDays(14))->get();
 
         if ($denunciations->count() > 0) {
+            Log::info('SendNotificationAdminRequireActionDenunciation memulai pada ' . now());
             foreach ($admin_users as $user) {
                 foreach ($denunciations as $denunciation) {
                     $title = 'Ada Laporan Yang Perlu Ditindak.';
