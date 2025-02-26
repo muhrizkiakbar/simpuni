@@ -74,4 +74,11 @@ class DenunciationController extends Controller
         );
     }
 
+    public function cluster(Request $request)
+    {
+        $denunciations = $this->denunciationService->denunciations($request)->get();
+
+        $denunciationOutput = new DenunciationOutput();
+        return response()->json(['data' => $denunciationOutput->renderJson($denunciations, "format", [ "mode" => "raw_many_data"])]);
+    }
 }

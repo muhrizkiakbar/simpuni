@@ -104,6 +104,7 @@ Route::middleware([
                 ]);
                 Route::post('/denunciations/{id}', [PelaporDenunciationController::class, 'update']);
                 Route::get('/denunciations/count/in_progress', [PelaporDenunciationController::class, 'count_denunciation_in_progress']);
+                Route::get('/cluster/denunciations', [PelaporDenunciationController::class, 'cluster']);
                 Route::get('/denunciations/export/excel', [PelaporDenunciationController::class, 'export_excel']);
 
                 Route::resource('type_denunciations', PelaporTypeDenunciationController::class)->only([
