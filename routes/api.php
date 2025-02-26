@@ -22,6 +22,7 @@ use App\Http\Controllers\Petugas\BuildingController as PetugasBuildingController
 use App\Http\Controllers\Petugas\FunctionBuildingController as PetugasFunctionBuildingController;
 use App\Http\Controllers\Petugas\DutyController as PetugasDutyController;
 use App\Http\Controllers\Petugas\DenunciationController as PetugasDenunciationController;
+use App\Http\Controllers\Petugas\TypeDenunciationController as PetugasTypeDenunciationController;
 
 function revertUrlFormat($formattedUrl)
 {
@@ -134,6 +135,10 @@ Route::middleware([
                 Route::get('/cluster/denunciations', [PetugasDenunciationController::class, 'cluster']);
                 Route::get('/denunciations/count/in_progress', [PelaporDenunciationController::class, 'count_denunciation_in_progress']);
                 Route::get('/denunciations/export/excel', [PetugasDenunciationController::class, 'export_excel']);
+
+                Route::resource('type_denunciations', PetugasTypeDenunciationController::class)->only([
+                    'index'
+                ]);
             });
         });
 
