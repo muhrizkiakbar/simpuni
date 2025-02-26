@@ -62,7 +62,7 @@ class SendNotificationAdminNewDenunciation implements ShouldQueue
             return;
         }
 
-        $firebase = (new Factory())->withServiceAccount(storage_path('app/json/account_google.json'));
+        $firebase = (new Factory())->withServiceAccount(env('FIREBASE_CREDENTIAL'));
 
         $messaging = $firebase->createMessaging();
 
