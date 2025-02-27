@@ -132,8 +132,7 @@ class DenunciationService extends ApplicationService
 
                 $log_denunciation = $this->create_log_denunciation($denunciation, $currentState);
 
-                Duty::where('denunciation_id', $denunciation->id)
-                    ->update(['state' => 'done']);
+                Duty::whereIn('state', ['waiting', 'on_going'])->update(['state' => 'canceled']);
 
                 return [$denunciation, null];
             } elseif ($request->state == 'reject' && $denunciation->state == 'sent') {

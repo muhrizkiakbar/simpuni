@@ -46,7 +46,7 @@ class SendNotificationAdminNewBuilding implements ShouldQueue
         //// Buat instance service di dalam handle()
 
         $title = 'Bangunan Baru.';
-        $description = 'Ada bangunan baru nih dengan fungsi bangunan '.$building->function_building->name.'.';
+        $description = 'Ada bangunan baru nih dengan fungsi bangunan '.$building->function_building->name ?? null.'.';
 
         foreach ($admin_users as $user) {
             $this->send_notification($building, $user, $title, $description, "building_new");
