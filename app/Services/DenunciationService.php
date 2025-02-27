@@ -126,8 +126,8 @@ class DenunciationService extends ApplicationService
                 $denunciation->state = 'done';
                 $denunciation->save();
 
-                $title = "Laporan Selesai.";
-                $description = "Laporan telah selesai, dengan jenis laporan ". $denunciation->type_denunciation->name.".";
+                $title = "Pelaporan Selesai";
+                $description = "Pelaporan dengan jenis laporan ". $denunciation->type_denunciation->name." telah selesai.";
                 $this->send_notification($denunciation, $denunciation->user_pelapor, $title, $description, "denunciation_done");
 
                 $log_denunciation = $this->create_log_denunciation($denunciation, $currentState);
@@ -142,8 +142,8 @@ class DenunciationService extends ApplicationService
                 $denunciation->state = 'reject';
                 $denunciation->save();
 
-                $title = "Laporan Ditolak.";
-                $description = "Laporan telah ditolak, dengan jenis laporan ". $denunciation->type_denunciation->name.".";
+                $title = "Pelaporan Ditolak";
+                $description = "Pelaporan dengan jenis laporan ". $denunciation->type_denunciation->name." telah ditolak.";
                 $this->send_notification($denunciation, $denunciation->user_pelapor, $title, $description, "denunciation_reject");
 
 
@@ -297,8 +297,8 @@ class DenunciationService extends ApplicationService
         }
 
         $duty_service = new DutyService(new User());
-        $title = "Tugas Baru.";
-        $description = "Tugas baru dengan jenis peringatan ". str_replace('_', ' ', strtoupper($duty->state_type)).".";
+        $title = "Tugas Baru";
+        $description = "Ada tugas baru dengan jenis peringatan ". str_replace('_', ' ', strtoupper($duty->state_type)).". Harap segera periksa detailnya.";
         $this->send_notification($denunciation, $duty->user_petugas, $title, $description, "assignment_new");
 
 

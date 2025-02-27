@@ -131,8 +131,8 @@ class BuildingService extends ApplicationService
 
 
         if ($building->state == "active" && $building->created_by_user->type_user == 'konsultan') {
-            $title = "Bangunan Diaktifkan.";
-            $description = "Bangunan dengan fungsi bangunan ".$building->function_building->name.".";
+            $title = "Bangunan Telah Dikonfirmasi";
+            $description = "Bangunan yang Anda tambahkan dengan fungsi bangunan ".$building->function_building->name." telah berhasil dikonfirmasi.";
             $this->send_notification($building, $building->created_by_user, $title, $description, "building_confirmation");
         }
         return $building;

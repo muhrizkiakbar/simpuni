@@ -43,8 +43,8 @@ class SendNotificationAdminRequireActionDenunciation implements ShouldQueue
             Log::info('SendNotificationAdminRequireActionDenunciation memulai pada ' . now());
             foreach ($admin_users as $user) {
                 foreach ($denunciations as $denunciation) {
-                    $title = 'Ada Laporan Yang Perlu Ditindak.';
-                    $description = 'Ada laporan yang perlu ditindak, laporan dengan jenis laporan '.$denunciation->type_denunciation->name.'. Semangat yaa !';
+                    $title = 'Pelaporan Perlu Tindakan';
+                    $description = 'Ada laporan dengan jenis laporan '.$denunciation->type_denunciation->name.' yang perlu tindakan lanjutan.';
                     $this->send_notification($denunciation, $user, $title, $description, "denunciation_need_action");
                 }
             }
