@@ -55,7 +55,7 @@ class SendNotificationAdminNewBuilding implements ShouldQueue
 
     public function send_notification($data, $user, $title, $description, $topic)
     {
-        $procject_id = 'simpuni-banjarbaru';
+        $project_id = 'simpuni-banjarbaru';
         $fcm = $user->fcm_token;
         if ($fcm == null) {
             return;
