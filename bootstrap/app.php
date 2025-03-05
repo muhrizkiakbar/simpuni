@@ -20,6 +20,11 @@ return Application::configure(basePath: dirname(__DIR__))
            'konsultan' => \App\Http\Middleware\KonsultanMiddleware::class,
            'konsultan_petugas' => \App\Http\Middleware\KonsultanPetugasMiddleware::class,
         ]);
+
+        $middleware->statefulApi();
+        $middleware->validateCsrfTokens(
+            except: ['login', 'logout']
+        );
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
