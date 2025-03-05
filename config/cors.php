@@ -7,6 +7,7 @@ return [
     'allowed_origins_patterns' => [],
     'allowed_headers' => ['*'],
     'exposed_headers' => [],
+    'credentials' => ['*'],
     'max_age' => 0,
     'supports_credentials' => true,
 ];
