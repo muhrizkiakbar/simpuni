@@ -19,7 +19,7 @@ class CreateRequest extends FormRequest
             'year' => [ 'nullable','string' ],
             'type' => [ 'nullable','string' ],
             'description' => [ 'nullable','string' ],
-            'attachment' => 'required|file|mimetypes:image/jpeg,image/png,image/jpg,application/pdf,application/xlsx,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet|max:3072',
+            'attachment' => 'required|file|mimetypes:image/jpeg,image/png,image/jpg,application/pdf,application/xlsx,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document|max:3072',
         ];
     }
 }
