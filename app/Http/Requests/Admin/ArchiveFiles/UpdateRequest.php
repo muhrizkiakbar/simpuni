@@ -19,7 +19,7 @@ class UpdateRequest extends FormRequest
             'year' => [ 'nullable','string' ],
             'type' => [ 'nullable','string' ],
             'description' => [ 'nullable','string' ],
-            'attachment' => 'nullable|file|mimetypes:image/jpeg,image/png,image/jpg,application/pdf,application/xlsx|max:3072',
+            'attachment' => 'required|file|mimetypes:image/jpeg,image/png,image/jpg,application/pdf,application/xlsx,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet|max:3072',
         ];
     }
 }
