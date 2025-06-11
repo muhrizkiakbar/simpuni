@@ -74,9 +74,10 @@ class SendNotificationAdminRequireActionDenunciation implements ShouldQueue
             'notification' => [
                 "body" => $description,
                 "title" => $title
+                'sent_at' => "a",
             ], // optional
             'data' => [
-                'sent_at' => strftime(now()),
+                'sent_at' => "a",
                 'user_id' => $user->id,
                 'slug' => encrypt($data->id),
                 'notification_type' => $topic
