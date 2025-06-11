@@ -49,7 +49,7 @@ class DenunciationOutput extends ApiOutput
             'function_building' => $function_building_output->renderJson($object->function_building ?? [], "format", [ "mode" => "raw_data"]) ?? [],
             'attachments' => $object->attachments->count() > 0 ? $attachment_output->renderJson($object->attachments, "format", ["mode" => "raw_many_data"]) : [],
             'state' => $object->state,
-            'require_action' => ($diffDate * -1) > 14 && !in_array($object->state, ['sent', 'reject', 'done']) ? true : false,
+            'require_action' => ($diffDate * -1) > 14 && !in_array($object->state, ['reject', 'done']) ? true : false,
             'updated_at' => $object->updated_at,
             'slug' => encrypt($object->id)
         ];
