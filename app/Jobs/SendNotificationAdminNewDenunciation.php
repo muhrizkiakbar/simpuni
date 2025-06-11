@@ -73,9 +73,11 @@ class SendNotificationAdminNewDenunciation implements ShouldQueue
             'token' => $fcm,
             'notification' => [
                 "body" => $description,
-                "title" => $title
+                "title" => $title,
+                "title2" => $title
             ], // optional
             'data' => [
+                'user_id2' => $user->id,
                 'user_id' => $user->id,
                 'slug' => encrypt($data->id),
                 'notification_type' => $topic

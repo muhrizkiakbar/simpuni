@@ -71,10 +71,12 @@ class SendNotificationAdminNewBuilding implements ShouldQueue
         $message = CloudMessage::fromArray([
             'token' => $fcm,
             'notification' => [
+                "body2" => $description,
                 "body" => $description,
                 "title" => $title
             ], // optional
             'data' => [
+                'user_id2' => $user->id,
                 'user_id' => $user->id,
                 'slug' => encrypt($data->id),
                 'notification_type' => $topic
