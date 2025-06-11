@@ -39,13 +39,16 @@ class SendNotificationAdminRequireActionDenunciation implements ShouldQueue
         echo storage_path('app/json/account_google.json');
         $denunciations = Denunciation::where('updated_at', '<', Carbon::now()->subDays(14))->whereNotIn('state', ['done', 'reject'])->get();
 
+        $laporan = 1;
         if ($denunciations->count() > 0) {
             Log::info('SendNotificationAdminRequireActionDenunciation memulai pada ' . now());
             foreach ($admin_users as $user) {
                 foreach ($denunciations as $denunciation) {
+                    Log::info('Laporan :'. $laporan);
                     $title = 'Pelaporan Perlu Tindakan';
                     $description = 'Ada laporan dengan jenis laporan '.$denunciation->type_denunciation->name.' yang perlu tindakan lanjutan.';
                     $this->send_notification($denunciation, $user, $title, $description, "denunciation_need_action");
+                    $laporan = $laporan + 1;
                 }
             }
         }
