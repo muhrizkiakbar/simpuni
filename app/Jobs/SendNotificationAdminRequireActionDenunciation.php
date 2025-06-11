@@ -41,7 +41,7 @@ class SendNotificationAdminRequireActionDenunciation implements ShouldQueue
 
         $laporan = 1;
         if ($denunciations->count() > 0) {
-            Log::info('SendNotificationAdminRequireActionDenunciation memulai pada ' . now());
+            //Log::info('SendNotificationAdminRequireActionDenunciation memulai pada ' . now());
             foreach ($admin_users as $user) {
                 foreach ($denunciations as $denunciation) {
                     Log::info('Laporan :'. $laporan);
