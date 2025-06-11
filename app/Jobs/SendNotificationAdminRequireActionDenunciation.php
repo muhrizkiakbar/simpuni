@@ -42,19 +42,19 @@ class SendNotificationAdminRequireActionDenunciation implements ShouldQueue
         $laporan = 1;
         if ($denunciations->count() > 0) {
             Log::info('SendNotificationAdminRequireActionDenunciation memulai pada ' . now());
-            Log::info('Banyak Laporan :'. $denunciations->count);
+            Log::info('Banyak Laporan :'. $denunciations->count());
             foreach ($admin_users as $user) {
                 foreach ($denunciations as $denunciation) {
                     $title = 'Pelaporan Perlu Tindakan';
                     $description = 'Ada laporan dengan jenis laporan '.$denunciation->type_denunciation->name.' yang perlu tindakan lanjutan.';
-                    $this->send_notification2($denunciation, $user, $title, $description, "denunciation_need_action");
+                    $this->send_notification($denunciation, $user, $title, $description, "denunciation_need_action");
                     $laporan = $laporan + 1;
                 }
             }
         }
     }
 
-    public function send_notification2($data, $user, $title, $description, $topic)
+    public function send_notification($data, $user, $title, $description, $topic)
     {
         $project_id = 'simpuni-banjarbaru';
         $fcm = $user->fcm_token;
