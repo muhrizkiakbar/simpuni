@@ -73,7 +73,7 @@ class SendNotificationAdminRequireActionDenunciation implements ShouldQueue
             'token' => $fcm,
             'notification' => [
                 "body" => $description,
-                "title" => $title
+                "title" => $title,
                 'sent_at' => "a",
             ], // optional
             'data' => [
