@@ -97,7 +97,7 @@ io.on('connection', (socket) => {
 });
 
 // Remove the old Redis pub/sub code and keep the rest below
-app.get('/', (req, res) => {
+app.get('/socketio', (req, res) => {
     res.send('Socket.io server is running!');
 });
 
