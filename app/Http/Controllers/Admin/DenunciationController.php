@@ -53,7 +53,9 @@ class DenunciationController extends Controller
 
     public function destroy(string $id)
     {
-        $this->denunciationService->delete(decrypt($id));
+        $denunciation = Denunciation::find(decrypt($id));
+
+        $this->denunciationService->delete($denunciation);
 
         return response()->json([
             'message' => 'Laporan berhasil dihapus'

@@ -114,11 +114,9 @@ class DenunciationService extends ApplicationService
         }
     }
 
-    public function delete($id)
+    public function delete(Denunciation $denunciation)
     {
         try {
-            $denunciation = Denunciation::find($id);
-
             $duties = $denunciation->duties();
 
             $attachment_duties =
