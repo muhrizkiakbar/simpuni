@@ -82,7 +82,7 @@ Route::middleware([
                 ]);
 
                 Route::resource('denunciations', AdminDenunciationController::class)->only([
-                    'index', 'show'
+                    'index', 'show', 'destroy'
                 ]);
                 Route::post('/denunciations/{id}', [AdminDenunciationController::class, 'update']);
                 Route::get('/cluster/denunciations', [AdminDenunciationController::class, 'cluster']);
