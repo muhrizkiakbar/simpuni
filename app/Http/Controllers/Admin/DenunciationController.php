@@ -51,7 +51,7 @@ class DenunciationController extends Controller
         );
     }
 
-    public function delete(string $id)
+    public function destroy(string $id)
     {
         $this->denunciationService->delete(decrypt($id));
 
