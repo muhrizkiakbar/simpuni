@@ -51,6 +51,15 @@ class DenunciationController extends Controller
         );
     }
 
+    public function delete(string $id)
+    {
+        $this->denunciationService->delete(decrypt($id));
+
+        return response()->json([
+            'message' => 'Laporan berhasil dihapus'
+        ], 201);
+    }
+
     public function export_excel(Request $request)
     {
         $request_input = $request->except(['start_date', 'end_date']);

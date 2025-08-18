@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Exceptions\DenunciationException;
 use App\Jobs\SendNotificationAdminNewDenunciation;
+use App\Models\Attachment;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Duty;
 use Illuminate\Http\Request;
@@ -104,6 +105,40 @@ class DenunciationService extends ApplicationService
                     ]);
                 }
             }
+
+            return $denunciation;
+        } catch (DenunciationException $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
+        } catch (Exception $e) {
+            throw new Exception('Something went wrong.');
+        }
+    }
+
+    public function delete($id)
+    {
+        try {
+            $denunciation = Denunciation::find($id);
+
+            $duties = $denunciation->duties();
+
+            $attachment_duties =
+                Attachment::where('attachable_type', '=', "App\Models\Duty")
+                    ->whereIn('attachable_id', $duties->pluck('id'))
+                    ->pluck('file_path');
+            Storage::delete($attachment_duties->toArray());
+
+            Attachment::whereIn('attachable_id', $duties->pluck('id'))
+                ->where('attachable_type', '=', "App\Models\Duty")
+                ->delete();
+
+
+            $file_paths = $denunciation->attachments()->pluck('file_path');
+            Storage::delete($file_paths->toArray());
+            $denunciation->attachments()->delete();
+
+            $duties->delete();
+            $denunciation->log_denunciations()->delete();
+            $denunciation->delete();
 
             return $denunciation;
         } catch (DenunciationException $e) {
