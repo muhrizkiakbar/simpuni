@@ -56,8 +56,8 @@ class Denunciations extends Repository
     protected function filterByRequire_Action($query, $value)
     {
         if ($value) {
-            //$query->where('updated_at', '<', Carbon::now()->subDays(14))->whereNotIn('state', ['done', 'reject']);
-            $query->where('updated_at', '<', Carbon::now())->whereNotIn('state', ['done', 'reject']);
+            $query->where('updated_at', '<', Carbon::now()->subDays(14))->whereNotIn('state', ['done', 'reject']);
+            //$query->where('updated_at', '<', Carbon::now())->whereNotIn('state', ['done', 'reject']);
         }
     }
 }
