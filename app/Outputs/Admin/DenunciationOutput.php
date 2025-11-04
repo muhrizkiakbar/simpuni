@@ -31,7 +31,7 @@ class DenunciationOutput extends ApiOutput
 
         if (in_array($object->state, ['teguran_lisan'])) {
             $need_require_action = true;
-        } elseif (($diffDate * -1) > 14  && !in_array($object->state, ['reject', 'done'])) {
+        } elseif (($diffDate * -1) > 14  && !in_array($object->state, ['reject', 'done', 'sent', 'diterima'])) {
             $need_require_action = true;
         } else {
             $need_require_action = false;
@@ -80,7 +80,7 @@ class DenunciationOutput extends ApiOutput
         $diffDate = $today->diffInDays($updated_at);
         if (in_array($object->state, ['teguran_lisan'])) {
             $need_require_action = true;
-        } elseif (($diffDate * -1) > 14  && !in_array($object->state, ['reject', 'done'])) {
+        } elseif (($diffDate * -1) > 14  && !in_array($object->state, ['reject', 'done', 'sent', 'diterima'])) {
             $need_require_action = true;
         } else {
             $need_require_action = false;
