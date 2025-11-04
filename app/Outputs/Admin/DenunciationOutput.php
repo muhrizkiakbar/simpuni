@@ -49,7 +49,7 @@ class DenunciationOutput extends ApiOutput
             'function_building' => $function_building_output->renderJson($object->function_building ?? [], "format", [ "mode" => "raw_data"]) ?? [],
             'attachments' => $object->attachments->count() > 0 ? $attachment_output->renderJson($object->attachments, "format", ["mode" => "raw_many_data"]) : [],
             'state' => $object->state,
-            'require_action' => (($diffDate * -1) > 14 && !in_array($object->state, ['teguran_lisan'])) && !in_array($object->state, ['reject', 'done']) ? true : false,
+            'require_action' => ($diffDate * -1) > 14  && !in_array($object->state, ['reject', 'done']) || $object->state == 'teguran_lisan' ? true : false,
             'updated_at' => $object->updated_at,
             'slug' => encrypt($object->id)
         ];
@@ -88,7 +88,7 @@ class DenunciationOutput extends ApiOutput
             'logs' => $object->log_denunciations->count() > 0 ? $log_output->renderJson($object->log_denunciations, "format", ["mode" => "raw_many_data"]) : [],
             'duties' => $object->duties->count() > 0 ? $duty_output->renderJson($object->duties, "mini_format", ["mode" => "raw_many_data"]) : [],
             'state' => $object->state,
-            'require_action' => (($diffDate * -1) > 14 && !in_array($object->state, ['teguran_lisan'])) && !in_array($object->state, ['reject', 'done']) ? true : false,
+            'require_action' => ($diffDate * -1) > 14  && !in_array($object->state, ['reject', 'done']) || $object->state == 'teguran_lisan' ? true : false,
             'slug' => encrypt($object->id),
         ];
 
