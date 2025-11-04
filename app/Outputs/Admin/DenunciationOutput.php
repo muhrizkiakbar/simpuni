@@ -29,7 +29,7 @@ class DenunciationOutput extends ApiOutput
         $today = Carbon::now();
         $diffDate = $today->diffInDays($updated_at);
 
-        if (in_array($object->state, ['teguran_lisan', 'sent', 'diterima'])) {
+        if (in_array($object->state, ['teguran_lisan'])) {
             $need_require_action = true;
         } elseif (($diffDate * -1) > 14  && !in_array($object->state, ['reject', 'done'])) {
             $need_require_action = true;
@@ -78,7 +78,7 @@ class DenunciationOutput extends ApiOutput
         $updated_at = Carbon::parse($object->updated_at);
         $today = Carbon::now();
         $diffDate = $today->diffInDays($updated_at);
-        if (in_array($object->state, ['teguran_lisan', 'sent', 'diterima'])) {
+        if (in_array($object->state, ['teguran_lisan'])) {
             $need_require_action = true;
         } elseif (($diffDate * -1) > 14  && !in_array($object->state, ['reject', 'done'])) {
             $need_require_action = true;
