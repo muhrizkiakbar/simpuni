@@ -80,11 +80,7 @@ class DutyService extends ApplicationService
 
     public function show(string $id)
     {
-        return Duty::find($id)->load(
-            'denunciation',
-            'user_petugas',
-            'user_admin',
-        );
+        return Duty::find($id);
     }
 
     public function delete(string $id)
