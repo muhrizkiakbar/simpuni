@@ -23,7 +23,7 @@ const io = new socketIo(server, {
 const redisConfig = {
   host: 'localhost',
   port: 6379,
-  password: 'simpuni_redis',
+  password: 'rrr_dev',
   db: 0,
 };
 
