@@ -23,7 +23,7 @@ use App\Http\Controllers\Petugas\FunctionBuildingController as PetugasFunctionBu
 use App\Http\Controllers\Petugas\DutyController as PetugasDutyController;
 use App\Http\Controllers\Petugas\DenunciationController as PetugasDenunciationController;
 use App\Http\Controllers\Petugas\TypeDenunciationController as PetugasTypeDenunciationController;
-use App\Http\Controllers\Petugas\ArchiveFileController as KonsultanArchiveFileController;
+use App\Http\Controllers\Petugas\ArchiveFileController as ArchiveFileController;
 
 function revertUrlFormat($formattedUrl)
 {
@@ -152,6 +152,7 @@ Route::middleware([
                 Route::resource('/function_buildings', PetugasFunctionBuildingController::class)->only([
                     'index'
                 ]);
+
             });
         });
         // Konsultan
@@ -162,7 +163,7 @@ Route::middleware([
                 Route::post('/buildings/{id}', [PetugasBuildingController::class, 'update']);
                 Route::delete('/buildings/{id}', [PetugasBuildingController::class, 'destroy']);
 
-                Route::resource('archive_files', KonsultanArchiveFileController::class)->only([
+                Route::resource('archive_files', ArchiveFileController::class)->only([
                     'index', 'show'
                 ]);
             });
