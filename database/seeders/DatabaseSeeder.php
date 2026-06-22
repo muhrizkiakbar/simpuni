@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
             'instansi' => 'DISKOMINFO'
         ]);
         User::create([
-            'username' => 'konsultan',
+            'username' => 'konsultantesting',
             'name' => 'vendor',
             'posisi' => 'vendor',
             'email' => 'vendor@mail.com',
